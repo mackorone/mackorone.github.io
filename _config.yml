@@ -1,3 +1,9 @@
+# Help: https://help.github.com/en/articles/configuring-jekyll
+
+# Unset default theme 'jekyll-theme-primer'
+theme: null
+
+# Don't copy these files to _site/
 exclude:
     - CNAME
     - Gemfile
