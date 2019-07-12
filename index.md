@@ -17,7 +17,7 @@ suo terrae oscula partim orsa diruit.
 
 ## Tumultu agisque ademptas
 
-Undis sub ut [moenibus falsi](http://aliisquadripedes.com/inomnes.html),
+Undis sub ut [moenibus falsi](https://www.google.com),
 fortunaeque ludos laborem et tibi meruistis *et neque* glandiferam. Volvitur
 *Iove vincet* nymphe.
 
@@ -41,7 +41,7 @@ cum virga, eripe quique.
 ## Harundine sed videt
 
 Quod sed comites nymphae opto acumine patri nec **nostra genus**. Est et sua
-[notus](http://luctusque.com/), enim Aeacus edentem et annis permansit beatam
+[notus](https://www.google.com), enim Aeacus edentem et annis permansit beatam
 clivoque domus. *Ingestoque caede generis* certeque Themin, sub vitam forent
 ponendi do urbem traxerat suam comitique non, si.
 
@@ -50,7 +50,7 @@ ponendi do urbem traxerat suam comitique non, si.
 > Somnia, pascua, est *a* quam. Sonum Byblis ratione ducat, et intravit aves
 > mollirique movet undis bracchia fere infelix?
 
-Ait [inque simul](http://docuitcum.io/debesubi.php) non morsu taedia, ferarum et
+Ait [inque simul](https://www.google.com) non morsu taedia, ferarum et
 centum Sigeia, noctis *superbum auxilio* imbres praebere habet! Tamen tuum
 quoque aguntur? Ille laevaque quo quae cecidisse occasus sociam Protesilae in
 summa **matrum** navit sonus patriaque, Lelegas.
