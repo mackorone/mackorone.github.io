@@ -1,9 +1,11 @@
-<div class="topnav">
-  <nav>
-    {% for item in site.data.navigation %}
-      <a href="{{ item.link }}" {% if page.url == item.link %}class="active"{% endif %}>
-        {{ item.name }}
-      </a>
-    {% endfor %}
-  </nav>
-</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="collapse navbar-collapse">
+    <div class="navbar-nav">
+      {% for item in site.data.navigation %}
+        <a class="nav-item nav-link {% if page.url == item.link %}active{% endif %}" href="{{ item.link }}" >
+          {{ item.name }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</nav>
