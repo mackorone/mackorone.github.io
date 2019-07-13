@@ -9,7 +9,25 @@
   </head>
   <body>
     <div class="container px-0">
-      {% include navigation.html %}
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <ul class="navbar-nav mr-auto">
+          {% for item in site.data.navigation %}
+            {% capture active %}
+              {% if page.url == item.link %}
+                active
+              {% endif %}
+            {% endcapture %}
+            <li class="nav-item {{ active }}">
+              <a class="nav-link" href="{{ item.link }}">{{ item.name }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+        <div>
+          <a href="https://github.com/mackorone/mackorone.github.io">
+            <img src="/assets/images/GitHub-Mark-Light-32px.png" alt="GitHub">
+          </a>
+        </div>
+      </nav>
       <div class="p-3">
         {{ content }}
       </div>
