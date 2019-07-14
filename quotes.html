@@ -1,0 +1,12 @@
+---
+layout: default
+title: Quotes
+---
+
+{% assign quotes = site.data.quotes | sort: "source" %}
+{% for item in quotes %}
+  <blockquote class="blockquote mb-2">
+    <p class="mb-0">{{ item.quote}}</p>
+    <footer class="blockquote-footer">{{ item.source }}</footer>
+  </blockquote>
+{% endfor %}
