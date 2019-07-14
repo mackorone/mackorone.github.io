@@ -1,0 +1,58 @@
+---
+layout: default
+title: About
+---
+
+<div class="row">
+
+  <div class="col">
+    <div class="mt-2 mb-3">
+      <img src="/assets/images/headshot.jpg" alt="Headshot">
+    </div>
+  </div>
+
+  <div class="col">
+    <h3>About</h3>
+    <div>
+      <p class="mb-2">
+        Hi, I'm Mack! I'm a bay area software engineer and wannabe vlogger.
+        I've been at Facebook since mid-2015, where I spent most of my time
+        building large-scale backend systems and developer tools.
+      </p>
+      <p>
+        This is my website, where I rant about various topics, from software to
+        personal finance to games. Hopefully you find something that's helpful or
+        entertaining - or better yet, both!
+      </p>
+    </div>
+    <h3>Contact</h3>
+    <div>
+      <ul>
+        {% for item in site.data.emails %}
+          <li>
+            <!-- Add hidden characters to prevent spam -->
+            {{ item.user }}<span style="display:none">null</span>@{{ item.domain }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="col">
+    <h3>Links</h3>
+    <ul>
+      {% for item in site.data.links %}
+        <li>
+          <div class="mb-2">
+            {{ item.desc }}
+            <br/>
+            <a href="{{ item.link }}" data-proofer-ignore>
+              {{ item.link | remove_first: "https://" | remove_first: "www."}}
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+</div>
