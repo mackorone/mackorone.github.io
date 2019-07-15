@@ -1,4 +1,7 @@
-# Help: https://help.github.com/en/articles/configuring-jekyll
+# Help
+# - https://help.github.com/en/articles/configuring-jekyll
+# - https://jekyllrb.com/docs/configuration/default/
+# - https://jekyllrb.com/docs/configuration/front-matter-defaults/
 
 # Unset default theme 'jekyll-theme-primer'
 theme: null
@@ -10,3 +13,14 @@ exclude:
     - Gemfile.lock
     - LICENSE
     - README.md 
+
+# Show posts from the future
+future: true
+
+# Set default layout for posts
+defaults:
+  -
+    scope:
+        path: "_posts"
+    values:
+        layout: "post"

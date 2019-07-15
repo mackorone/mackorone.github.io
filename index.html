@@ -7,7 +7,7 @@ title: Home
 <ul>
   {% for post in site.posts %}
     <li>
-      <span class="text-monospace">({{ post.date | date_to_string }})</span>
+      ({{ post.date | date_to_string }})
       <a href="{{ post.url}}">{{ post.title }}</a>
     </li>
   {% endfor %}
