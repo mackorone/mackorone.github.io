@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% feed_meta %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/assets/css/custom.css">
     <title>{{ page.title }}</title>
@@ -22,6 +23,11 @@
             </li>
           {% endfor %}
         </ul>
+        <div class="mx-3">
+          <a href="/feed.xml">
+            <img src="/assets/images/feed-icon-28x28.png" alt="RSS">
+          </a>
+        </div>
         <div>
           <a href="https://github.com/mackorone/mackorone.github.io">
             <img src="/assets/images/GitHub-Mark-Light-32px.png" alt="GitHub">

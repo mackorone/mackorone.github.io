@@ -14,6 +14,15 @@ exclude:
     - LICENSE
     - README.md 
 
+# Generate Atom (RSS) feed
+plugins:
+    - jekyll-feed
+
+# Atom (RSS) config
+title: mackorone.com
+author: mackorone
+description: Thoughts on software and life
+
 # Show posts from the future
 future: true
 
