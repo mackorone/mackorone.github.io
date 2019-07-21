@@ -5,3 +5,18 @@ layout: default
 <p>{{ page.date | date_to_string }}</p>
 
 {{ content }}
+
+<!-- Footer with links to previous and next posts -->
+<hr />
+<div class="d-flex justify-content-between">
+  {% if page.previous.url %}
+    <span class="col p-0">
+      <a href="{{page.previous.url}}">&laquo; {{page.previous.title}}</a>
+    </span>
+  {% endif %}
+  {% if page.next.url %}
+    <span class="col p-0 text-right">
+      <a href="{{page.next.url}}">{{page.next.title}} &raquo;</a>
+    </span>
+  {% endif %}
+</div>

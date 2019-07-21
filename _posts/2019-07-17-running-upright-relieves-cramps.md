@@ -2,7 +2,7 @@
 ---
 
 A few friends and I are running the second half of the San Francisco Marathon on
-Saturday, July 27th. I've been pretty good about following a ten week training
+Sunday, July 28th. I've been pretty good about following a ten week training
 schedule - haven't missed a day so far. (This is in stark contrast with half
 marathon I ran two years ago, for which I was woefully unprepared.)
 
@@ -39,4 +39,4 @@ In any case, here's what's worked for me:
       curse at the cramp. I will *not* be defeated - I've spent too much time
       training to let it get the best of me.
 
-Looking forward to next Saturday!
+Looking forward to next Sunday!
