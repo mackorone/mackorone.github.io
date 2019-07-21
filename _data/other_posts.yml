@@ -1,0 +1,46 @@
+- url: https://www.sandimetz.com/blog/2016/1/20/the-wrong-abstraction
+  title: "The Wrong Abstraction"
+- url: https://caseymuratori.com/blog_0015
+  title: "Semantic Compression"
+- url: https://programmingisterrible.com/post/139222674273/write-code-that-is-easy-to-delete-not-easy-to
+  title: "Write code that is easy to delete, not easy to extend"
+- url: https://ferd.ca/queues-don-t-fix-overload.html
+  title: "Queues Don't Fix Overload"
+- url: https://erikbern.com/2018/03/27/waiting-time-load-factor-and-queueing-theory.html 
+  title: "Waiting time, load factor, and queueing theory – why you need to cut your systems a bit of slack"
+- url: https://programmingisterrible.com/post/162346490883/how-do-you-cut-a-monolith-in-half 
+  title: "How do you cut a monolith in half?"
+- url: https://segment.com/blog/goodbye-microservices
+  title: "Goodbye Microservices: From 100s of problem children to 1 superstar"
+- url: https://plato.stanford.edu/entries/computability
+  title: "Computability and Complexity"
+- url: https://www.bigocheatsheet.com
+  title: "Big-O Cheat Sheet"
+- url: http://book.mixu.net/distsys/single-page.html
+  title: "Distributed systems for fun and profit"
+- url: https://landing.google.com/sre/sre-book/toc
+  title: "Site Reliability Engineering (Google SRE Book)"
+- url: http://gameprogrammingpatterns.com/architecture-performance-and-games.html
+  title: "Architecture, Performance, and Games"
+- url: http://web.archive.org/web/20190403012130/https://gafferongames.com/post/fix_your_timestep/
+  title: "Fix Your Timestep!"
+- url: https://www.gamasutra.com/blogs/AhmedKhalifa/20190610/344344/Level_Design_Patterns_in_2D_Games.php
+  title: "Level Design Patterns in 2D Games"
+- url: http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
+  title: "The guide to implementing 2D platformers"
+- url: https://kb.speeddemosarchive.com/Making_your_game_speedrunner-friendly
+  title: "Making your game speedrunner-friendly"
+- url: https://erkaman.github.io/posts/beginner_computer_graphics.html
+  title: "How to Start Learning Computer Graphics Programming"
+- url: https://cstack.github.io/db_tutorial/
+  title: "Let's Build a Simple Database"
+- url: https://nikic.github.io/2012/06/15/The-true-power-of-regular-expressions.html
+  title: "The true power of regular expressions"
+- url: https://prefixy.github.io
+  title: "Building Prefixy, Prefix Search as a Service"
+- url: http://explained.ai/matrix-calculus/index.html
+  title: "The Matrix Calculus You Need For Deep Learning"
+- url: https://www.sideprojectchecklist.com/marketing-checklist
+  title: "The Side Project Marketing Checklist"
+- url: https://producingoss.com/en/setting-tone.html#avoid-private-discussions
+  title: "Avoid Private Discussions"

@@ -26,33 +26,19 @@ title: About
       </p>
     </div>
     <h3>Contact</h3>
-    <div>
-      <ul>
-        {% for item in site.data.emails %}
-          <li>
-            <!-- Add hidden characters to prevent spam -->
-            {{ item.user }}<span style="display:none">null</span>@{{ item.domain }}
-          </li>
-        {% endfor %}
-      </ul>
+    <div class="mb-3">
+      {% for item in site.data.emails %}
+        <!-- Add hidden characters to prevent spam -->
+        {{ item.user }}<span style="display:none">null</span>@{{ item.domain }}
+        <br/>
+      {% endfor %}
     </div>
   </div>
 
   <div class="col">
     <h3>Links</h3>
-    <ul>
-      {% for item in site.data.links %}
-        <li>
-          <div class="mb-2">
-            {{ item.desc }}
-            <br/>
-            <a href="{{ item.link }}" data-proofer-ignore>
-              {{ item.link | remove_first: "https://" | remove_first: "www."}}
-            </a>
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
+    {% assign links = site.data.my_sites %} 
+    {% include links.html %} 
   </div>
 
 </div>

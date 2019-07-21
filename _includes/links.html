@@ -1,0 +1,10 @@
+{% for item in links %}
+  <div class="mb-2">
+    <a href="{{ item.url }}" data-proofer-ignore>
+      {{ item.url | remove_first: "http://" | remove_first: "https://" | remove_first: "www." }}
+    </a>
+    <div class="ml-3">
+      {{ item.desc }}
+    </div>
+  </div>
+{% endfor %}

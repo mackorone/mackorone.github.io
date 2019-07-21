@@ -1,0 +1,23 @@
+---
+layout: default
+title: Other
+---
+
+<div class="row">
+
+  <div class="col mb-2">
+    <h3>Sites</h3>
+    {% assign links = site.data.other_sites %}
+    {% include links.html %}
+  </div>
+
+  <div class="col">
+    <h3>Articles</h3>
+    {% for item in site.data.other_posts %}
+      <div class="mb-2">
+        <a href="{{ item.url}}">{{ item.title }}</a>
+      </div>
+    {% endfor %}
+  </div>
+
+<div>
