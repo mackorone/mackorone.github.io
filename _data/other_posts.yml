@@ -12,8 +12,6 @@
   title: "How do you cut a monolith in half?"
 - url: https://segment.com/blog/goodbye-microservices
   title: "Goodbye Microservices: From 100s of problem children to 1 superstar"
-- url: https://plato.stanford.edu/entries/computability
-  title: "Computability and Complexity"
 - url: https://www.bigocheatsheet.com
   title: "Big-O Cheat Sheet"
 - url: http://book.mixu.net/distsys/single-page.html
@@ -38,9 +36,5 @@
   title: "The true power of regular expressions"
 - url: https://prefixy.github.io
   title: "Building Prefixy, Prefix Search as a Service"
-- url: http://explained.ai/matrix-calculus/index.html
-  title: "The Matrix Calculus You Need For Deep Learning"
-- url: https://www.sideprojectchecklist.com/marketing-checklist
-  title: "The Side Project Marketing Checklist"
 - url: https://producingoss.com/en/setting-tone.html#avoid-private-discussions
   title: "Avoid Private Discussions"
