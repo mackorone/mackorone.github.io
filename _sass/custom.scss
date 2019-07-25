@@ -3,16 +3,17 @@ html {
 }
 
 blockquote p {
-  font-style: italic;
-  margin-left: 1.5em;
-  margin-right: 1.5em;
+  border-left: 0.25em solid #ccc;
+  color: #666;
+  padding-left: 1.0em;
 }
 
 .famous-quote-p {
+  border-left: none;
+  color: #222;
   font-size: 0.8em !important;
   font-style: italic;
-  margin-left: 0.0em;
-  margin-right: 0.0em;
+  padding-left: 0.0em;
 }
 
 .famous-quote-footer {
