@@ -1,6 +1,7 @@
 {% for item in links %}
   <div class="mb-2">
-    <a href="{{ item.url }}" data-proofer-ignore>
+    <a href="{{ item.url }}"
+      {% if item.skip-validation %} data-proofer-ignore {% endif %}>
       {{ item.url | remove_first: "http://" | remove_first: "https://" | remove_first: "www." }}
     </a>
     <div class="ml-3">

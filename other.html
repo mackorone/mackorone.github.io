@@ -15,7 +15,10 @@ title: Other
     <h3>Articles</h3>
     {% for item in site.data.other_posts %}
       <div class="mb-2">
-        <a href="{{ item.url}}">{{ item.title }}</a>
+        <a href="{{ item.url}}"
+          {% if item.skip-validation %} data-proofer-ignore {% endif %}>
+          {{ item.title }}
+        </a>
       </div>
     {% endfor %}
   </div>
