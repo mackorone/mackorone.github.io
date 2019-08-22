@@ -41,3 +41,15 @@ in the world.
 
 Crossing my fingers, and also chuckling at the idea of someone from Strava
 watching my vlogs.
+
+-----
+
+15 Aug 2019
+
+Strava got back to me. I didn't win - oh well.
+
+> It was an honor and pleasure to read all the stories from the TCS NYC Marathon
+Contest (yes, we read every single one!). We wish we could send every Strava
+runner to New York, but unfortunately we’ve had to choose just a few. You didn’t
+win this time around, but we wanted to send this note of sincere appreciation.
+Thank you. Runners like you make Strava what it is.
