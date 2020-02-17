@@ -14,9 +14,6 @@ We want more than just your basic details – take a minute to tell us about you
 We’ll select a diverse group of first timers with deserving stories. You gotta
 want it!
 
-For those that are curious, here's the link:
-<https://blog.strava.com/2019-tcs-new-york-city-marathon-contest>.
-
 Funnily enough, I've already been entertaining the idea of running the NYC
 Marathon in November, and have gone so far as to try to convince a few friends
 to do it with me. Seeing as how I haven't yet figured out how I'm going to
