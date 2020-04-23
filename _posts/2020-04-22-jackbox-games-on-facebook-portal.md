@@ -64,5 +64,5 @@ chose my headphones but I don't think it matters.
 ### Final Result
 
 <center>
-<iframe width="800" height="480" src="/assets/images/jackbox.mov" frameborder="0" allowfullscreen></iframe>
+  <video width="800" src="/assets/images/jackbox.mov" controls loop />
 </center>
