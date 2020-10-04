@@ -63,6 +63,7 @@ chose my headphones but I don't think it matters.
 
 ### Final Result
 
-<center>
-  <video width="800" src="/assets/images/jackbox.mov" controls loop />
-</center>
+{% include video.html
+  alt="Drawful game on Facebook Portal"
+  src="/assets/images/jackbox.mov"
+%}
