@@ -15,30 +15,33 @@ title: About
     <h3>About</h3>
     <div>
       <p class="mb-2">
-        Hi, I'm Mack! I'm a bay area software engineer and wannabe vlogger.
-        I've been at Facebook since mid-2015, where I've spent most of my time
-        building large-scale backend systems and developer tools.
+        Hi, I'm Mack! I'm a husband, software engineer, video game enthusiast,
+        and wannabe vlogger.
       </p>
-      <p>
-        This is my website, where I rant about various topics, from software to
-        personal finance to games. Hopefully you find something that's helpful or
-        entertaining - or better yet, both!
+      <p class="mb-2">
+        I've been at Facebook since mid-2015, where I spend
+        time building large-scale backend systems and developer tools.
       </p>
     </div>
+  </div>
+
+  <div class="col-md">
     <h3>Contact</h3>
-    <div class="mb-3">
+    <div class="mb-2">
       {% for item in site.data.emails %}
         <!-- Add hidden characters to prevent spam -->
         {{ item.user }}<span style="display:none">null</span>@{{ item.domain }}
         <br/>
       {% endfor %}
     </div>
-  </div>
-
-  <div class="col-md">
-    <h3>Links</h3>
-    {% assign links = site.data.my_sites %} 
-    {% include links.html %} 
+    <h3>Socials</h3>
+    {% for item in site.data.socials %}
+      <div class="mb-1">
+        <a href="{{ item.url }}">
+          {{ item.url | remove_first: "https://" | remove_first: "www." }}
+        </a>
+      </div>
+    {% endfor %}
   </div>
 
 </div>
