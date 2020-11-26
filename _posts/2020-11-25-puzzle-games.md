@@ -37,4 +37,7 @@ certain solutions more intuitive? What other representations are possible? Are
 certain representations more amenable to certain tasks, e.g., puzzle generation?
 
 One day I may take a stab at those questions. Maybe this book will be helpful:
-[Games, Puzzles, and Computation](https://www.amazon.com/Games-Puzzles-Computation-Robert-Hearn/dp/1568813228).
+<a href="https://www.amazon.com/Games-Puzzles-Computation-Robert-Hearn/dp/1568813228"
+    data-proofer-ignore>
+    Games, Puzzles, and Computation
+</a>
