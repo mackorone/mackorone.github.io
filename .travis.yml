@@ -1,5 +1,0 @@
-language: ruby
-cache: bundler
-rvm: 2.4.1
-install: gem install bundler jekyll html-proofer
-script: bundle install && bundle exec jekyll build && htmlproofer _site
