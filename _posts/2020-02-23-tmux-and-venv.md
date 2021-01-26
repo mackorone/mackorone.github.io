@@ -86,3 +86,17 @@ example, [direnv](https://direnv.net/) lets you configure environment
 variables on a per-directory basis. You could use it to run `activate` whenever
 you change into project directory, and `deactivate` whenever you leave. For now
 though, the lines above are good enough for me.
+
+
+#### Update ({{ "2021-01-25" | date_to_string }})
+
+With some fiddling, I figured out how to unset the `VIRTUAL_ENV` variable
+when `deactivate` is run:
+
+```
+function sv() {
+    source venv/bin/activate &&
+    tmux set-environment VIRTUAL_ENV $VIRTUAL_ENV &&
+    alias deactivate='\deactivate && tmux set-environment -u VIRTUAL_ENV && unalias deactivate'
+}
+```
