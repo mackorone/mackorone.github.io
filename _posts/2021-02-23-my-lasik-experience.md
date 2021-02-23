@@ -49,7 +49,7 @@ corneas. I asked a few questions (apparently it's mostly postmenopausal women
 who complain of dry eyes), chatted about costs, and booked the surgery, knowing
 that if I could always cancel if necessary.
 
-My second appointment was with *The LASIK Vision Institute*. The staff was
+My second appointment was with *The LASIK Vision Institute (LVI)*. The staff was
 friendly but the facility seemed - for lack of a better word - grungy. They ran
 the same tests as *TLC* and came to the same conclusion: that I was a great
 candidate for the surgery. They quoted me $300 cheaper than *TLC* and offered to
@@ -127,18 +127,18 @@ life post-recovery.
 In case it's helpful, here's what I paid:
 
 ---|---
-Original price........................ | $5800
-Discounted price with VSP...... |  $4500
-Negotiated discounted price.... | $4200
-Amount paid with credit card... | $2000
-Amount paid with FSA............ | $2200
+Original price | $5800
+Price after VSP discount |  $4500
+Price after LVI price match... | $4200
+Price after reimbursement | $2200
+Amount paid with FSA | $2200
 
 <p/>
 
-Thanks to a generous $2000 once-per-lifetime LASIK benefit from my employer and
-some careful planning with my Health Care Flex Spending Account (FSA), I spent
-only about $1500 after-tax dollars on the procedure and eye drops. Not too
-shabby for a
+Thanks to a generous $2000 once-per-lifetime LASIK reimbursement benefit from my
+employer and some careful planning with my Health Care Flex Spending Account
+(FSA), I spent only about $1500 after-tax dollars on the procedure and eye
+drops. Not too shabby for a
 [lifetime](https://www.tlcvision.com/tlc-difference/lifetime-commitment-program/)
 of clear vision.
 
