@@ -1,6 +1,6 @@
 ---
 title: My LASIK Experience
-tags: [life]
+tags: [finance, life]
 ---
 
 #### Background
@@ -129,7 +129,7 @@ In case it's helpful, here's what I paid:
 ---|---
 Original price | $5800
 Price after VSP discount |  $4500
-Price after LVI price match... | $4200
+Price after price match | $4200
 Price after reimbursement | $2200
 Amount paid with FSA | $2200
 
