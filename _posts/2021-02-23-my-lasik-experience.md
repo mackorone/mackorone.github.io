@@ -83,16 +83,16 @@ into the operating room. I was instructed to lay down on a table and stare up at
 a bright blue light, which I did to the best of my ability. They covered one of
 my eyes, put a ring around the other (to push back my eyelids), and then slowly
 lowered some instrument onto the exposed eye. I didn't feel or see anything; my
-vision went black before long before I had the opportunity to think about what
-was happening (they were cutting a flap in my cornea). After a brief countdown,
-they switched eyes, and then sat me up and walked me over to a second table.
-This time, I was instructed to stare at a dull green light while the surgeon
-lifted each flap and zapped my eyes with clicky-sounding laser. It smelled
-like burning plastic and was over before I knew it. Someone helped me up and
-walked me into an exam room where Dr. Donnenfeld checked the quality of
-his work. With a quick, "Enjoy your vision, you deserve it," he was off to the
-next procedure. I was given some protective goggles and sent on my way; my wife
-was waiting outside in the car.
+vision went black before I had the opportunity to think about what was happening
+(they were cutting a flap in my cornea). After a ten second countdown, they
+switched eyes, and then sat me up and walked me over to a second table. This
+time, I was instructed to stare at a dull green light while the surgeon lifted
+each flap and zapped my eyes with clicky-sounding laser. It smelled like burning
+plastic and was over before I knew it. Someone helped me up and walked me into
+an exam room where Dr. Donnenfeld checked the quality of his work. With a quick,
+"Enjoy your vision, you deserve it," he was off to the next procedure. I was
+given some protective goggles and sent on my way; my wife was waiting outside in
+the car.
 
 The thirty-minute car ride home felt like hours. The Valium made me feel sick -
 not nauseous, just tired and grumpy - and my eyes started to leak and string. I
@@ -113,7 +113,7 @@ I have a few broken blood vessels but no pain associated with them.
 
 My post-op routine is relatively straightforward. I'm not allowed to rub my
 eyes, and I sleep with protective goggles to ensure I don't do so mid-slumber. I
-use prescribed anti-inflammatory and anti-biotic eye drops twice a day, and
+use prescribed anti-inflammatory and antibiotic eye drops twice a day, and
 over-the-counter [Refresh Plus](https://www.refreshbrand.com/Products/refresh-plus)
 preservative-free lubricating eye drops every two hours. After a few more days,
 I'll stop using the first two kinds of drops and reduce the lubricating drops to
