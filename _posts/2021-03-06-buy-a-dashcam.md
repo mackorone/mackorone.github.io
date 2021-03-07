@@ -10,12 +10,11 @@ manufacturers spying on us. We don't want *other cars* spying on us,
 crowdsourcing our live locations. Fair enough, don't connect them to the
 internet. Keep everything local.
 
-Sell them alongside the heating steering wheels, rubber mats, roof racks, etc.
-I can almost guarantee dealerships would make a killing. What new car buyer
-wouldn't want the added peace of mind - *professionally installed* - for
-a negligible cost? Heck, dealerships could even partner with insurance
-companies; presumably they be happy to pay for each sale to a covered
-individual. 
+Sell them at dealerships alongside the heating steering wheels, rubber mats,
+roof racks, etc. What new car buyer wouldn't want the added peace of mind -
+*professionally installed* - for a negligible cost? Heck, dealerships could even
+partner with insurance companies; presumably they be happy to pay for each sale
+to a covered individual. 
 
 
 Anyways, if you don't already have a dashcam, get one. A good one costs less
