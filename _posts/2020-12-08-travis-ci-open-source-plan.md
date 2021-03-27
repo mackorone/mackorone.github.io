@@ -46,3 +46,23 @@ reply, and I have a feeling they're not actually going to follow up,
 especially given that
 [HackerNews](https://news.ycombinator.com/item?id=25338983) says they're no
 longer giving credits to open-source projects. Only time will tell...
+
+---
+
+{{ "2021-03-27" | date_to_string }}
+
+Travis CI never got back to me, so today I migrated all (two) of my repositories
+to GitHub Actions. The migration was actually pretty simple:
+- Add GitHub Actions workflow file
+- Delete `.travis.yml` config file
+- Update build status badge
+
+Here's an example commit:
+[https://github.com/mackorone/spotify-playlist-publisher/commit/a6541aa86fd5ca65a13e24ce439cd7c060888fce](https://github.com/mackorone/spotify-playlist-publisher/commit/a6541aa86fd5ca65a13e24ce439cd7c060888fce)
+
+And to really put the nail in the coffin, I also:
+- Disabled Travis CI periodic builds
+- Deleted Travis CI secrets
+- Revoked permissions
+
+So long, Travis CI, and thanks for all the fish.

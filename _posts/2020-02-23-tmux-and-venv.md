@@ -87,8 +87,9 @@ variables on a per-directory basis. You could use it to run `activate` whenever
 you change into project directory, and `deactivate` whenever you leave. For now
 though, the lines above are good enough for me.
 
+---
 
-#### Update ({{ "2021-01-25" | date_to_string }})
+{{ "2021-01-25" | date_to_string }}
 
 With some fiddling, I figured out how to unset the `VIRTUAL_ENV` variable
 when `deactivate` is run:
