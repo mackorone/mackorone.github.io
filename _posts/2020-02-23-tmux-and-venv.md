@@ -92,7 +92,8 @@ though, the lines above are good enough for me.
 {{ "2021-01-25" | date_to_string }}
 
 With some fiddling, I figured out how to unset the `VIRTUAL_ENV` variable
-when `deactivate` is run:
+when `deactivate` is run, but unfortunately it only works if it's run from the
+same shell as the original command:
 
 ```
 function sv() {
