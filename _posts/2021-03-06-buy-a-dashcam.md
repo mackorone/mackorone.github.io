@@ -25,4 +25,3 @@ Video evidence wins disputes.
 ---|---
 [APEMAN 1080p camera](https://www.amazon.com/gp/product/B07GFF7NLB) | $40 | 
 [SanDisk 256GB SD card](https://www.amazon.com/SanDisk-Extreme-microSDXC-Memory-Adapter/dp/B07FCR3316) | $40
-[SF-to-NYC timelapse video](https://www.youtube.com/watch?v=VsRL7CDdJew) | Priceless
