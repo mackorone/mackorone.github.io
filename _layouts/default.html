@@ -13,14 +13,29 @@
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <ul class="navbar-nav mr-auto">
           {% for item in site.data.navigation %}
-            {% capture active %}
-              {% if page.url == item.link %}
-                active
-              {% endif %}
-            {% endcapture %}
-            <li class="nav-item {{ active }}">
-              <a class="nav-link" href="{{ item.link }}">{{ item.name }}</a>
-            </li>
+            {% if item.subpages %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                  {{ item.name }}
+                </a>
+                <div class="dropdown-menu">
+                  {% for subpage in item.subpages %}
+                    <a class="dropdown-item" href="{{ subpage.link }}">
+                      {{ subpage.name }}
+                    </a>
+                  {% endfor %}
+                </div>
+              </li>
+            {% else %}
+              {% capture active %}
+                {% if page.url == item.link %}
+                  active
+                {% endif %}
+              {% endcapture %}
+              <li class="nav-item {{ active }}">
+                <a class="nav-link" href="{{ item.link }}">{{ item.name }}</a>
+              </li>
+            {% endif %}
           {% endfor %}
         </ul>
         <div class="mx-3">
@@ -38,5 +53,8 @@
         {{ content }}
       </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
 </html>
