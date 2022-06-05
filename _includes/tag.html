@@ -1,0 +1,9 @@
+<span
+  class="{{ include.class }}"
+  href="#{{ include.name }}"
+  data-toggle="pill">
+  {{ include.name }}
+  {% if include.count != nil %}
+  ({{ include.count }})
+  {% endif %}
+</span>

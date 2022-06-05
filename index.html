@@ -3,10 +3,85 @@ layout: default
 title: Home
 ---
 
-<h3>Posts</h3>
-{% for post in site.posts %}
-  <div class="mb-1">
-    ({{ post.date | date_to_string }})
-    <a href="{{ post.url}}">{{ post.title }}</a>
+<ul class="nav nav-pills">
+  <!-- All posts -->
+  <li style="margin-right:5px;margin-top:5px;">
+    {% assign num_posts = site.posts | size %}
+    {% include tag.html
+      name="all"
+      count=num_posts
+      class="btn btn-outline-primary btn-sm active"
+    %}
+  </li>
+
+  <!-- Tagged posts -->
+  {% assign site_tags = site.tags | sort %}
+  {% for tag_struct in site_tags %}
+    {% assign tag = tag_struct[0] %}
+    {% assign count = tag_struct[1] | size %}
+    <li style="margin-right:5px;margin-top:5px;">
+      {% include tag.html
+        name=tag count=count
+        class="btn btn-outline-primary btn-sm"
+      %}
+    </li>
+  {% endfor %}
+
+  <!-- Untagged posts -->
+  <li style="margin-right:5px;margin-top:5px;">
+    {% assign count = 0 %}
+    {% for post in site.posts %}
+      {% assign num_tags = post.tags | size %}
+      {% if num_tags == 0 %}
+        {% assign count = count  | plus:1 %}
+      {% endif %}
+    {% endfor %}
+    {% include tag.html
+      name="untagged"
+      count=count
+      class="btn btn-outline-primary btn-sm"
+    %}
+  </li>
+</ul>
+
+<hr/>
+
+<div class="tab-content">
+  <!-- All posts -->
+  <div class="tab-pane active" id="all">
+    {% for post in site.posts %}
+      <div class="mb-1">
+        ({{ post.date | date_to_string }})
+        <a href="{{ post.url}}">{{ post.title }}</a>
+      </div>
+    {% endfor %}
   </div>
-{% endfor %}
+
+  <!-- Tagged posts -->
+  {% assign site_tags = site.tags | sort %}
+  {% for tag_struct in site_tags %}
+    {% assign tag = tag_struct[0] %}
+    <div class="tab-pane" id="{{ tag }}">
+      {% for post in tag_struct[1] %}
+        <div class="mb-1">
+          ({{ post.date | date_to_string }})
+          <a href="{{ post.url}}">{{ post.title }}</a>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+  <!-- Untagged posts -->
+  <div class="tab-pane" id="untagged">
+    {% for post in site.posts %}
+      {% assign num_tags = post.tags | size %}
+      {% if num_tags == 0 %}
+        <div class="mb-1">
+          ({{ post.date | date_to_string }})
+          <a href="{{ post.url}}">{{ post.title }}</a>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+</div>
