@@ -1,5 +1,5 @@
 ---
-tags: [finance]
+tags: [money]
 ---
 
 Today I saw a bunch of trending posts about $GME and I feel like I have a

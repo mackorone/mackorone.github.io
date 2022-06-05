@@ -1,4 +1,5 @@
 ---
+tags: [money]
 ---
 
 Over the past week, I've seen numerous posts to this effect:

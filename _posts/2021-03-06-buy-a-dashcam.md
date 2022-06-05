@@ -1,5 +1,5 @@
 ---
-tags: [finance, life]
+tags: [money]
 ---
 
 Hot take: every vehicle on the road should have a dashcam. They should come

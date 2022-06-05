@@ -1,4 +1,5 @@
 ---
+tags: [gaming, software]
 ---
 
 Thanks to the Steam holiday sale, I recently discovered a puzzle game called

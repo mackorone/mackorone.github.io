@@ -1,5 +1,4 @@
 ---
-tags: [life]
 ---
 
 Last November, Christine and I bought our first car together: a Honda CR-V.

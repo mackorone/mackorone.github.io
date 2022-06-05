@@ -1,4 +1,5 @@
 ---
+tags: [software]
 ---
 
 Last week, I migrated CI for my open source projects from Travis CI to GitHub

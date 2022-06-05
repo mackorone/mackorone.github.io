@@ -1,6 +1,6 @@
 ---
 title: My LASIK Experience
-tags: [finance, life]
+tags: [money]
 ---
 
 #### Background

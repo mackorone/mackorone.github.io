@@ -1,5 +1,6 @@
 ---
 title: Travis CI Open Source Plan
+tags: [software]
 ---
 
 Travis CI recently announced a [new pricing

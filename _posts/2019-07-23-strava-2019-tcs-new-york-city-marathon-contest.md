@@ -1,6 +1,6 @@
 ---
 title: Strava 2019 TCS New York City Marathon Contest
-tags: [running]
+tags: [fitness]
 ---
 
 A few days ago, while perusing the Strava app, I saw an advertisement for a

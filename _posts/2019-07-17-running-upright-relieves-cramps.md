@@ -1,5 +1,5 @@
 ---
-tags: [running]
+tags: [fitness]
 ---
 
 A few friends and I are running the second half of the San Francisco Marathon on

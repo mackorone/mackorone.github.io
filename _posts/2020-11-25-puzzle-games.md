@@ -1,4 +1,5 @@
 ---
+tags: [gaming]
 ---
 
 Yesterday I finished

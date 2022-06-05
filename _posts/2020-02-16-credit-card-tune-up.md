@@ -1,4 +1,5 @@
 ---
+tags: [money]
 ---
 
 About a month ago, a few friends and I spent some time chatting about which
