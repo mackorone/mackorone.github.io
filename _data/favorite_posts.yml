@@ -22,7 +22,7 @@
   title: "Architecture, Performance, and Games"
 - url: http://web.archive.org/web/20190403012130/https://gafferongames.com/post/fix_your_timestep/
   title: "Fix Your Timestep!"
-  skip-validation: true
+  skip_validation: true
 - url: https://www.gamasutra.com/blogs/AhmedKhalifa/20190610/344344/Level_Design_Patterns_in_2D_Games.php
   title: "Level Design Patterns in 2D Games"
 - url: http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/

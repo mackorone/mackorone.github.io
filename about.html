@@ -35,7 +35,7 @@ title: About
     {% for item in site.data.socials %}
       <div class="mb-1">
         <a href="{{ item.url }}"
-          {% if item.skip-validation %} data-proofer-ignore {% endif %}>
+          {% if item.skip_validation %} data-proofer-ignore {% endif %}>
           {{ item.url | remove_first: "https://" | remove_first: "www." }}
         </a>
       </div>

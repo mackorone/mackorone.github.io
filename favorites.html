@@ -16,7 +16,7 @@ title: Favorites
     {% for item in site.data.favorite_posts %}
       <div class="mb-2">
         <a href="{{ item.url}}"
-          {% if item.skip-validation %} data-proofer-ignore {% endif %}>
+          {% if item.skip_validation %} data-proofer-ignore {% endif %}>
           {{ item.title }}
         </a>
       </div>
