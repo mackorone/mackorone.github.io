@@ -27,12 +27,11 @@
                 </div>
               </li>
             {% else %}
-              {% capture active %}
-                {% if page.url == item.link %}
-                  active
-                {% endif %}
-              {% endcapture %}
-              <li class="nav-item {{ active }}">
+              {% assign class = "nav-item" %}
+              {% if page.url == item.link %}
+                {% assign class = class | append: " active" %}
+              {% endif %}
+              <li class="{{ class }}">
                 <a class="nav-link" href="{{ item.link }}">{{ item.name }}</a>
               </li>
             {% endif %}
