@@ -3,7 +3,7 @@
   href="#{{ include.name }}"
   data-toggle="pill">
   {{ include.name }}
-  {% if include.count != nil %}
-  ({{ include.count }})
+  {% if include.count %}
+    ({{ include.count }})
   {% endif %}
 </span>

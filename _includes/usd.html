@@ -1,0 +1,13 @@
+{% assign amount = include.amount | default: 0 %}
+{% if amount == 0 %}
+  -
+{% else %}
+  {% assign rounded = amount | round: 2 %}
+  {% capture repr %}{{ rounded }}{% endcapture %}
+  {% unless repr contains "." %}
+    {% assign rounded = rounded | append: ".00" %}
+  {% endunless %}
+  {% assign integer = rounded | split: "." | first %}
+  {% assign decimal = rounded | split: "." | last %}
+  $ {{ integer }}.{{ decimal | append: "00" | truncate: 2, "" }}
+{% endif %}
