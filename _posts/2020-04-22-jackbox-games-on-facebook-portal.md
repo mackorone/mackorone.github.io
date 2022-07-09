@@ -22,7 +22,7 @@ to two. Portal prevents screen sharing - I have no idea why - so I had
 to trick Messenger into thinking the game running on my desktop was a webcam,
 and then join the call. Here's how I did it:
 
-### Virtual Webcam
+#### Virtual Webcam
 
 I used [OBS](https://obsproject.com/) to compose a scene
 consisting solely of the game. Then I downloaded
@@ -42,7 +42,7 @@ reason?
 certificate to create a virtual sound
 card."](https://github.com/CatxFish/obs-virtual-cam/issues/38) -CatxFish
 
-### Virtual Microphone
+#### Virtual Microphone
 
 Since OBS doesn't solve the audio problem, I needed to find something that
 does. After a bit of searching I stumbled upon a
@@ -62,7 +62,7 @@ One note: I had to select a main output device - the flashing prompt in the
 upper right corner - before sound actually came through on the Portal. I
 chose my headphones but I don't think it matters.
 
-### Final Result
+#### Final Result
 
 {% include video.html
   alt="Drawful game on Facebook Portal"

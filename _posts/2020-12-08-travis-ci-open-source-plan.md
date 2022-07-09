@@ -59,7 +59,7 @@ to GitHub Actions. The migration was actually pretty simple:
 - Update build status badge
 
 Here's an example commit:
-[https://github.com/mackorone/spotify-playlist-publisher/commit/a6541aa86fd5ca65a13e24ce439cd7c060888fce](https://github.com/mackorone/spotify-playlist-publisher/commit/a6541aa86fd5ca65a13e24ce439cd7c060888fce)
+<https://github.com/mackorone/spotify-playlist-publisher/commit/a6541aa86fd5ca65a13e24ce439cd7c060888fce>
 
 And to really put the nail in the coffin, I also:
 - Disabled Travis CI periodic builds

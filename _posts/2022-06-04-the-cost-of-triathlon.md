@@ -3,7 +3,7 @@ title: The Cost of Triathlon
 tags: [money, fitness]
 ---
 
-Over the past few years, I started doing triathons. It started with just
+Over the past few years, I've started doing triathons. It started with just
 running, but before long I was buying a bike and learning how to swim properly.
 It's fun to keep pushing yourself.
 

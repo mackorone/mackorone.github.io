@@ -23,7 +23,7 @@ Key features include:
 
 In short, I never have to manually type date strings - nice.
 
-### Demo
+#### Demo
 
 List blog posts by date:
 ```
