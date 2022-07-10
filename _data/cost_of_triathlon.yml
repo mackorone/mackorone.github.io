@@ -3,43 +3,35 @@
     - name: Swimsuit
       url: https://www.amazon.com/gp/product/B00DGOKCZK/
       one_time_cost: 10
-      annual_cost:
 
     - name: Goggles
       url: https://www.amazon.com/gp/product/B07PKN27XG/
       one_time_cost: 10
-      annual_cost:
 
     - name: Swim cap
       url: https://www.amazon.com/gp/product/B07RQKX3Z3/
       one_time_cost: 10
-      annual_cost:
 
     - name: Baby shampoo
       url: https://www.amazon.com/Johnsons-Baby-Shampoo-Travel-Ounce/dp/B00LVUOL5I/
       one_time_cost: 5
-      annual_cost:
       notes: Prevents goggle fog
 
     - name: Swim buoy
       url: https://www.amazon.com/gp/product/B09G2QH26H/
       one_time_cost: 20
-      annual_cost:
       notes: For open water swimming
 
     - name: Wetsuit
       url: https://synergywetsuits.com/collections/endorphin-wetsuits/products/mens-endorphin-fullsleeve-triathlon-wetsuit-2021
       one_time_cost: 240
-      annual_cost:
       notes: For open water swimming
 
     - name: Headphones
       url: https://shokz.com/products/openswim
       one_time_cost: 160
-      annual_cost:
 
     - name: Family YMCA membership
-      url: 
       one_time_cost: 100
       annual_cost: 1800
 
@@ -48,167 +40,146 @@
     - name: Bike
       url: https://www.giant-bicycles.com/us/contend-3
       one_time_cost: 600
-      annual_cost: 
 
     - name: Helmet
       url: https://www.amazon.com/gp/product/B07HQ6GKWB/
       one_time_cost: 60
-      annual_cost: 
 
     - name: Shorts (x2)
       url: https://www.amazon.com/gp/product/B085XXL1YC/
       one_time_cost: 80
-      annual_cost: 
+      notes: Padded shorts are a must
 
     - name: Sunglasses
       url: https://www.amazon.com/gp/product/B019JR5APE/
       one_time_cost: 25
-      annual_cost: 
+
+    - name: Water bottle (x2)
+      url: https://www.amazon.com/gp/product/B08TQ8B1KH/
+      one_time_cost: 20
+
+    - name: Water bottle cage (x2)
+      url: https://www.amazon.com/gp/product/B00322W9TS/
+      one_time_cost: 16
 
     - name: Floor pump
       url: https://www.amazon.com/gp/product/B017ADD9N4/
       one_time_cost: 35
-      annual_cost: 
 
     - name: Portable pump
       url: https://www.amazon.com/gp/product/B010JFWDHS/
       one_time_cost: 20
-      annual_cost: 
 
     - name: Clipless pedals
       url: https://www.lookcycle.com/it-en/products/pedals/road/comfort/keo-classic-3-plus
       one_time_cost: 80
-      annual_cost: 
       notes: '"Clipless" pedals have clips'
 
     - name: Cycling shoes
       url: https://www.fizik.com/us_en/tempo-overcurve-r4.html
       one_time_cost: 200
-      annual_cost: 
 
     - name: Replacement cleats
       url: https://www.amazon.com/gp/product/B001CHRPGM/
       one_time_cost: 25
-      annual_cost: 
 
     - name: Saddle bag
       url: https://www.amazon.com/gp/product/B0797M8DW8/
       one_time_cost: 15
-      annual_cost: 
 
     - name: Tire levers
       url: https://www.amazon.com/gp/product/B07FDS3VCW/
       one_time_cost: 10
-      annual_cost: 
 
     - name: Replacement tube
       url: https://www.amazon.com/gp/product/B008ZTM95C/
       one_time_cost: 10
-      annual_cost: 
 
     - name: Frame Bag
       url: https://www.amazon.com/gp/product/B07YN2TFSM/
       one_time_cost: 21
-      annual_cost: 
       notes: For bike touring
 
     - name: Bike rack
       url: https://www.amazon.com/gp/product/B00DWKUAZK/
       one_time_cost: 36
-      annual_cost: 
       notes: For bike touring
 
     - name: Panniers
       url: https://www.amazon.com/gp/product/B00KW2ZIMQ/
       one_time_cost: 90
-      annual_cost: 
       notes: For bike touring
 
     - name: Aerobars
       url: https://www.amazon.com/gp/product/B0185OKVRY/
       one_time_cost: 80
-      annual_cost: 
 
     - name: Smart trainer
       url: https://www.wahoofitness.com/devices/indoor-cycling/bike-trainers/kickr-buy
       one_time_cost: 1300
-      annual_cost:
       notes: For indoor training
 
     - name: Cassette
       url: https://www.sram.com/en/sram/models/cs-pg-850-a1
       one_time_cost: 35
-      annual_cost: 
       notes: For smart trainer
 
     - name: Trainer mat
       url: https://www.amazon.com/gp/product/B08CK3YK2V/
       one_time_cost: 60
-      annual_cost:
       notes: For indoor training
 
     - name: Wheel block
       url: https://www.amazon.com/gp/product/B088BGKWL7/
       one_time_cost: 10
-      annual_cost:
       notes: For indoor training
 
     - name: Circular fan
       url: https://www.amazon.com/gp/product/B001R1Q0OG/
       one_time_cost: 30
-      annual_cost:
       notes: For indoor training
 
     - name: Zwift membership
       url: https://us.zwift.com/
-      one_time_cost:
       annual_cost: 198
       notes: For indoor training
 
     - name: Annual tune up
-      url: 
-      one_time_cost: 
       annual_cost: 120
 
 - name: run
   items: 
     - name: Sneakers
       url: https://www.nike.com/t/free-rn-2018-mens-running-shoe-4VTnGqeZ
-      one_time_cost:
       annual_cost: 200
       notes: Roughly two pairs per year
 
     - name: Socks
       url: https://www.amazon.com/gp/product/B07MMGZYNY/
-      one_time_cost:
       annual_cost: 60
       notes: I go through a <em>lot</em> of socks
 
     - name: Headphones
       url: https://www.jabra.com/bluetooth-headsets/jabra-elite-active-75t
       one_time_cost: 140
-      annual_cost: 
 
     - name: Nutrition
       url: https://www.amazon.com/gp/product/B01N4QA8AG/
-      one_time_cost:
       annual_cost: 70
+      notes: Gels, chews, powder, etc.
 
     - name: Body glide
       url: https://www.amazon.com/gp/product/B0043S06GI/
-      one_time_cost:
       annual_cost: 16
 
     - name: Treadmill
       url: https://www.horizonfitness.com/horizon-7-0-at-treadmill
       one_time_cost: 900
-      annual_cost:
       notes: For indoor training
 
     - name: Treamill mat
       url: https://www.amazon.com/gp/product/B001VA8NRU/
       one_time_cost: 65
-      annual_cost:
       notes: For indoor training
 
 - name: other
@@ -216,51 +187,40 @@
     - name: Fitness watch
       url: https://www.garmin.com/en-US/p/713363
       one_time_cost: 380
-      annual_cost:
 
     - name: USAT Membership
-      url: 
-      one_time_cost: 
+      url: https://www.teamusa.org/USA-Triathlon/Membership-Overview/Membership-Types/Annual-Membership
       annual_cost: 50
       notes: Required by most races
 
     - name: Race fees
-      url: 
-      one_time_cost: 
       annual_cost: 1000
 
     - name: Race belt
       url: https://www.amazon.com/gp/product/B07SLS59BG/
       one_time_cost: 10
-      annual_cost: 
 
     - name: Triathlon suit
       url: https://www.amazon.com/gp/product/B08D2R2H6R/
       one_time_cost: 175
-      annual_cost:
 
     - name: Transition mat
       url: https://www.amazon.com/gp/product/B01M0SUX1D/
       one_time_cost: 35
-      annual_cost:
 
     - name: Heart rate monitor
       url: https://www.amazon.com/gp/product/B085JKM9DR/
       one_time_cost: 120
-      annual_cost:
 
     - name: Training bible
       url: https://www.amazon.com/Triathletes-Training-Bible-Worlds-Comprehensive/dp/1937715442/
       one_time_cost: 15
-      annual_cost:
 
     - name: Training diary
       url: https://www.amazon.com/gp/product/1937715639/
       one_time_cost: 10
-      annual_cost:
 
     - name: Gallon water bottle
       url: https://coldest.com/product/the-coldest-bottle-1-gallon/
       one_time_cost: 100
-      annual_cost:
       notes: For hydration throughout the day
