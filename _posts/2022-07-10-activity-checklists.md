@@ -15,7 +15,7 @@ Useful for packing and pre-race jitters.
 1. Towel
 1. Dry clothes
 
-### Open water swim
+#### Open water swim
 
 1. Take off ring
 1. Fitness watch
