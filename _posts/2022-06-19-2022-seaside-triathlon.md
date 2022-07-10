@@ -46,9 +46,9 @@ Lessons learned:
 - Fitness watch goes on top of wetsuit, comes off during T1
 - The wetsuit is easier to take off than anticipated - just pull
 - Make sure to hit the "transition" button, not the "pause" button, next time
-- Using the aero bars takes some adjustment - practice to avoid sore back
+- Using the aero bars takes some getting used to - practice to avoid sore back
 
 <img
-  style="display:block; width:100%;"
+  style="width:100%"
   src="/assets/images/2022-seaside-triathlon.jpg"
 />

@@ -7,9 +7,9 @@ topics that I want to write about, but it's hard to find the willpower to fire
 up a text editor and start riffing. To make things worse, Jekyll blog post file
 names have the following format: `yyyy-mm-dd-title.md`. As such, it can be
 annoying to:
+
 1. Open up a post - I'm not good at typing numbers
 2. Update the date - sometimes it takes multiple days to finish a post
-
 
 So I built a tool that reduces the friction involved in managing Jekyll blog
 posts: [`mackorone/jekyll-blog-cli`](https://github.com/mackorone/jekyll-blog-cli)
