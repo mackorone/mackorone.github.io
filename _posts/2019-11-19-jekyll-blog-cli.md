@@ -26,7 +26,7 @@ In short, I never have to manually type date strings - nice.
 #### Demo
 
 List blog posts by date:
-```
+```bash
 $ blog list
 2019-07-14-hello-world.md
 2019-07-17-running-upright-relieves-cramps.md
@@ -34,7 +34,7 @@ $ blog list
 ```
 
 Open a post by title (with tab-completion):
-```
+```bash
 $ blog open <TAB>
 hello-world.md
 honda-maintenance-codes.md
@@ -43,7 +43,7 @@ $ blog open hello-world.md
 ```
 
 Update the date by title:
-```
+```bash
 $ blog touch hello-world.md
 ```
 ```
@@ -52,6 +52,6 @@ After: 2019-11-19-hello-world.md
 ```
 
 Run Jekyll server locally:
-```
+```bash
 $ blog serve
 ```

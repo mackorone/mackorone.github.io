@@ -51,13 +51,13 @@ echo venv >> .gitignore
 ```
 
 With everything set up, installing dependencies is as easy as:
-```
+```bash
 source venv/bin/activate
 pip install ...
 ```
 
 And export dependencies is just:
-```
+```bash
 pip freeze > requirements.txt
 ```
 
@@ -65,7 +65,7 @@ One last thing: I noticed that new `tmux` panes and windows don't inherit the
 virtual environment from the parent shell.  Since I frequently create new panes
 and windows, it quickly became inconvenient to `activate` the virtual
 environment every time I did. So I added the following lines to my `.bashrc`:
-```
+```bash
 # Activate virtual env and save the path as a tmux variable,
 # so that new panes/windows can re-activate as necessary
 function sv() {
@@ -95,7 +95,7 @@ With some fiddling, I figured out how to unset the `VIRTUAL_ENV` variable
 when `deactivate` is run, but unfortunately it only works if it's run from the
 same shell as the original command:
 
-```
+```bash
 function sv() {
     source venv/bin/activate &&
     tmux set-environment VIRTUAL_ENV $VIRTUAL_ENV &&
