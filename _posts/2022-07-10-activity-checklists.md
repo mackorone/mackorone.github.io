@@ -49,15 +49,17 @@ Useful for packing and pre-race jitters.
 1. Heart rate strap
 1. Triathlon suit
 1. Wet suit
-1. Goggles
-1. Swim cap
+1. Goggles (x2)
+1. Swim cap (x2)
 1. Baby shampoo
 1. Towel
 1. Transition mat
+1. Finish line bag
+1. Timing chip
 
 <p style="margin-bottom:0px;">Bike</p>
 1. Bike
-1. Socks
+1. Socks (x2)
 1. Shoes
 1. Helmet
 1. Sunglasses

@@ -5,6 +5,10 @@
       one_time_cost: 10
 
     - name: Goggles
+      url: https://www.amazon.com/dp/product/B001M5TW6K/
+      one_time_cost: 20
+
+    - name: Backup goggles
       url: https://www.amazon.com/gp/product/B07PKN27XG/
       one_time_cost: 10
 
@@ -113,6 +117,10 @@
     - name: Aerobars
       url: https://www.amazon.com/gp/product/B0185OKVRY/
       one_time_cost: 80
+
+    - name: Gloves
+      url: https://www.amazon.com/gp/product/B00NB739F2/
+      one_time_cost: 15
 
     - name: Smart trainer
       url: https://www.wahoofitness.com/devices/indoor-cycling/bike-trainers/kickr-buy
