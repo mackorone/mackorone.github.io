@@ -43,19 +43,23 @@ Useful for packing and pre-race jitters.
 
 #### Triathlon
 
-<p style="margin-bottom:0px;">Swim</p>
+<p style="margin-bottom:0px;">Pre-race</p>
 1. Take off ring
-1. Fitness Watch
+1. Fitness watch
 1. Heart rate strap
 1. Triathlon suit
+1. Transition mat
+1. Timing chip
+1. Checked bag
+1. Extra shoes
+1. Breakfast
+
+<p style="margin-bottom:0px;">Swim</p>
 1. Wet suit
 1. Goggles (x2)
 1. Swim cap (x2)
 1. Baby shampoo
 1. Towel
-1. Transition mat
-1. Finish line bag
-1. Timing chip
 
 <p style="margin-bottom:0px;">Bike</p>
 1. Bike
