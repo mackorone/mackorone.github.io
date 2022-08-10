@@ -30,6 +30,23 @@ Useful for packing and pre-race jitters.
 1. Swim buoy
 1. Body glide
 
+#### Long bike
+
+1. Fitness watch
+1. Heart rate strap
+1. Bike
+1. Socks
+1. Shoes
+1. Helmet
+1. Sunglasses
+1. Water bottle (x2)
+1. Portable pump
+1. Saddle bag
+1. Frame bag
+1. Nutrition
+1. Phone mount
+1. Phone
+
 #### Long run
 
 1. Fitness watch
@@ -70,6 +87,7 @@ Useful for packing and pre-race jitters.
 1. Water bottle (x2)
 1. Portable pump
 1. Saddle bag
+1. Frame bag
 1. Nutrition
 
 <p style="margin-bottom:0px;">Run</p>
