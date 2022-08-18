@@ -5,12 +5,12 @@
       one_time_cost: 10
 
     - name: Goggles
-      url: https://www.amazon.com/dp/product/B001M5TW6K/
-      one_time_cost: 20
-
-    - name: Backup goggles
       url: https://www.amazon.com/gp/product/B07PKN27XG/
       one_time_cost: 10
+
+    - name: Backup goggles
+      url: https://www.amazon.com/gp/product/B0868M3PWG/
+      one_time_cost: 15
 
     - name: Swim cap
       url: https://www.amazon.com/gp/product/B07RQKX3Z3/
@@ -34,6 +34,10 @@
     - name: Headphones
       url: https://shokz.com/products/openswim
       one_time_cost: 160
+
+    - name: Swim snorkle
+      url: https://www.amazon.com/gp/product/B004O6ECL4/
+      one_time_cost: 30
 
     - name: Family YMCA membership
       one_time_cost: 100
@@ -122,6 +126,10 @@
       url: https://www.amazon.com/gp/product/B00NB739F2/
       one_time_cost: 15
 
+    - name: Phone mount
+      url: https://www.amazon.com/gp/product/B09B9WG3MH/
+      one_time_cost: 10
+
     - name: Smart trainer
       url: https://www.wahoofitness.com/devices/indoor-cycling/bike-trainers/kickr-buy
       one_time_cost: 1300
@@ -166,6 +174,10 @@
       url: https://www.amazon.com/gp/product/B07MMGZYNY/
       annual_cost: 60
       notes: I go through a <em>lot</em> of socks
+
+    - name: Shorts (x2)
+      url: https://www.amazon.com/gp/product/B09CG5YQL8/
+      one_time_cost: 30
 
     - name: Headphones
       url: https://www.jabra.com/bluetooth-headsets/jabra-elite-active-75t

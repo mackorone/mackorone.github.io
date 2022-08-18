@@ -37,6 +37,7 @@ Useful for packing and pre-race jitters.
 1. Bike
 1. Socks
 1. Shoes
+1. Gloves
 1. Helmet
 1. Sunglasses
 1. Water bottle (x2)
@@ -103,6 +104,7 @@ Useful for packing and pre-race jitters.
 1. Shirts (x2)
 1. Socks
 1. Shoes
+1. Gloves
 1. Bike
 1. Helmet
 1. Sunglasses
