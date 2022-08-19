@@ -183,6 +183,10 @@
       url: https://www.jabra.com/bluetooth-headsets/jabra-elite-active-75t
       one_time_cost: 140
 
+    - name: Headbands
+      url: https://www.amazon.com/gp/product/B07X2SNH9G/
+      one_time_cost: 15
+
     - name: Nutrition
       url: https://www.amazon.com/gp/product/B01N4QA8AG/
       annual_cost: 70
