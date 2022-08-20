@@ -1,4 +1,5 @@
 ---
+title: Jekyll Blog CLI
 tags: [software]
 ---
 
