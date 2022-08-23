@@ -14,6 +14,7 @@ Useful for packing and pre-race jitters.
 1. Headphones
 1. Towel
 1. Dry clothes
+1. Swim snorkle
 
 #### Open water swim
 
@@ -45,8 +46,8 @@ Useful for packing and pre-race jitters.
 1. Saddle bag
 1. Frame bag
 1. Nutrition
+1. Sunscreen
 1. Phone mount
-1. Phone
 
 #### Long run
 
@@ -91,6 +92,7 @@ Useful for packing and pre-race jitters.
 1. Saddle bag
 1. Frame bag
 1. Nutrition
+1. Sunscreen
 
 <p style="margin-bottom:0px;">Run</p>
 1. Sneakers
@@ -114,6 +116,7 @@ Useful for packing and pre-race jitters.
 1. Portable pump
 1. Saddle bag
 1. Frame bag
+1. Phone mount
 1. Panniers
 1. Gorilla tape
 1. Super glue
