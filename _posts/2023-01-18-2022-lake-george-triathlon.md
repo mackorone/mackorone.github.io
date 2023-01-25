@@ -69,7 +69,7 @@ I need to set harder goals next time. Regarding each segment:
 (more or less), breathing was good, and pace was sub-2 (min / 100 yards).
 
 **T1**: A bit of a jog to my bike but no big deal. Got my wetsuit off pretty
-easily, dried my face, re-applied sunscreen, and off I went.
+easily, dried my face, reapplied sunscreen, and off I went.
 
 **Bike**: Overall, a great ride. The initial climb was cruel, but hey,
 whatcha gonna do. Nutrition was good. Absolutely cooked my legs, though. Was
@@ -92,7 +92,7 @@ me to the finish line.
 - Wetsuits help prevent shock when you hit a cold pocket of water mid-swim
 - Wearing gloves for bike rides doesn't just look cool - it helps prevent blisters
 - Wearing a tri suit underneath a wetsuit is restrictive. Instead, it's much
-  more comfortable to only weat the bottom half during the swim (if it's a
+  more comfortable to only wear the bottom half during the swim (if it's a
   one-piece, roll down the top half around your waist and stuff it underneath
   your wetsuit).
 - Eating too much after big workout leads to bloating during the week
