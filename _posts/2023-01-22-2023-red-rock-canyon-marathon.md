@@ -9,7 +9,7 @@ title: "Race Report: 2023 Red Rock Canyon Marathon"
 * **When:** Saturday, January 21, 2023
 * **Where:** Las Vegas, NV
 * **Distance:** Run 26.2M
-* **Strava:** [https://www.strava.com/activities/8429851182](https://www.strava.com/activities/8429851182)
+* **Strava:** <https://www.strava.com/activities/8429851182>
 * **Finish time:** [3:51:13](http://www.calicoracing.com/wp-content/uploads/2015/02/Red-Rock-2023-Marathon.pdf)
 
 #### Discussion

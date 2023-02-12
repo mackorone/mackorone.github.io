@@ -176,5 +176,5 @@ is accessible via CLI - prior to this project, it wasn't - but that's okay
 because it's basically the same exposure as the 1Password browser plugins.
 
 - Lastly, some related links, i.e., inspiration for this project:
-  - [https://github.com/direnv/direnv/issues/597](https://github.com/direnv/direnv/issues/597)
-  - [https://1password.community/discussion/128381/](https://1password.community/discussion/128381/)
+  - <https://github.com/direnv/direnv/issues/597>
+  - <https://1password.community/discussion/128381/>
