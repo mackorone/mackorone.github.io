@@ -6,9 +6,9 @@
   title: "Write code that is easy to delete, not easy to extend"
 - url: https://ferd.ca/queues-don-t-fix-overload.html
   title: "Queues Don't Fix Overload"
-- url: https://erikbern.com/2018/03/27/waiting-time-load-factor-and-queueing-theory.html 
+- url: https://erikbern.com/2018/03/27/waiting-time-load-factor-and-queueing-theory.html
   title: "Waiting time, load factor, and queueing theory – why you need to cut your systems a bit of slack"
-- url: https://programmingisterrible.com/post/162346490883/how-do-you-cut-a-monolith-in-half 
+- url: https://programmingisterrible.com/post/162346490883/how-do-you-cut-a-monolith-in-half
   title: "How do you cut a monolith in half?"
 - url: https://segment.com/blog/goodbye-microservices
   title: "Goodbye Microservices: From 100s of problem children to 1 superstar"
@@ -41,3 +41,7 @@
   title: "Avoid Private Discussions"
 - url: https://mtlynch.io/code-review-love/
   title: "How to Make Your Code Reviewer Fall in Love with You"
+- url: https://cohost.org/morayati/post/925436-i-saw-real-page-s-cra
+  title: "I saw RealPage's crappy rent-jacking-up software so you don't have to"
+- url: https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/
+  title: "What Is ChatGPT Doing... and Why Does It Work?"
