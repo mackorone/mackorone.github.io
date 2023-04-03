@@ -28,3 +28,12 @@ td {
 .famous-quote-footer {
   font-size: 0.7em !important;
 }
+
+.blurry-img {
+  filter: blur(15px);
+  transition: opacity 0.25s ease;
+}
+
+.transparent {
+  opacity: 0;
+}

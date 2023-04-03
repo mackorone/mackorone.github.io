@@ -1,4 +1,25 @@
 <figure class="figure">
-  <img class="figure-img img-fluid" style="width:{{ include.width }}px;" src="{{ include.src }}"/>
-  <figcaption class="figure-caption">{{ include.caption }}</figcaption>
+
+  {% if include.blur %}
+    <div style="display: inline-block; position: relative; overflow: hidden;">
+      <img
+        src="{{ include.src }}"
+        class="figure-img img-fluid"
+        style="position: absolute; width:{{ include.width }}px;">
+      <img
+        src="{{ include.src }}"
+        class="blurry-img img-fluid"
+        style="width:{{ include.width}}px;"
+        onclick="this.classList.add('transparent')">
+    </div>
+    <figcaption class="figure-caption">{{ include.caption }}</figcaption>
+
+  {% else %}
+    <img
+      class="figure-img img-fluid"
+      style="width:{{ include.width }}px;"
+      src="{{ include.src }}"/>
+    <figcaption class="figure-caption">{{ include.caption }}</figcaption>
+
+  {% endif %}
 </figure>
