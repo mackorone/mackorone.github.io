@@ -12,7 +12,9 @@
         style="width:{{ include.width}}px;"
         onclick="this.classList.add('transparent')">
     </div>
-    <figcaption class="figure-caption">{{ include.caption }}</figcaption>
+    <figcaption class="figure-caption">
+      {{ include.caption }} - CLICK TO REVEAL
+    </figcaption>
 
   {% else %}
     <img
