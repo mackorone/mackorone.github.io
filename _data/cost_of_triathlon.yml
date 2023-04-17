@@ -1,5 +1,5 @@
 - name: swim
-  items: 
+  items:
     - name: Swimsuit
       url: https://www.amazon.com/gp/product/B00DGOKCZK/
       one_time_cost: 10
@@ -31,6 +31,11 @@
       one_time_cost: 240
       notes: For open water swimming
 
+    - name: Swim hood
+      url: https://www.amazon.com/gp/product/B07C4M8CFF/
+      one_time_cost: 25
+      notes: For when it's really cold
+
     - name: Headphones
       url: https://shokz.com/products/openswim
       one_time_cost: 160
@@ -44,7 +49,7 @@
       annual_cost: 1800
 
 - name: bike
-  items: 
+  items:
     - name: Bike
       url: https://www.giant-bicycles.com/us/contend-3
       one_time_cost: 600
@@ -87,9 +92,9 @@
       url: https://www.fizik.com/us_en/tempo-overcurve-r4.html
       one_time_cost: 200
 
-    - name: Replacement cleats
+    - name: Replacement cleats (x2)
       url: https://www.amazon.com/gp/product/B001CHRPGM/
-      one_time_cost: 25
+      one_time_cost: 50
 
     - name: Saddle bag
       url: https://www.amazon.com/gp/product/B0797M8DW8/
@@ -99,9 +104,9 @@
       url: https://www.amazon.com/gp/product/B07FDS3VCW/
       one_time_cost: 10
 
-    - name: Replacement tube
+    - name: Replacement tube (x3)
       url: https://www.amazon.com/gp/product/B008ZTM95C/
-      one_time_cost: 10
+      one_time_cost: 30
 
     - name: Frame Bag
       url: https://www.amazon.com/gp/product/B07YN2TFSM/
@@ -155,6 +160,36 @@
       one_time_cost: 30
       notes: For indoor training
 
+    - name: AirTag mount
+      url: https://www.amazon.com/dp/B09SPD9GJN
+      one_time_cost: 13
+
+    - name: Skull cap
+      url: https://www.amazon.com/gp/product/B07N1DBCYJ/
+      one_time_cost: 9
+
+    - name: Arm sleeves
+      url: https://www.amazon.com/gp/product/B09FZDWT6Y/
+      one_time_cost: 5
+
+    - name: Warm jacket
+      url: https://www.amazon.com/gp/product/B014UTFU2Y/
+      one_time_cost: 40
+
+    - name: Warm gloves
+      url: https://www.amazon.com/gp/product/B08K3YTYKN/
+      one_time_cost: 15
+
+    - name: New water bottles
+      url: https://www.amazon.com/gp/product/B08W1YSLNX/
+      one_time_cost: 20
+      notes: With a better squeeze cap
+
+    - name: New sunglasses
+      url: https://www.amazon.com/gp/product/B09MFXF8LT/
+      one_time_cost: 30
+      notes: Gotta look the part
+
     - name: Zwift membership
       url: https://us.zwift.com/
       annual_cost: 198
@@ -164,7 +199,7 @@
       annual_cost: 120
 
 - name: run
-  items: 
+  items:
     - name: Sneakers
       url: https://www.nike.com/t/free-rn-2018-mens-running-shoe-4VTnGqeZ
       annual_cost: 200
@@ -187,14 +222,20 @@
       url: https://www.amazon.com/gp/product/B07X2SNH9G/
       one_time_cost: 15
 
-    - name: Nutrition
+    - name: Chews
       url: https://www.amazon.com/gp/product/B01N4QA8AG/
       annual_cost: 70
-      notes: Gels, chews, powder, etc.
+      notes: Nutrition
 
-    - name: Body glide
-      url: https://www.amazon.com/gp/product/B0043S06GI/
+    - name: Gels
+      url: https://www.amazon.com/gp/product/B00JZCWSJA/
+      annual_cost: 60
+      notes: Nutrition
+
+    - name: Electrolyte tablets
+      url: https://www.amazon.com/gp/product/B07TSFVJZ7/
       annual_cost: 16
+      notes: Nutrition
 
     - name: Treadmill
       url: https://www.horizonfitness.com/horizon-7-0-at-treadmill
@@ -206,8 +247,27 @@
       one_time_cost: 65
       notes: For indoor training
 
+    - name: Compression shorts (x3)
+      url: https://www.amazon.com/gp/product/B08XXHTG62/
+      one_time_cost: 25
+      notes: To prevent my phone from bouncing around in my pocket
+
+    - name: More running shorts (x2)
+      url: https://www.amazon.com/gp/product/B08VHZYLTV/
+      one_time_cost: 38
+
+    - name: Headlamp
+      url: https://www.amazon.com/gp/product/B08CB9XDLB/
+      one_time_cost: 80
+      notes: For running at night and spelunking
+
+    - name: New running shoes
+      url: https://www.newbalance.com/pd/fuelcell-supercomp-trainer/MRCXV2-MPS.html
+      one_time_cost: 180
+      notes: These things are a cheat code
+
 - name: other
-  items: 
+  items:
     - name: Fitness watch
       url: https://www.garmin.com/en-US/p/713363
       one_time_cost: 380
@@ -248,3 +308,13 @@
       url: https://coldest.com/product/the-coldest-bottle-1-gallon/
       one_time_cost: 100
       notes: For hydration throughout the day
+
+    - name: Foam rollers
+      url: https://www.amazon.com/gp/product/B09JFQMFX9/
+      one_time_cost: 40
+      notes: For recovery
+
+    - name: Cool hat(s)
+      url: https://cieleathletics.com/products/gocapsc-athletics-kea
+      one_time_cost: 40
+      notes: At David's recommendation

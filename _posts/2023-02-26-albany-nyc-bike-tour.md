@@ -6,8 +6,11 @@ tags: [fitness]
 {% include note.html
   text="I wrote this post on July 9, 2022 but never got around to cleaning it
   up and publishing it. I'm giving up and just shipping it as-is.
-  \"Perfect is the enemy of done\", or something like."
+  \"Perfect is the enemy of done\", or something like that."
 %}
+
+(Link to Mike's post:
+<https://fiddlingmarcus.substack.com/p/empire-state-trail-to-nyc>)
 
 Last weekend, Mike and I rode from Albany to NYC. It took us roughly three days
 from start to the finish. For me, it was the perfect combination of experiencing
