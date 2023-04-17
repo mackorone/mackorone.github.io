@@ -44,9 +44,10 @@
       url: https://www.amazon.com/gp/product/B004O6ECL4/
       one_time_cost: 30
 
-    - name: Family YMCA membership
+    - name: Pool membership
       one_time_cost: 100
-      annual_cost: 1800
+      annual_cost: 1000
+      notes: Cost varies widely between town park, YMCA, etc.
 
 - name: bike
   items:
@@ -266,6 +267,11 @@
       one_time_cost: 180
       notes: These things are a cheat code
 
+    - name: Elastic laces
+      url: https://www.locklaces.com/products/black-no-tie-shoelaces?variant=23080909829
+      one_time_cost: 10
+      notes: Totally worth the money
+
 - name: other
   items:
     - name: Fitness watch
@@ -278,7 +284,7 @@
       notes: Required by most races
 
     - name: Race fees
-      annual_cost: 1000
+      annual_cost: 2000
 
     - name: Race belt
       url: https://www.amazon.com/gp/product/B07SLS59BG/
@@ -296,6 +302,11 @@
       url: https://www.amazon.com/gp/product/B085JKM9DR/
       one_time_cost: 120
 
+    - name: Race bag
+      url: https://www.tyr.com/alliance-45l-backpack-latbp45.html
+      one_time_cost: 80
+      notes: A lot nicer than a laundry bag
+
     - name: Training bible
       url: https://www.amazon.com/Triathletes-Training-Bible-Worlds-Comprehensive/dp/1937715442/
       one_time_cost: 15
@@ -305,9 +316,14 @@
       one_time_cost: 10
 
     - name: Gallon water bottle
-      url: https://coldest.com/product/the-coldest-bottle-1-gallon/
+      url: https://coldest.com/collections/jugs/products/the-coldest-bottle-1-gallon-1
       one_time_cost: 100
       notes: For hydration throughout the day
+
+    - name: Massage gun
+      url: https://www.amazon.com/Massager-Percussion-Handheld-Portable-Brushless/dp/B086XCB1QP
+      one_time_cost: 100
+      notes: For recovery
 
     - name: Foam rollers
       url: https://www.amazon.com/gp/product/B09JFQMFX9/
