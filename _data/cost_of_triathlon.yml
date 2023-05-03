@@ -32,8 +32,13 @@
       notes: For open water swimming
 
     - name: Swim hood
-      url: https://www.amazon.com/gp/product/B07C4M8CFF/
-      one_time_cost: 25
+      url: https://shop.sportsbasement.com/products/adjustable-thermal-skull-cap
+      one_time_cost: 50
+      notes: For when it's really cold
+
+    - name: Swim socks
+      url: https://www.amazon.com/gp/product/B00L9LAOE6/
+      one_time_cost: 30
       notes: For when it's really cold
 
     - name: Headphones
@@ -162,8 +167,12 @@
       notes: For indoor training
 
     - name: AirTag mount
-      url: https://www.amazon.com/dp/B09SPD9GJN
+      url: https://www.amazon.com/dp/B09SPD9GJN/
       one_time_cost: 13
+
+    - name: Toe covers
+      url: https://www.giro.com/p/ambient-cycling-toe-cover/GR-7111991.html
+      one_time_cost: 20
 
     - name: Skull cap
       url: https://www.amazon.com/gp/product/B07N1DBCYJ/
@@ -314,6 +323,10 @@
     - name: Training diary
       url: https://www.amazon.com/gp/product/1937715639/
       one_time_cost: 10
+
+    - name: IRONMAN Training Plan
+      url: https://www.trainingpeaks.com/training-plans/triathlon/ironman/tp-165939/d3-multisport-ironman-lake-placid-intermediate-24-weeks-email-support-and-reusab
+      one_time_cost: 110
 
     - name: Gallon water bottle
       url: https://coldest.com/collections/jugs/products/the-coldest-bottle-1-gallon-1
