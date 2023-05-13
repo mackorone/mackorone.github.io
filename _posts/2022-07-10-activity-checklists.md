@@ -30,6 +30,8 @@ Useful for packing and pre-race jitters.
 1. Beach pass
 1. Swim buoy
 1. Body glide
+1. Thermal cap (if cold)
+1. Thermal socks (if cold)
 
 #### Long bike
 
@@ -79,6 +81,8 @@ Useful for packing and pre-race jitters.
 1. Swim cap (x2)
 1. Baby shampoo
 1. Towel
+1. Thermal cap (if cold)
+1. Thermal socks (if cold)
 
 <p style="margin-bottom:0px;">Bike</p>
 1. Bike
