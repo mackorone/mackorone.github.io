@@ -138,7 +138,7 @@ and over 190 for *ten minutes* towards the end. I *really* pushed myself.
 
 Christine found me on the ground, congratulated me on my fast time, and handed
 me some fluids. It took a few minutes for my watch to sync with my phone, but
-eventually everything uploaded to Zwift and I saw my new half marathon PR:
+eventually everything uploaded to Strava and I saw my new half marathon PR:
 1:29:58. Turns out, my route was a little bit long and technically I ran an
 extra 0.1 miles. Accounting for that, I made it under 1:30:00, and I couldn't
 have been happier.
