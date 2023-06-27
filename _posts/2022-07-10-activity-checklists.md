@@ -13,6 +13,7 @@ Useful for packing and pre-race jitters.
 1. Baby shampoo
 1. Headphones
 1. Towel
+1. Sunscreen
 1. Dry clothes
 1. Swim snorkle
 
@@ -27,6 +28,7 @@ Useful for packing and pre-race jitters.
 1. Swim cap
 1. Baby shampoo
 1. Towel
+1. Sunscreen
 1. Beach pass
 1. Swim buoy
 1. Body glide
@@ -40,6 +42,7 @@ Useful for packing and pre-race jitters.
 1. Bike
 1. Socks
 1. Shoes
+1. Toe covers
 1. Gloves
 1. Helmet
 1. Sunglasses
@@ -50,6 +53,9 @@ Useful for packing and pre-race jitters.
 1. Nutrition
 1. Sunscreen
 1. Phone mount
+1. Bike lights
+1. Check tire pressure
+1. Check brake quick releases
 
 #### Long run
 
@@ -61,6 +67,7 @@ Useful for packing and pre-race jitters.
 1. Headphones
 1. Body glide
 1. Nutrition
+1. Sunscreen
 
 #### Triathlon
 
@@ -74,6 +81,7 @@ Useful for packing and pre-race jitters.
 1. Checked bag
 1. Extra shoes
 1. Breakfast
+1. Sunscreen
 
 <p style="margin-bottom:0px;">Swim</p>
 1. Wet suit
@@ -88,6 +96,7 @@ Useful for packing and pre-race jitters.
 1. Bike
 1. Socks (x2)
 1. Shoes
+1. Toe covers
 1. Gloves
 1. Helmet
 1. Sunglasses
@@ -97,6 +106,9 @@ Useful for packing and pre-race jitters.
 1. Frame bag
 1. Nutrition
 1. Sunscreen
+1. Check tire pressure
+1. Check brake quick releases
+1. Charge bike shifter batteries
 
 <p style="margin-bottom:0px;">Run</p>
 1. Sneakers
@@ -104,6 +116,7 @@ Useful for packing and pre-race jitters.
 1. Headband
 1. Body glide
 1. Nutrition
+1. Sunscreen
 
 #### Bike tour
 
