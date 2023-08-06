@@ -91,6 +91,8 @@ Useful for packing and pre-race jitters.
 1. Towel
 1. Thermal cap (if cold)
 1. Thermal socks (if cold)
+1. Body glide on back of neck
+1. Water bottle for rinsing after
 
 <p style="margin-bottom:0px;">Bike</p>
 1. Bike
@@ -117,6 +119,7 @@ Useful for packing and pre-race jitters.
 1. Body glide
 1. Nutrition
 1. Sunscreen
+1. Sunglasses
 
 #### Bike tour
 
