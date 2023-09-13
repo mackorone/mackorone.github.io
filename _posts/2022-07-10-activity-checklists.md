@@ -80,15 +80,20 @@ Useful for packing and pre-race jitters.
 1. Timing chip
 1. Checked bag
 1. Extra shoes
+1. Velcro ties
 1. Breakfast
 1. Sunscreen
+1. Ear plugs
+1. Eye cover
+1. Head lamp
 
 <p style="margin-bottom:0px;">Swim</p>
 1. Wet suit
+1. Wet suit bag
 1. Goggles (x2)
 1. Swim cap (x2)
 1. Baby shampoo
-1. Towel
+1. Towel (small and big)
 1. Thermal cap (if cold)
 1. Thermal socks (if cold)
 1. Body glide on back of neck
@@ -103,14 +108,21 @@ Useful for packing and pre-race jitters.
 1. Helmet
 1. Sunglasses
 1. Water bottle (x2)
+1. Gatorade endurance bottle
+1. Big pump
 1. Portable pump
 1. Saddle bag
 1. Frame bag
 1. Nutrition
 1. Sunscreen
+1. Chamois cream
 1. Check tire pressure
 1. Check brake quick releases
 1. Charge bike shifter batteries
+1. Spare shifter battery
+1. Shifter battery charger
+1. Electrical tape
+1. Chain cleaner/lube
 
 <p style="margin-bottom:0px;">Run</p>
 1. Sneakers
@@ -120,6 +132,12 @@ Useful for packing and pre-race jitters.
 1. Nutrition
 1. Sunscreen
 1. Sunglasses
+
+<p style="margin-bottom:0px;">Post-race</p>
+1. Hat
+1. Gloves
+1. Sweater
+1. Nutrition
 
 #### Bike tour
 
