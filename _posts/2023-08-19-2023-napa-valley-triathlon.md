@@ -19,11 +19,6 @@ title: "Race Report: 2023 Napa Valley Triathlon"
 
 #### Discussion
 
-{% include note.html
-  text="It's been more than four months since this race. I meant to write this
-  sooner... oh, well."
-%}
-
 Back in April, David and I raced the Alpha Win Napa Valley 70.3. The race kicked
 my butt: the swim was freezing cold, the bike was super hilly
 ([>4000ft of climbing](https://www.strava.com/routes/2984141782536596214) over 56
