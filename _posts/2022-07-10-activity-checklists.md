@@ -68,6 +68,7 @@ Useful for packing and pre-race jitters.
 1. Body glide
 1. Nutrition
 1. Sunscreen
+1. Head lamp
 
 #### Triathlon
 
@@ -86,6 +87,7 @@ Useful for packing and pre-race jitters.
 1. Ear plugs
 1. Eye cover
 1. Head lamp
+1. Plastic bags for gear in transition
 
 <p style="margin-bottom:0px;">Swim</p>
 1. Wet suit
