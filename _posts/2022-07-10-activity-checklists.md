@@ -68,6 +68,7 @@ Useful for packing and pre-race jitters.
 1. Body glide
 1. Nutrition
 1. Sunscreen
+1. Sunglasses
 1. Head lamp
 
 #### Triathlon
