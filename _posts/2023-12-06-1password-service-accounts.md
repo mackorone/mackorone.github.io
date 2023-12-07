@@ -36,7 +36,7 @@ Persisting the token in the environment made me nervous at first--it's
 essentially a key for accessing *all* of my passwords. But it turns out you can
 configure service accounts to only have access to specific vaults, so I created
 a dedicated vault containing *only* the secrets needed by the piece of software.
-As before, only the relevant secrets are accessible within the session.
+Thus, as before, only the relevant secrets are accessible within the session.
 
-As the saying goes, "All problems in computer science can be solved by another
-level of indirection."
+In conclusion, as the saying goes, "All problems in computer science can be solved
+by another level of indirection."
