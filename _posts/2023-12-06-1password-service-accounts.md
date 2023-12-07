@@ -15,12 +15,13 @@ token to fetch other secrets at runtime. There's even an
 `OP_SERVICE_ACCOUNT_TOKEN` environment variable for the 1Password CLI that makes
 it trivial to persist the token and use it for subsequent CLI commands.
 
-Simply create a template file:
+Given a template file:
 ```bash
 # my_template.sh
 export OP_SERVICE_ACCOUNT_TOKEN='op://path/to/token'
 ```
-And run the following:
+My [script](https://github.com/mackorone/dotfiles/blob/main/bashrc/secrets.sh)
+basically runs the following:
 ```bash
 eval $(op inject --session "$(op signin --raw)" --in-file my_template.sh)
 ```
