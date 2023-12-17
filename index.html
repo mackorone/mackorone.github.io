@@ -55,13 +55,18 @@ title: Posts
     {% endif %}
     <div class="{{ class }}" id="{{ tag }}">
       {% for post in tuple[1] %}
-        <span style="display: inline-block;
-                     width: 120px;
-                     text-align: right;
-                     margin-right: 5px;">
-          {{ post.date | date_to_string: "ordinal", "US"}}
-        </span>
-        <a href="{{ post.url }}">{{ post.title }}</a>
+        <div style="display: flex;">
+          <div style="display: inline-block;
+                      width: 120px;
+                      flex-shrink: 0;
+                      text-align: right;
+                      margin-right: 10px;">
+            {{ post.date | date_to_string: "ordinal", "US"}}
+          </div>
+          <div>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+          </div>
+        </div>
         <hr style="margin: 5px;"/>
       {% endfor %}
     </div>
