@@ -2,6 +2,25 @@ html {
   overflow-y: scroll;
 }
 
+code {
+  // Disable the default pink color
+  color: inherit;
+  // Add a light grey background color
+  background-color: #e5e5e5;
+  // Add space around the text (vertical, horizontal)
+  padding: 0.2em 0.4em;
+  // Creates rounded corners for a pill shape
+  border-radius: 0.5em;
+}
+
+pre code {
+  // Some attributes are overridden for inline code. Reset them for code
+  // blocks, since the default formatting works quite well.
+  background-color: transparent;
+  padding: 0.0em 0.0em;
+  border-radius: 0.0em;
+}
+
 blockquote p {
   border-left: 0.25em solid #ccc;
   color: #666;
