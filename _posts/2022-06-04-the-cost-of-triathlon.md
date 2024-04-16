@@ -17,7 +17,7 @@ A few notes:
 - Most of this stuff is optional
 
 {% assign expenses = site.data.cost_of_triathlon %}
- 
+
 {% for category in expenses %}
 #### {{ category.name | capitalize }}
   <table class="table table-sm table-bordered table-striped">
@@ -47,9 +47,13 @@ A few notes:
               {{ item.name }}
             {% endif %}
           </td>
-          <td width="18%">{% include usd.html amount=item.one_time_cost %}</td>
-          <td width="18%">{% include usd.html amount=item.annual_cost %}</td>
-          <td>{{ item.notes | default: "-" }}</td>
+          <td width="18%" style="text-align: right;">
+            {% include usd.html amount=item.one_time_cost %}
+          </td>
+          <td width="18%" style="text-align: right;">
+            {% include usd.html amount=item.annual_cost %}
+          </td>
+          <td>{{ item.notes }}</td>
         </tr>
 
         {% assign one_time_total = one_time_total | plus: item.one_time_cost %}
@@ -58,11 +62,15 @@ A few notes:
       {% endfor %}
 
       <tr>
-        <td>-</td>
+        <td></td>
         <td><b>Total</b></td>
-        <td width="18%"><b>{% include usd.html amount=one_time_total %}</b></td>
-        <td width="18%"><b>{% include usd.html amount=annual_total %}</b></td>
-        <td>-</td>
+        <td width="18%" style="text-align: right;">
+          <b>{% include usd.html amount=one_time_total %}</b>
+        </td>
+        <td width="18%" style="text-align: right;">
+          <b>{% include usd.html amount=annual_total %}</b>
+        </td>
+        <td></td>
       </tr>
 
     </tbody>
@@ -94,8 +102,12 @@ A few notes:
 
       <tr>
         <td>{{ category.name | capitalize }}</td>
-        <td width="18%">{% include usd.html amount=one_time_total %}</td>
-        <td width="18%">{% include usd.html amount=annual_total %}</td>
+        <td width="18%" style="text-align: right;">
+          {% include usd.html amount=one_time_total %}
+        </td>
+        <td width="18%" style="text-align: right;">
+          {% include usd.html amount=annual_total %}
+        </td>
       </tr>
 
       {% assign one_time_grand_total
@@ -107,8 +119,12 @@ A few notes:
 
     <tr>
       <td><b>Total</b></td>
-      <td width="18%"><b>{% include usd.html amount=one_time_grand_total %}</b></td>
-      <td width="18%"><b>{% include usd.html amount=annual_grand_total %}</b></td>
+      <td width="18%" style="text-align: right;">
+        <b>{% include usd.html amount=one_time_grand_total %}</b>
+      </td>
+      <td width="18%" style="text-align: right;">
+        <b>{% include usd.html amount=annual_grand_total %}</b>
+      </td>
     </tr>
 
   </tbody>
