@@ -1,5 +1,9 @@
 <figure class="figure">
 
+  {% if include.href %}
+    <a href="{{ include.href }}">
+  {% endif %}
+
   {% if include.blur %}
     <div style="display: inline-block; position: relative; overflow: hidden;">
       <img
@@ -22,6 +26,10 @@
       style="width:{{ include.width }}px;"
       src="{{ include.src }}"/>
     <figcaption class="figure-caption">{{ include.caption }}</figcaption>
+
+  {% if include.href %}
+    </a>
+  {% endif %}
 
   {% endif %}
 </figure>
