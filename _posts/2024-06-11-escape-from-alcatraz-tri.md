@@ -13,7 +13,7 @@ the price.
 For $837---yes, almost $1000---I got:
 - A ferry ride to the swim start
 - A "bucket list" swim experience
-- A forgettable ~20 mile bike run
+- A forgettable ~20 mile bike ride
 - A forgettable ~8 mile run (sand ladder notwithstanding)
 - A heavy-duty grocery bag
 - A hooded towel
