@@ -3,7 +3,7 @@ title: "Dear Loved One"
 ---
 
 I've been thinking a lot since we spoke this morning. You're right: I shouldn't
-have acted holier than though. Sorry about that. Here's what I was trying to
+have acted holier than thou. Sorry about that. Here's what I was trying to
 convey:
 
 I'm sure it's obvious, but a bunch of people (myself included) are really hurt
