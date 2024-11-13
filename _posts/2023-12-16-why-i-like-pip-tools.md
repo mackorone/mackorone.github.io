@@ -1,5 +1,5 @@
 ---
-title: Why I like pip-tools
+title: Why I Like pip-tools
 tags: software
 ---
 
