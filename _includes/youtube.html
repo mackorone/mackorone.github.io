@@ -1,0 +1,33 @@
+<figure class="video-container" style="display: inline-block; vertical-align: top;">
+
+  {% assign width = include.width | default: 720 %}
+  {% if include.vertical %}
+    {% assign height = include.height | default: width | times: 1.7777 %}
+  {% else %}
+    {% assign height = include.height | default: width | times: 0.5625 %}
+  {% endif %}
+
+  <iframe
+      width="{{ width }}"
+      height="{{ height }}"
+      src="https://www.youtube.com/embed/{{ include.video_id }}"
+      title="YouTube video player"
+      frameborder="0"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen>
+  </iframe>
+
+  {% if include.caption %}
+    <figcaption class="video-caption">
+    {% if include.caption_href %}
+      <a href="{{ include.caption_href }}">
+        {{ include.caption }}
+      </a>
+    {% else %}
+      {{ include.caption }}
+    {% endif %}
+    </figcaption>
+  {% endif %}
+
+</figure>
+
