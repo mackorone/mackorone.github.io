@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Happy Birthday Maggie!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            cursor: default;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            touch-action: none;
+            overscroll-behavior: none;
+        }
+
+        .message-container {
+            text-align: center;
+            padding: 5px 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 2px;
+            position: relative;
+            pointer-events: none;
+        }
+
+        .word-line {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .message-container {
+                font-size: 64px;
+                padding: 30px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 12px;
+                justify-content: center;
+            }
+
+            .word-line {
+                gap: 12px;
+            }
+        }
+
+        .letter-slot {
+            display: inline-flex;
+            align-items: flex-start;
+            justify-content: center;
+            width: 15px;
+            height: 32px;
+            position: relative;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .letter-slot {
+                width: 50px;
+                height: 85px;
+            }
+        }
+
+        .letter-slot::after {
+            content: '_';
+            position: absolute;
+            bottom: 3px;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8em;
+        }
+
+        .letter-slot.space {
+            width: 0;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .letter-slot.space {
+                display: inline-flex;
+                width: 25px;
+            }
+        }
+
+        .letter-slot.space::after {
+            content: '';
+        }
+
+        .letter {
+            position: fixed;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            pointer-events: none;
+            z-index: 10;
+            text-align: center;
+            transform: translateX(-50%);
+        }
+
+        @media (min-width: 768px) {
+            .letter {
+                font-size: 64px;
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-10px, -10px); }
+            20% { transform: translate(10px, 10px); }
+            30% { transform: translate(-10px, 10px); }
+            40% { transform: translate(10px, -10px); }
+            50% { transform: translate(-10px, -10px); }
+            60% { transform: translate(10px, 10px); }
+            70% { transform: translate(-10px, 10px); }
+            80% { transform: translate(10px, -10px); }
+            90% { transform: translate(-10px, -10px); }
+        }
+
+        body.shake {
+            animation: shake 0.5s;
+        }
+
+        .timer {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            pointer-events: none;
+            z-index: 5;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .timer {
+                font-size: 32px;
+                padding: 10px 20px;
+            }
+        }
+
+        .timer.final {
+            position: static;
+            font-size: 48px;
+            color: #FFD700;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            background: none;
+            padding: 0;
+        }
+
+        @media (min-width: 768px) {
+            .timer.final {
+                font-size: 64px;
+            }
+        }
+
+        .bubble {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            user-select: none;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(255,255,255,0.3) 40%, transparent 70%);
+            box-shadow:
+                inset -10px -10px 20px rgba(255,255,255,0.2),
+                0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            will-change: transform;
+            transform: translate(0, 0);
+        }
+
+        @media (min-width: 768px) {
+            .bubble {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        .bubble:active {
+            transform: scale(0.95);
+        }
+
+        .bubble::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 20%;
+            width: 30%;
+            height: 30%;
+            background: radial-gradient(circle, rgba(255,255,255,0.9), transparent);
+            border-radius: 50%;
+        }
+
+        .bubble::after {
+            content: '';
+            position: absolute;
+            bottom: 20%;
+            right: 25%;
+            width: 15%;
+            height: 15%;
+            background: radial-gradient(circle, rgba(255,255,255,0.7), transparent);
+            border-radius: 50%;
+        }
+
+        .bubble:hover {
+            transform: scale(1.1);
+        }
+
+        .bubble.popped {
+            animation: popScale 0.3s forwards;
+        }
+
+        @keyframes popScale {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            animation: confetti-fall 3s linear;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .complete-message {
+            position: fixed;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #FFD700;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            opacity: 0;
+            animation: celebrate 1s forwards;
+            animation-delay: 0.5s;
+            z-index: 999;
+            text-align: center;
+            pointer-events: all;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 90vw;
+        }
+
+        @media (min-width: 768px) {
+            .complete-message {
+                font-size: 48px;
+                top: 45%;
+            }
+        }
+
+        .complete-message .bottom-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        @keyframes celebrate {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .play-again-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 15px 40px;
+            font-size: 24px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            font-weight: 600;
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .play-again-btn:hover {
+            transform: scale(1.1);
+        }
+
+        @media (min-width: 768px) {
+            .play-again-btn {
+                font-size: 28px;
+            }
+        }
+
+        .theme-selector {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 12px;
+            border-radius: 25px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            pointer-events: all;
+            flex-wrap: wrap;
+            max-width: 95vw;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .theme-selector {
+                padding: 15px 25px;
+                border-radius: 50px;
+                gap: 10px;
+                bottom: 20px;
+            }
+        }
+
+        .theme-selector label {
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            margin-right: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        @media (min-width: 768px) {
+            .theme-selector label {
+                font-size: 20px;
+                margin-right: 10px;
+            }
+        }
+
+        .theme-btn {
+            padding: 6px 12px;
+            font-size: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: rgba(255,255,255,0.3);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            white-space: nowrap;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        @media (min-width: 768px) {
+            .theme-btn {
+                padding: 10px 20px;
+                font-size: 18px;
+                border-radius: 25px;
+            }
+        }
+
+        .theme-btn:hover {
+            background: rgba(255,255,255,0.5);
+            transform: scale(1.05);
+        }
+
+        .theme-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 8px 16px;
+            font-size: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        @media (min-width: 768px) {
+            .back-button {
+                padding: 10px 20px;
+                font-size: 18px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">← Back</a>
+
+    <div class="message-container" id="message"></div>
+    <div class="celebration" id="celebration"></div>
+
+    <div class="theme-selector">
+        <label>Theme:</label>
+        <button class="theme-btn active" data-theme="bubbles">🫧 Bubbles</button>
+        <button class="theme-btn" data-theme="redgreen">🚦 Red/Green</button>
+    </div>
+
+    <div class="timer" id="timer" style="display: none;">0.0s</div>
+
+    <script>
+        const message = "HAPPY BIRTHDAY MAGGIE";
+        let currentTheme = 'bubbles';
+        let poppedCount = 0;
+        let poppedIndices = new Set(); // Track which letter indices have been popped
+        let animationFrameId = null;
+        let timerStartTime = null;
+        let timerInterval = null;
+        let isFrozen = false;
+        let backgroundMusic = null;
+        let audioContext = null;
+        let isAudioInitialized = false;
+        const messageContainer = document.getElementById('message');
+        const celebrationContainer = document.getElementById('celebration');
+        const timerElement = document.getElementById('timer');
+        const bubbles = [];
+        const isMobile = window.innerWidth < 768;
+        const bubbleSize = isMobile ? 60 : 100;
+
+        // Theme configurations
+        const themes = {
+            bubbles: {
+                colors: [
+                    'rgba(255, 107, 107, 0.6)', 'rgba(78, 205, 196, 0.6)',
+                    'rgba(69, 183, 209, 0.6)', 'rgba(255, 160, 122, 0.6)',
+                    'rgba(152, 216, 200, 0.6)', 'rgba(247, 220, 111, 0.6)',
+                    'rgba(187, 143, 206, 0.6)', 'rgba(133, 193, 226, 0.6)',
+                    'rgba(248, 183, 57, 0.6)', 'rgba(82, 183, 136, 0.6)',
+                    'rgba(230, 57, 70, 0.6)', 'rgba(69, 123, 157, 0.6)'
+                ],
+                sound: 'pop'
+            },
+            redgreen: {
+                colors: ['rgba(34, 197, 94, 0.7)'], // Green
+                wrongColor: 'rgba(239, 68, 68, 0.7)', // Red
+                sound: 'pop',
+                hasWrongBubbles: true,
+                redBubbleCount: 3
+            }
+        };
+
+        // Initialize audio context (critical for mobile)
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        // Resume audio context (for mobile)
+        async function resumeAudioContext() {
+            if (!audioContext) return null;
+
+            if (audioContext.state === 'suspended') {
+                try {
+                    await audioContext.resume();
+                } catch (e) {
+                    console.error('Audio resume failed:', e);
+                }
+            }
+            return audioContext;
+        }
+
+        // Test audio by playing a beep
+        function testAudio() {
+            if (!audioContext) return;
+
+            try {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.frequency.value = 880;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.7, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                osc.start(audioContext.currentTime);
+                osc.stop(audioContext.currentTime + 0.2);
+            } catch (e) {
+                console.error('Test sound failed:', e);
+            }
+        }
+
+        // Background music
+        async function startBackgroundMusic() {
+            if (backgroundMusic || !audioContext) return;
+
+            try {
+                await resumeAudioContext();
+                const ctx = audioContext;
+                const masterGain = ctx.createGain();
+                masterGain.gain.value = 0.6; // Louder
+                masterGain.connect(ctx.destination);
+
+                // Simple melody loop
+                function playNote(freq, startTime, duration) {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+                    osc.frequency.value = freq;
+                    osc.type = 'sine';
+                    gain.gain.setValueAtTime(0.05, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                    osc.start(startTime);
+                    osc.stop(startTime + duration);
+                }
+
+                const melody = [523, 587, 659, 523, 587, 659, 698, 784];
+                let noteIndex = 0;
+
+                function playMelody() {
+                    if (!audioContext) return;
+                    const now = ctx.currentTime;
+                    playNote(melody[noteIndex], now, 0.3);
+                    noteIndex = (noteIndex + 1) % melody.length;
+                    backgroundMusic = setTimeout(playMelody, 400);
+                }
+
+                playMelody();
+            } catch (e) {
+                console.error('Background music failed:', e);
+            }
+        }
+
+        function stopBackgroundMusic() {
+            if (backgroundMusic) {
+                clearTimeout(backgroundMusic);
+                backgroundMusic = null;
+            }
+        }
+
+        async function playTriumphSound() {
+            if (!audioContext) return;
+
+            try {
+                await resumeAudioContext();
+                const ctx = audioContext;
+                const masterGain = ctx.createGain();
+                masterGain.gain.value = 0.5;
+                masterGain.connect(ctx.destination);
+
+                // Happy Birthday melody: "Happy birthday to you, happy birthday to you"
+                const melody = [
+                    { freq: 392, duration: 0.3 },  // G - Hap-
+                    { freq: 392, duration: 0.15 }, // G - py
+                    { freq: 440, duration: 0.45 }, // A - birth-
+                    { freq: 392, duration: 0.45 }, // G - day
+                    { freq: 523, duration: 0.45 }, // C - to
+                    { freq: 494, duration: 0.9 },  // B - you
+
+                    { freq: 392, duration: 0.3 },  // G - Hap-
+                    { freq: 392, duration: 0.15 }, // G - py
+                    { freq: 440, duration: 0.45 }, // A - birth-
+                    { freq: 392, duration: 0.45 }, // G - day
+                    { freq: 587, duration: 0.45 }, // D - to
+                    { freq: 523, duration: 0.9 }   // C - you!
+                ];
+
+                let time = 0;
+                melody.forEach(({ freq, duration }) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+                    osc.frequency.value = freq;
+                    osc.type = 'triangle';
+                    const startTime = ctx.currentTime + time;
+                    gain.gain.setValueAtTime(0.4, startTime);
+                    gain.gain.setValueAtTime(0.4, startTime + duration * 0.9);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                    osc.start(startTime);
+                    osc.stop(startTime + duration);
+                    time += duration;
+                });
+            } catch (e) {
+                console.error('Audio playback failed:', e);
+            }
+        }
+
+        // Create letter slots for the message
+        function createLetterSlots() {
+            messageContainer.innerHTML = '';
+
+            if (isMobile) {
+                // On mobile, display words on separate lines
+                const words = message.split(' ');
+                words.forEach(word => {
+                    const wordLine = document.createElement('div');
+                    wordLine.className = 'word-line';
+                    word.split('').forEach(letter => {
+                        const slot = document.createElement('div');
+                        slot.className = 'letter-slot';
+                        wordLine.appendChild(slot);
+                    });
+                    messageContainer.appendChild(wordLine);
+                });
+            } else {
+                // On desktop, display all letters in a row
+                const letters = message.split('');
+                letters.forEach(letter => {
+                    const slot = document.createElement('div');
+                    slot.className = letter === ' ' ? 'letter-slot space' : 'letter-slot';
+                    messageContainer.appendChild(slot);
+                });
+            }
+        }
+
+        // Create bubbles for each letter
+        function createBubbles(preservePositions = false) {
+            // Save existing bubble positions before clearing
+            const savedPositions = new Map();
+            if (preservePositions) {
+                bubbles.forEach(({ element, x, y, velocity }) => {
+                    const letterIndex = element.dataset.index;
+                    if (letterIndex !== undefined) {
+                        savedPositions.set(parseInt(letterIndex), { x, y, velocity: { ...velocity } });
+                    }
+                });
+            }
+
+            // Clear existing bubbles
+            bubbles.forEach(({ element }) => element.remove());
+            bubbles.length = 0;
+
+            const letters = message.split('').filter(l => l !== ' '); // Remove spaces
+            const theme = themes[currentTheme];
+            const colors = theme.colors;
+
+            // Filter out already popped letters
+            const unpoppedLetters = [];
+            const unpoppedLetterIndices = [];
+            letters.forEach((letter, idx) => {
+                const originalIndex = message.split('').findIndex((l, mIdx) => {
+                    let count = 0;
+                    for (let j = 0; j <= mIdx; j++) {
+                        if (message[j] !== ' ') count++;
+                    }
+                    return count === idx + 1;
+                });
+
+                if (!poppedIndices.has(originalIndex)) {
+                    unpoppedLetters.push(letter);
+                    unpoppedLetterIndices.push(originalIndex);
+                }
+            });
+
+            // For red/green theme, always create exactly 3 red bubbles (as long as there are unpopped letters)
+            let redBubbleIndices = [];
+            if (theme.hasWrongBubbles && unpoppedLetters.length > 0) {
+                // Always create exactly 3 red bubbles
+                const redCount = theme.redBubbleCount;
+                const totalBubbles = unpoppedLetters.length + redCount;
+                const availableIndices = Array.from({ length: totalBubbles }, (_, i) => i);
+
+                // Shuffle and pick first redCount for red bubbles
+                for (let i = availableIndices.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [availableIndices[i], availableIndices[j]] = [availableIndices[j], availableIndices[i]];
+                }
+                redBubbleIndices = availableIndices.slice(0, redCount);
+            }
+
+            let letterIndex = 0;
+            const totalBubbles = theme.hasWrongBubbles ? unpoppedLetters.length + redBubbleIndices.length : unpoppedLetters.length;
+
+            for (let i = 0; i < totalBubbles; i++) {
+                const isRedBubble = redBubbleIndices.includes(i);
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+
+                let x, y, velocity;
+
+                if (isRedBubble) {
+                    // Red bubble (wrong)
+                    bubble.style.backgroundColor = theme.wrongColor;
+                    bubble.dataset.isWrong = true;
+
+                    // Handle both click and touch for mobile
+                    const handleWrong = (e) => {
+                        e.preventDefault();
+                        handleWrongBubble(bubble);
+                    };
+                    bubble.addEventListener('click', handleWrong);
+                    bubble.addEventListener('touchend', handleWrong);
+
+                    // Use random position for red bubbles
+                    const minTop = isMobile ? window.innerHeight * 0.3 : window.innerHeight * 0.25;
+                    x = Math.random() * (window.innerWidth - bubbleSize);
+                    y = minTop + Math.random() * (window.innerHeight - minTop - bubbleSize);
+                    const maxVel = isMobile ? 3 : 3.75;
+                    velocity = {
+                        x: (Math.random() - 0.5) * maxVel,
+                        y: (Math.random() - 0.5) * maxVel
+                    };
+                } else {
+                    // Green bubble (correct letter)
+                    const letter = unpoppedLetters[letterIndex];
+                    const originalIndex = unpoppedLetterIndices[letterIndex];
+
+                    bubble.style.backgroundColor = colors[originalIndex % colors.length];
+                    bubble.dataset.letter = letter;
+                    bubble.dataset.index = originalIndex;
+
+                    // Handle both click and touch for mobile
+                    const handlePop = (e) => {
+                        e.preventDefault();
+                        popBubble(bubble, letter, originalIndex);
+                    };
+                    bubble.addEventListener('click', handlePop);
+                    bubble.addEventListener('touchend', handlePop);
+
+                    // Try to restore saved position, otherwise use random
+                    const savedPos = savedPositions.get(originalIndex);
+                    if (savedPos && preservePositions) {
+                        x = savedPos.x;
+                        y = savedPos.y;
+                        velocity = savedPos.velocity;
+                    } else {
+                        const minTop = isMobile ? window.innerHeight * 0.3 : window.innerHeight * 0.25;
+                        x = Math.random() * (window.innerWidth - bubbleSize);
+                        y = minTop + Math.random() * (window.innerHeight - minTop - bubbleSize);
+                        const maxVel = isMobile ? 3 : 3.75;
+                        velocity = {
+                            x: (Math.random() - 0.5) * maxVel,
+                            y: (Math.random() - 0.5) * maxVel
+                        };
+                    }
+
+                    letterIndex++;
+                }
+
+                // Position using transform for GPU acceleration
+                bubble.style.left = '0';
+                bubble.style.top = '0';
+                bubble.style.transform = `translate(${x}px, ${y}px)`;
+
+                bubbles.push({ element: bubble, x, y, velocity });
+                document.body.appendChild(bubble);
+            }
+        }
+
+        // Animate bubbles using transforms (GPU accelerated!)
+        function animateBubbles() {
+            if (isFrozen) {
+                animationFrameId = requestAnimationFrame(animateBubbles);
+                return;
+            }
+
+            const minTop = isMobile ? window.innerHeight * 0.3 : window.innerHeight * 0.25;
+            const maxSpeed = isMobile ? 3.75 : 4.5;
+
+            bubbles.forEach(({ element, x, y, velocity }) => {
+                if (!element.parentElement) return;
+
+                // Add randomness for chaotic movement
+                velocity.x += (Math.random() - 0.5) * 0.3;
+                velocity.y += (Math.random() - 0.5) * 0.3;
+
+                // Cap velocity
+                velocity.x = Math.max(-maxSpeed, Math.min(maxSpeed, velocity.x));
+                velocity.y = Math.max(-maxSpeed, Math.min(maxSpeed, velocity.y));
+
+                // Update position
+                x += velocity.x;
+                y += velocity.y;
+
+                // Bounce off edges
+                if (x <= 0 || x >= window.innerWidth - bubbleSize) {
+                    velocity.x *= -1;
+                    x = Math.max(0, Math.min(window.innerWidth - bubbleSize, x));
+                }
+                if (y <= minTop || y >= window.innerHeight - bubbleSize) {
+                    velocity.y *= -1;
+                    y = Math.max(minTop, Math.min(window.innerHeight - bubbleSize, y));
+                }
+
+                // Apply transform (GPU accelerated!)
+                element.style.transform = `translate(${x}px, ${y}px)`;
+
+                // Update stored position
+                Object.assign(bubbles.find(b => b.element === element), { x, y });
+            });
+
+            animationFrameId = requestAnimationFrame(animateBubbles);
+        }
+
+        async function handleWrongBubble(bubble) {
+            if (isFrozen) return;
+
+            // Freeze game
+            isFrozen = true;
+
+            // Shake screen
+            document.body.classList.add('shake');
+
+            // Play buzzer sound
+            if (audioContext) {
+                try {
+                    await resumeAudioContext();
+                    const ctx = audioContext;
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                oscillator.frequency.value = 100;
+                oscillator.type = 'sawtooth';
+                gainNode.gain.setValueAtTime(0.4, ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                    oscillator.start(ctx.currentTime);
+                    oscillator.stop(ctx.currentTime + 0.5);
+                } catch (e) {
+                    console.error('❌ Buzzer sound failed:', e);
+                }
+            }
+
+            // Unfreeze after 500ms
+            setTimeout(() => {
+                isFrozen = false;
+                document.body.classList.remove('shake');
+            }, 500);
+        }
+
+        function startTimer() {
+            if (timerStartTime) return; // Already started
+
+            timerStartTime = Date.now();
+            timerElement.style.display = 'block';
+
+            timerInterval = setInterval(() => {
+                const elapsed = (Date.now() - timerStartTime) / 1000;
+                timerElement.textContent = elapsed.toFixed(1) + 's';
+            }, 100);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            const finalTime = ((Date.now() - timerStartTime) / 1000).toFixed(1);
+
+            // Animate timer to center
+            setTimeout(() => {
+                timerElement.classList.add('final');
+                timerElement.textContent = finalTime + 's';
+            }, 500);
+        }
+
+        function popBubble(bubble, letter, index) {
+            // Prevent double-clicking
+            if (bubble.classList.contains('popped') || isFrozen) return;
+
+            // Start timer on first pop
+            startTimer();
+
+            // Initialize audio on first interaction if not already initialized (fallback for autoplay blocking)
+            if (!isAudioInitialized) {
+                initAudioContext();
+                startBackgroundMusic();
+                isAudioInitialized = true;
+            }
+
+            playSound(letter);
+
+            // Get bubble's actual screen position (accounting for transform)
+            const bubbleData = bubbles.find(b => b.element === bubble);
+            const startX = bubbleData.x + bubbleSize / 2;
+            const startY = bubbleData.y + bubbleSize / 2;
+
+            // Animate bubble shrinking at its current position
+            const currentTransform = bubble.style.transform;
+            bubble.style.transition = 'transform 0.3s, opacity 0.3s';
+            bubble.style.transform = currentTransform.replace(/translate\([^)]+\)/, `translate(${bubbleData.x}px, ${bubbleData.y}px) scale(0)`);
+            bubble.style.opacity = '0';
+
+            bubble.classList.add('popped');
+
+            // Get target slot position
+            const slots = messageContainer.querySelectorAll('.letter-slot:not(.space)');
+            let slotIndex = 0;
+            for (let i = 0; i < index; i++) {
+                if (message[i] !== ' ') slotIndex++;
+            }
+            const targetSlot = slots[slotIndex];
+            if (!targetSlot) return; // Safety check
+
+            const targetRect = targetSlot.getBoundingClientRect();
+            const endX = targetRect.left + targetRect.width / 2;
+            const endY = targetRect.top + 8; // Position at top of slot, above underscore
+
+            // Create letter element
+            const letterEl = document.createElement('div');
+            letterEl.className = 'letter';
+            letterEl.textContent = letter;
+            letterEl.style.left = startX + 'px';
+            letterEl.style.top = startY + 'px';
+            document.body.appendChild(letterEl);
+
+            // Animate letter to target position (centered with translateX(-50%))
+            setTimeout(() => {
+                letterEl.style.transition = 'all 0.8s ease-out';
+                letterEl.style.left = endX + 'px';
+                letterEl.style.top = endY + 'px';
+            }, 100);
+
+            // Remove bubble
+            setTimeout(() => {
+                bubble.remove();
+                poppedCount++;
+                poppedIndices.add(index); // Track this letter as popped
+
+                // Count actual letter bubbles (not spaces)
+                const totalLetters = message.split('').filter(l => l !== ' ').length;
+                if (poppedCount === totalLetters) {
+                    stopTimer();
+                    celebrate();
+                }
+            }, 300);
+        }
+
+        async function playSound(letter) {
+            if (!audioContext) return;
+
+            try {
+                await resumeAudioContext();
+                const ctx = audioContext;
+
+                // Bubble pop sound
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                oscillator.frequency.value = 400 + Math.random() * 400;
+                oscillator.type = 'sine';
+                gainNode.gain.setValueAtTime(0.8, ctx.currentTime); // Louder
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 0.1);
+            } catch (e) {
+                console.error('❌ Pop sound failed:', e);
+            }
+        }
+
+        function celebrate() {
+            // Stop background music and play triumph
+            stopBackgroundMusic();
+            playTriumphSound();
+
+            // Move timer to final position
+            timerElement.classList.add('final');
+
+            // Add celebration message with new layout
+            const completeMsg = document.createElement('div');
+            completeMsg.className = 'complete-message';
+            completeMsg.innerHTML = `
+                <div>🎉 Love, Uncle Mack and Aunt Christine 🎉</div>
+                <div class="bottom-section">
+                    ${timerElement.outerHTML}
+                    <button class="play-again-btn" onclick="resetGame()">Play Again</button>
+                </div>
+            `;
+            document.body.appendChild(completeMsg);
+
+            // Hide original timer
+            timerElement.style.display = 'none';
+
+            // Create confetti
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    createConfetti();
+                }, i * 30);
+            }
+        }
+
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * window.innerWidth + 'px';
+            const colors = themes[currentTheme].colors;
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+            celebrationContainer.appendChild(confetti);
+
+            setTimeout(() => confetti.remove(), 4000);
+        }
+
+        function resetGame() {
+            // Remove celebration message
+            const completeMsg = document.querySelector('.complete-message');
+            if (completeMsg) completeMsg.remove();
+
+            // Remove all letters
+            document.querySelectorAll('.letter').forEach(l => l.remove());
+
+            // Clear confetti
+            celebrationContainer.innerHTML = '';
+
+            // Reset timer
+            if (timerInterval) clearInterval(timerInterval);
+            timerStartTime = null;
+            timerInterval = null;
+            timerElement.style.display = 'none';
+            timerElement.classList.remove('final');
+            timerElement.textContent = '0.0s';
+
+            // Reset counter and frozen state
+            poppedCount = 0;
+            poppedIndices.clear();
+            isFrozen = false;
+
+            // Restart background music
+            startBackgroundMusic();
+
+            // Recreate game
+            createLetterSlots();
+            createBubbles();
+        }
+
+        // Theme switching
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Change theme without resetting progress
+                currentTheme = btn.dataset.theme;
+                createBubbles(true); // Recreate bubbles with new theme, preserving positions and popped letters
+            });
+        });
+
+        // Initialize game
+        createLetterSlots();
+        createBubbles();
+        animateBubbles();
+
+        // Try to start audio immediately (may be blocked by browser autoplay policies)
+        (async () => {
+            try {
+                initAudioContext();
+                await startBackgroundMusic();
+                isAudioInitialized = true;
+            } catch (e) {
+                // Audio will start on first interaction if autoplay is blocked
+                console.log('Audio autoplay blocked, will start on first interaction');
+            }
+        })();
+    </script>
+</body>
+</html>
