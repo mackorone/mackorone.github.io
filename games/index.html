@@ -16,7 +16,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             background-attachment: fixed;
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 20px;
             color: white;
         }
 
@@ -28,36 +28,37 @@
         h1 {
             text-align: center;
             font-size: 48px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
         }
 
         .subtitle {
             text-align: center;
             font-size: 18px;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             opacity: 0.9;
         }
 
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
             margin-bottom: 40px;
         }
 
         .game-card {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 15px;
+            padding: 15px;
             text-decoration: none;
             color: white;
             transition: all 0.3s ease;
             border: 2px solid rgba(255, 255, 255, 0.2);
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            align-items: center;
+            gap: 5px;
         }
 
         .game-card:hover {
@@ -68,56 +69,19 @@
         }
 
         .game-icon {
-            font-size: 64px;
-            text-align: center;
-            margin-bottom: 10px;
+            font-size: 40px;
+            margin-bottom: 0px;
         }
 
         .game-title {
-            font-size: 28px;
+            font-size: 18px;
             font-weight: bold;
             text-align: center;
-            margin-bottom: 5px;
-        }
-
-        .game-date {
-            font-size: 14px;
-            text-align: center;
-            opacity: 0.7;
-            margin-bottom: 10px;
-        }
-
-        .game-description {
-            font-size: 16px;
-            line-height: 1.6;
-            opacity: 0.9;
-            flex-grow: 1;
-        }
-
-        .play-button {
-            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            color: white;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            transition: transform 0.2s;
-        }
-
-        .game-card:hover .play-button {
-            transform: scale(1.05);
         }
 
         @media (max-width: 768px) {
             h1 {
                 font-size: 36px;
-            }
-
-            .games-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -128,15 +92,16 @@
         <p class="subtitle">Choose a game to play</p>
 
         <div class="games-grid">
-            <!-- Pop Game -->
-            <a href="pop.html" class="game-card">
+            <!-- Birthday Bubble Pop Game -->
+            <a href="birthday-bubble-pop.html" class="game-card">
                 <div class="game-icon">🫧</div>
-                <div class="game-title">Pop</div>
-                <div class="game-date">February 7, 2026</div>
-                <div class="game-description">
-                    Pop the colorful bubbles to reveal a hidden message!
-                </div>
-                <div class="play-button">Play Now</div>
+                <div class="game-title">Birthday Bubble Pop</div>
+            </a>
+
+            <!-- Tower Topple Game -->
+            <a href="tower-topple.html" class="game-card">
+                <div class="game-icon">📦</div>
+                <div class="game-title">Tower Topple</div>
             </a>
 
             <!-- Add more games here in the future -->
