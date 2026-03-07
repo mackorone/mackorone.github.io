@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+        maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Gravity Flip</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #f5ecd8;
+            overflow: hidden;
+            touch-action: none;
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+
+        canvas { display: block; }
+
+        /* --- Back button --- */
+        .back-btn {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            padding: 7px 16px;
+            background: rgba(200, 165, 100, 0.25);
+            border: 1.5px solid #9a7040;
+            color: #5a3a18;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: Georgia, serif;
+            z-index: 50;
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            background: rgba(200, 165, 100, 0.45);
+            color: #2a1a08;
+        }
+
+        /* --- HUD --- */
+        #hud {
+            position: fixed;
+            top: 14px;
+            right: 16px;
+            text-align: right;
+            z-index: 50;
+            pointer-events: none;
+        }
+        #hud .lbl {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #9a7040;
+            font-family: Georgia, serif;
+        }
+        #hud .score {
+            font-size: 38px;
+            font-weight: 700;
+            font-family: Georgia, serif;
+            color: #b83025;
+            line-height: 1;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+        }
+        #hud .best {
+            font-size: 11px;
+            color: #7a5a20;
+            font-family: Georgia, serif;
+            margin-top: 2px;
+        }
+
+        /* --- Tutorial hint --- */
+        #tut {
+            position: fixed;
+            bottom: 28%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(90, 58, 24, 0.55);
+            font-family: Georgia, serif;
+            pointer-events: none;
+            z-index: 50;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 1.5s;
+        }
+
+        /* --- Overlay screens --- */
+        .screen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(245, 236, 216, 0.93);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            transition: opacity 0.4s;
+        }
+        .screen.hidden { opacity: 0; pointer-events: none; }
+
+        .game-title {
+            font-size: clamp(42px, 9vw, 78px);
+            font-weight: 900;
+            font-family: Georgia, serif;
+            color: #2a1a08;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
+            text-shadow: 3px 3px 0 rgba(160, 110, 40, 0.3);
+        }
+        .tagline {
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: #9a7040;
+            text-transform: uppercase;
+            font-family: Georgia, serif;
+            margin-bottom: 8px;
+        }
+        .subhint {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: rgba(90, 58, 24, 0.45);
+            text-transform: uppercase;
+            font-family: Georgia, serif;
+            margin-bottom: 48px;
+        }
+        .btn {
+            padding: 13px 48px;
+            font-size: 15px;
+            background: transparent;
+            color: #7a3820;
+            border: 2px solid #9a5030;
+            border-radius: 3px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: bold;
+            font-family: Georgia, serif;
+            transition: all 0.2s;
+            box-shadow: 2px 2px 0 rgba(120, 80, 20, 0.2);
+        }
+        .btn:hover, .btn:active {
+            background: #9a5030;
+            color: #f7f0e3;
+            box-shadow: 3px 3px 0 rgba(80, 40, 10, 0.3);
+            transform: translate(-1px, -1px);
+        }
+
+        .over-title {
+            font-size: clamp(32px, 7vw, 54px);
+            font-weight: 900;
+            font-family: Georgia, serif;
+            letter-spacing: 4px;
+            color: #b83025;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+            margin-bottom: 4px;
+        }
+        .over-score {
+            font-size: clamp(56px, 13vw, 96px);
+            font-weight: 700;
+            font-family: Georgia, serif;
+            color: #2a1a08;
+            text-shadow: 3px 3px 0 rgba(160, 110, 40, 0.3);
+            margin: 8px 0;
+            line-height: 1;
+        }
+        .over-best {
+            font-size: 13px;
+            color: #7a5a20;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: Georgia, serif;
+            margin-bottom: 36px;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<a href="index.html" class="back-btn">&#8592; Exit</a>
+
+<div id="hud">
+    <div class="lbl">Score</div>
+    <div class="score" id="scoreEl">0</div>
+    <div class="best"  id="bestEl">Best: 0</div>
+</div>
+
+<div id="tut">Tap anywhere to flip</div>
+
+<div id="startScreen" class="screen">
+    <div class="game-title">Gravity Flip</div>
+    <div class="tagline">Tap to flip gravity</div>
+    <div class="subhint">Avoid the walls &mdash; survive as long as you can</div>
+    <button class="btn" id="startBtn">Play</button>
+</div>
+
+<div id="gameOverScreen" class="screen hidden">
+    <div class="over-title">Crashed</div>
+    <div class="over-score" id="overScoreEl">0</div>
+    <div class="over-best"  id="overBestEl">Best: 0</div>
+    <button class="btn" id="restartBtn">Try Again</button>
+</div>
+
+<script>
+'use strict';
+
+// ─── Constants ───────────────────────────────────────────────────────────────
+
+const WALL_FRAC    = 0.075;
+const OBS_W        = 26;
+const PS           = 13;
+const TRAIL_LEN    = 24;
+const GRAV_FORCE   = 0.60;
+const SPEED_START  = 4.8;
+const SPEED_MAX    = 11.5;
+const GRAV_IMPULSE = 3.2;  // small nudge — player accelerates into the arc
+
+// ─── Canvas ──────────────────────────────────────────────────────────────────
+
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+let W = 0, H = 0;
+let wallEdgeTop = [];  // pre-generated torn paper edge points
+let wallEdgeBot = [];
+
+function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    generateWallEdges();
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ─── Pre-generate torn paper wall edges ─────────────────────────────────────
+
+function generateWallEdges() {
+    const wh  = wallH();
+    const seg = 13;
+    let seed  = 0xdeadbeef;
+    function r() {
+        seed ^= seed << 13; seed ^= seed >> 17; seed ^= seed << 5;
+        return ((seed >>> 0) / 0xffffffff);
+    }
+    wallEdgeTop = [];
+    wallEdgeBot = [];
+    for (let x = 0; x <= W + seg; x += seg) {
+        // Inner edge of top wall: slightly below wh
+        wallEdgeTop.push({ x, y: wh - 3 + r() * 14 });
+        // Inner edge of bottom wall: slightly above H-wh
+        wallEdgeBot.push({ x, y: H - wh + 3 - r() * 14 });
+    }
+    // Clamp last points to exactly W
+    if (wallEdgeTop.length) wallEdgeTop[wallEdgeTop.length - 1].x = W;
+    if (wallEdgeBot.length) wallEdgeBot[wallEdgeBot.length - 1].x = W;
+}
+
+// ─── Audio ───────────────────────────────────────────────────────────────────
+
+class AudioEngine {
+    constructor() { this.ac = null; this.drones = []; this.speedFrac = 0; }
+
+    wake() {
+        if (!this.ac) {
+            this.ac = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (this.ac.state === 'suspended') this.ac.resume();
+    }
+
+    _osc(type, freq) {
+        const o = this.ac.createOscillator();
+        o.type = type; o.frequency.value = freq; return o;
+    }
+    _gain(v) { const g = this.ac.createGain(); g.gain.value = v; return g; }
+
+    _noise(dur) {
+        const len = Math.floor(this.ac.sampleRate * dur);
+        const buf = this.ac.createBuffer(1, len, this.ac.sampleRate);
+        const d   = buf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+        const src = this.ac.createBufferSource();
+        src.buffer = buf;
+        return src;
+    }
+
+    // Papery whoosh — filtered noise sweep
+    playFlip(toUp) {
+        if (!this.ac) return;
+        const t  = this.ac.currentTime;
+        const ns = this._noise(0.18);
+        const f  = this.ac.createBiquadFilter();
+        f.type = 'bandpass';
+        f.frequency.setValueAtTime(toUp ? 700 : 450, t);
+        f.frequency.exponentialRampToValueAtTime(toUp ? 1400 : 260, t + 0.14);
+        f.Q.value = 4;
+        const g  = this._gain(0);
+        g.gain.setValueAtTime(0.22, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+        ns.connect(f).connect(g).connect(this.ac.destination);
+        ns.start(t);
+
+        // Soft tonal ping layered on top
+        const o  = this._osc('triangle', toUp ? 520 : 320);
+        const g2 = this._gain(0);
+        o.frequency.setValueAtTime(toUp ? 520 : 320, t);
+        o.frequency.exponentialRampToValueAtTime(toUp ? 780 : 220, t + 0.1);
+        g2.gain.setValueAtTime(0.07, t);
+        g2.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+        o.connect(g2).connect(this.ac.destination);
+        o.start(t); o.stop(t + 0.14);
+    }
+
+    // Paper crumple — three staggered noise bursts
+    playCrash() {
+        if (!this.ac) return;
+        const t = this.ac.currentTime;
+        [0, 0.055, 0.115].forEach((delay, i) => {
+            const ns = this._noise(0.25 + i * 0.08);
+            const f  = this.ac.createBiquadFilter();
+            f.type = 'bandpass';
+            f.frequency.value = 1400 - i * 350;
+            f.Q.value = 1.5 + i;
+            const g  = this._gain(0);
+            g.gain.setValueAtTime(0.28 - i * 0.06, t + delay);
+            g.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.3);
+            ns.connect(f).connect(g).connect(this.ac.destination);
+            ns.start(t + delay);
+        });
+        // Soft thud
+        const o  = this._osc('sine', 140);
+        const g3 = this._gain(0);
+        o.frequency.setValueAtTime(140, t);
+        o.frequency.exponentialRampToValueAtTime(40, t + 0.2);
+        g3.gain.setValueAtTime(0.18, t);
+        g3.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+        o.connect(g3).connect(this.ac.destination);
+        o.start(t); o.stop(t + 0.25);
+    }
+
+    // Milestone chime — brighter two-note ding
+    playMilestone() {
+        if (!this.ac) return;
+        const t = this.ac.currentTime;
+        [[392, 0], [523.25, 0.12]].forEach(([freq, delay]) => {
+            const o = this._osc('triangle', freq);
+            const g = this._gain(0);
+            g.gain.setValueAtTime(0.13, t + delay);
+            g.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.4);
+            o.connect(g).connect(this.ac.destination);
+            o.start(t + delay); o.stop(t + delay + 0.45);
+        });
+    }
+
+    // Rubber-stamp thwack
+    playScore() {
+        if (!this.ac) return;
+        const t = this.ac.currentTime;
+        const o = this._osc('sine', 200);
+        const g = this._gain(0);
+        o.frequency.setValueAtTime(200, t);
+        o.frequency.exponentialRampToValueAtTime(90, t + 0.07);
+        g.gain.setValueAtTime(0.1, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+        o.connect(g).connect(this.ac.destination);
+        o.start(t); o.stop(t + 0.1);
+    }
+
+    // Wind bed + music-box melody
+    startDrones() {
+        this.stopDrones();
+        if (!this.ac) return;
+
+        // Wind bed: two looping filtered-noise layers
+        const len = this.ac.sampleRate * 3;
+        const buf = this.ac.createBuffer(1, len, this.ac.sampleRate);
+        const d   = buf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+
+        const src = this.ac.createBufferSource();
+        src.buffer = buf; src.loop = true;
+        const f   = this.ac.createBiquadFilter();
+        f.type = 'bandpass'; f.frequency.value = 500; f.Q.value = 0.6;
+        const lfo  = this.ac.createOscillator();
+        const lfoG = this._gain(180);
+        lfo.frequency.value = 0.18;
+        lfo.connect(lfoG).connect(f.frequency);
+        lfo.start();
+        const g = this._gain(0.028);
+        src.connect(f).connect(g).connect(this.ac.destination);
+        src.start();
+        this.drones.push(src, lfo);
+
+        const src2 = this.ac.createBufferSource();
+        src2.buffer = buf; src2.loop = true; src2.loopStart = 0.7;
+        const f2   = this.ac.createBiquadFilter();
+        f2.type = 'bandpass'; f2.frequency.value = 900; f2.Q.value = 0.8;
+        const lfo2  = this.ac.createOscillator();
+        const lfoG2 = this._gain(120);
+        lfo2.frequency.value = 0.31;
+        lfo2.connect(lfoG2).connect(f2.frequency);
+        lfo2.start();
+        const g2 = this._gain(0.012);
+        src2.connect(f2).connect(g2).connect(this.ac.destination);
+        src2.start();
+        this.drones.push(src2, lfo2);
+
+        // Music-box melody: gentle pentatonic phrase, 8 notes looping
+        // C4  E4  G4  C5  A4  G4  E4  D4
+        this._melody = [261.63, 329.63, 392.00, 523.25,
+                        440.00, 392.00, 329.63, 293.66];
+        // Bass root on beat 1 and 5: C3, G3
+        this._bass   = [130.81, 0, 0, 0, 196.00, 0, 0, 0];
+        this._mBeat  = 0;
+        this._mNext  = this.ac.currentTime + 0.5;
+        this._mRun   = true;
+        this._mTick();
+    }
+
+    _mTick() {
+        if (!this._mRun) return;
+        // Tempo speeds up with game speed: 0.38s (slow) → 0.14s (max)
+        // Square-root curve so the speedup hits hard early, not just at max speed
+        const BEAT = 0.38 - Math.sqrt(this.speedFrac) * 0.24;
+        while (this._mNext < this.ac.currentTime + 0.3) {
+            const i    = this._mBeat % this._melody.length;
+            const mel  = this._melody[i];
+            const bass = this._bass[i];
+            const t    = this._mNext;
+
+            // Melody note: triangle wave, quick decay (music-box)
+            const o  = this._osc('triangle', mel);
+            const gm = this._gain(0);
+            gm.gain.setValueAtTime(0.08, t);
+            gm.gain.exponentialRampToValueAtTime(0.001, t + 0.30);
+            o.connect(gm).connect(this.ac.destination);
+            o.start(t); o.stop(t + 0.35);
+
+            // Bass note: sine, softer
+            if (bass > 0) {
+                const ob = this._osc('sine', bass);
+                const gb = this._gain(0);
+                gb.gain.setValueAtTime(0.06, t);
+                gb.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
+                ob.connect(gb).connect(this.ac.destination);
+                ob.start(t); ob.stop(t + 0.6);
+            }
+
+            this._mNext += BEAT;
+            this._mBeat++;
+        }
+        this._mTimer = setTimeout(() => this._mTick(), 40);
+    }
+
+    stopDrones() {
+        this._mRun = false;
+        if (this._mTimer) clearTimeout(this._mTimer);
+        for (const o of this.drones) { try { o.stop(); } catch (_) {} }
+        this.drones = [];
+    }
+}
+
+const audio = new AudioEngine();
+
+// ─── State ───────────────────────────────────────────────────────────────────
+
+let gs        = null;
+let particles = [];
+let shake     = { power: 0 };
+let best      = parseInt(localStorage.getItem('gf_best') || '0', 10);
+document.getElementById('bestEl').textContent = `Best: ${best}`;
+
+function wallH()  { return H * WALL_FRAC; }
+function laneH()  { return H - wallH() * 2; }
+
+function obsSpacing() {
+    return Math.max(170, 335 - (gs ? gs.score * 0.9 : 0));
+}
+
+function makeObstacle(x) {
+    const wh  = wallH();
+    const lh  = laneH();
+    const gap = Math.max(lh * 0.30, lh * (0.56 - (gs ? gs.score : 0) * 0.004));
+    const margin    = gap * 0.55;
+    const gapCenter = wh + margin + Math.random() * (lh - gap - margin * 0.4);
+    return { x, gapCenter, gapH: gap, passed: false };
+}
+
+function initGame() {
+    gs = {
+        running: false, dead: false,
+        score: 0, speed: SPEED_START,
+        gravDir: 1, scrollX: 0, coyote: 0,
+        obstacles: [], player: {
+            x: W * 0.22, y: H / 2,
+            vy: 0, angle: 0, trail: [],
+            scaleX: 1, scaleY: 1,
+        },
+    };
+    particles = [];
+    let ox = W + 360;
+    for (let i = 0; i < 6; i++) {
+        gs.obstacles.push(makeObstacle(ox));
+        ox += obsSpacing();
+    }
+}
+
+// ─── Flip ────────────────────────────────────────────────────────────────────
+
+function flip() {
+    if (!gs || !gs.running || gs.dead) return;
+    const p = gs.player;
+    gs.gravDir *= -1;
+    p.vy = gs.gravDir * GRAV_IMPULSE;
+    // Snap angle partially toward new direction immediately
+    p.angle *= 0.1;
+    // Squash & stretch: widen in travel axis, compress perpendicular
+    p.scaleX = 1.5;
+    p.scaleY = 0.55;
+    // Coyote grace: forgive a wall clip for a few frames after a flip
+    gs.coyote = 5;
+    // Ghost afterimage at flip position
+    particles.push({ type: 'ghost', x: p.x, y: p.y, angle: p.angle, life: 1, decay: 0.07 });
+    audio.playFlip(gs.gravDir === -1);
+    spawnFlipParticles();
+}
+
+function spawnFlipParticles() {
+    const p  = gs.player;
+    const paperColors = ['#e8d5a8', '#f0e2bc', '#d4bc88', '#eddcaa', '#f5ecd0'];
+    for (let i = 0; i < 14; i++) {
+        const ang = Math.random() * Math.PI * 2;
+        const spd = Math.random() * 4 + 1.5;
+        particles.push({
+            x: p.x + (Math.random() - 0.5) * 10,
+            y: p.y + (Math.random() - 0.5) * 10,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd - gs.gravDir * 1.5,
+            life: 1,
+            decay: 0.035 + Math.random() * 0.025,
+            w: Math.random() * 9 + 4,
+            h: Math.random() * 5 + 2,
+            angle: Math.random() * Math.PI * 2,
+            spin:  (Math.random() - 0.5) * 0.25,
+            color: paperColors[Math.floor(Math.random() * paperColors.length)],
+            type: 'scrap',
+        });
+    }
+}
+
+// ─── Update ──────────────────────────────────────────────────────────────────
+
+function update(dt) {
+    if (!gs || !gs.running || gs.dead) return;
+
+    const p  = gs.player;
+    const wh = wallH();
+
+    gs.speed = Math.min(SPEED_MAX, SPEED_START + gs.score * 0.030);
+
+    p.vy += gs.gravDir * GRAV_FORCE * dt;
+    p.vy  = Math.max(-14, Math.min(14, p.vy));
+    p.y  += p.vy * dt;
+
+    // Spring scale back to 1 after squash/stretch
+    p.scaleX += (1 - p.scaleX) * 0.30 * dt;
+    p.scaleY += (1 - p.scaleY) * 0.30 * dt;
+
+    const targetAngle = Math.atan2(p.vy, gs.speed) * 0.62;
+    p.angle += (targetAngle - p.angle) * 0.17;
+
+    // Decay coyote timer and shake power
+    if (gs.coyote > 0) gs.coyote -= dt;
+    if (shake.power > 0.05) shake.power *= 0.58;
+
+    // Keep music tempo in sync with game speed
+    audio.speedFrac = (gs.speed - SPEED_START) / (SPEED_MAX - SPEED_START);
+
+    // Add new trail point, then scroll all existing points left with the world
+    p.trail.unshift({ x: p.x, y: p.y, angle: p.angle });
+    if (p.trail.length > TRAIL_LEN) p.trail.pop();
+    const dx = gs.speed * dt;
+    for (let i = 1; i < p.trail.length; i++) p.trail[i].x -= dx;
+
+    gs.scrollX = (gs.scrollX + dx) % 80;
+
+    for (const o of gs.obstacles) o.x -= dx;
+    gs.obstacles = gs.obstacles.filter(o => o.x > -80);
+
+    const last = gs.obstacles[gs.obstacles.length - 1];
+    if (!last || last.x < W + 80) {
+        gs.obstacles.push(makeObstacle(W + 300));
+    }
+
+    for (const o of gs.obstacles) {
+        // Fade near-miss flash
+        if (o.flash > 0) o.flash = Math.max(0, o.flash - 0.055 * dt);
+
+        if (!o.passed && o.x + OBS_W < p.x - PS) {
+            o.passed = true;
+            gs.score++;
+            document.getElementById('scoreEl').textContent = gs.score;
+            // Near-miss: check clearance from gap edges at moment of passing
+            const gapTop = o.gapCenter - o.gapH / 2;
+            const gapBot = o.gapCenter + o.gapH / 2;
+            const clearance = Math.min(p.y - PS - gapTop, gapBot - (p.y + PS));
+            if (clearance < 18) o.flash = 1.0;
+            // Milestone burst every 10 points
+            if (gs.score % 10 === 0) {
+                spawnMilestoneParticles();
+                audio.playMilestone();
+            } else {
+                audio.playScore();
+            }
+        }
+        if (p.x + PS > o.x && p.x - PS < o.x + OBS_W) {
+            const gapTop = o.gapCenter - o.gapH / 2;
+            const gapBot = o.gapCenter + o.gapH / 2;
+            if (p.y - PS < gapTop || p.y + PS > gapBot) { crash(); return; }
+        }
+    }
+
+    // Wall collision — coyote grace absorbs brief clips after a flip
+    if (p.y - PS < wh || p.y + PS > H - wh) {
+        if (gs.coyote > 0) {
+            p.y = p.y - PS < wh ? wh + PS : H - wh - PS;
+            p.vy *= -0.25;
+        } else {
+            crash(); return;
+        }
+    }
+
+    // Occasional pencil-dust trail particle
+    if (Math.random() < 0.25) {
+        particles.push({
+            x:  p.x + (Math.random() - 0.5) * 6,
+            y:  p.y + (Math.random() - 0.5) * 6,
+            vx: -gs.speed * 0.5 + (Math.random() - 0.5),
+            vy: (Math.random() - 0.5),
+            life: 0.6, decay: 0.06,
+            r: Math.random() * 2 + 0.5,
+            type: 'dust',
+        });
+    }
+
+    for (const pt of particles) {
+        pt.x += pt.vx * dt;
+        pt.y += pt.vy * dt;
+        pt.life -= pt.decay * dt;
+        if (pt.spin)  pt.angle += pt.spin * dt;
+        if (pt.type === 'scrap') pt.vy += 0.12 * dt;  // paper drifts down
+    }
+    particles = particles.filter(pt => pt.life > 0);
+}
+
+function crash() {
+    gs.dead    = true;
+    gs.running = false;
+    shake.power = 2;
+    audio.playCrash();
+    audio.stopDrones();
+
+    const p = gs.player;
+    const paperColors = ['#e8d5a8', '#f0e2bc', '#d4bc88', '#c4a870', '#eddcaa'];
+    for (let i = 0; i < 40; i++) {
+        const ang = Math.random() * Math.PI * 2;
+        const spd = Math.random() * 9 + 1;
+        particles.push({
+            x: p.x, y: p.y,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd - 2,
+            life: 1,
+            decay: 0.010 + Math.random() * 0.014,
+            w: Math.random() * 14 + 5,
+            h: Math.random() * 7 + 3,
+            angle: Math.random() * Math.PI * 2,
+            spin:  (Math.random() - 0.5) * 0.2,
+            color: paperColors[Math.floor(Math.random() * paperColors.length)],
+            type: 'scrap',
+        });
+    }
+    // Ink splat blobs
+    for (let i = 0; i < 10; i++) {
+        const ang = Math.random() * Math.PI * 2;
+        const spd = Math.random() * 4 + 1;
+        particles.push({
+            x: p.x, y: p.y,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd,
+            life: 1,
+            decay: 0.018 + Math.random() * 0.01,
+            r: Math.random() * 5 + 3,
+            type: 'ink',
+        });
+    }
+
+    if (gs.score > best) {
+        best = gs.score;
+        localStorage.setItem('gf_best', best);
+        document.getElementById('bestEl').textContent = `Best: ${best}`;
+    }
+
+    setTimeout(() => {
+        document.getElementById('overScoreEl').textContent = gs.score;
+        document.getElementById('overBestEl').textContent  = `Best: ${best}`;
+        document.getElementById('gameOverScreen').classList.remove('hidden');
+    }, 1000);
+}
+
+// ─── Draw ────────────────────────────────────────────────────────────────────
+
+function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    if (shake.power > 0.1) {
+        ctx.translate(
+            (Math.random() - 0.5) * shake.power * 2,
+            (Math.random() - 0.5) * shake.power * 2
+        );
+    }
+    drawBackground();
+    drawWalls();
+    drawObstacles();
+    drawSpeedLines();
+    drawParticles();
+    if (gs && !gs.dead) drawPlayer();
+    drawDangerTint();
+    drawVignette();
+    ctx.restore();
+}
+
+function drawBackground() {
+    // Warm parchment gradient
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0,   '#f8f2e4');
+    bg.addColorStop(0.5, '#f4ead6');
+    bg.addColorStop(1,   '#f8f2e4');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    const wh = wallH();
+    const sx = gs ? gs.scrollX : 0;
+
+    // Faint horizontal ruled lines (static, like notebook paper)
+    ctx.save();
+    ctx.globalAlpha = 0.18;
+    ctx.strokeStyle = '#c8a870';
+    ctx.lineWidth   = 0.8;
+    const lineSpacing = 28;
+    // Offset so lines start at wall boundary and tile cleanly
+    const lineStart = wh + ((lineSpacing - (wh % lineSpacing)) % lineSpacing);
+    for (let y = lineStart; y < H - wh; y += lineSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.stroke();
+    }
+    ctx.restore();
+
+    // Faint scrolling vertical pencil marks (suggest motion)
+    ctx.save();
+    ctx.globalAlpha = 0.06;
+    ctx.strokeStyle = '#8b6520';
+    ctx.lineWidth   = 0.8;
+    ctx.setLineDash([4, 14]);
+    const vSp = 90;
+    for (let x = W - (sx % vSp); x > -vSp; x -= vSp) {
+        ctx.beginPath();
+        ctx.moveTo(x, wh + 10);
+        ctx.lineTo(x, H - wh - 10);
+        ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    ctx.restore();
+}
+
+function drawWalls() {
+    if (!wallEdgeTop.length || !wallEdgeBot.length) return;
+    const wh = wallH();
+
+    // ---- Top wall ----
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(W, 0);
+    ctx.lineTo(W, wallEdgeTop[wallEdgeTop.length - 1].y);
+    for (let i = wallEdgeTop.length - 2; i >= 0; i--) {
+        ctx.lineTo(wallEdgeTop[i].x, wallEdgeTop[i].y);
+    }
+    ctx.closePath();
+    const tg = ctx.createLinearGradient(0, 0, 0, wh + 12);
+    tg.addColorStop(0, '#8b6520');
+    tg.addColorStop(1, '#c4a060');
+    ctx.fillStyle = tg;
+    ctx.fill();
+
+    // Torn edge shadow (below top wall)
+    ctx.beginPath();
+    ctx.moveTo(wallEdgeTop[0].x, wallEdgeTop[0].y);
+    for (const pt of wallEdgeTop) ctx.lineTo(pt.x, pt.y);
+    ctx.strokeStyle = '#6a4510';
+    ctx.lineWidth   = 2;
+    ctx.stroke();
+    // Inner shadow strip
+    ctx.beginPath();
+    ctx.moveTo(wallEdgeTop[0].x, wallEdgeTop[0].y);
+    for (const pt of wallEdgeTop) ctx.lineTo(pt.x, pt.y + 8);
+    ctx.strokeStyle = 'rgba(80, 40, 5, 0.18)';
+    ctx.lineWidth   = 10;
+    ctx.stroke();
+
+    // Grain lines across top wall
+    ctx.save();
+    ctx.globalAlpha = 0.12;
+    ctx.strokeStyle = '#f5e8c8';
+    ctx.lineWidth   = 1;
+    for (let y = 8; y < wh; y += 7) {
+        ctx.beginPath();
+        ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+    ctx.restore();
+
+    // ---- Bottom wall ----
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    ctx.lineTo(W, H);
+    ctx.lineTo(W, wallEdgeBot[wallEdgeBot.length - 1].y);
+    for (let i = wallEdgeBot.length - 2; i >= 0; i--) {
+        ctx.lineTo(wallEdgeBot[i].x, wallEdgeBot[i].y);
+    }
+    ctx.closePath();
+    const bg2 = ctx.createLinearGradient(0, H - wh - 12, 0, H);
+    bg2.addColorStop(0, '#c4a060');
+    bg2.addColorStop(1, '#8b6520');
+    ctx.fillStyle = bg2;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(wallEdgeBot[0].x, wallEdgeBot[0].y);
+    for (const pt of wallEdgeBot) ctx.lineTo(pt.x, pt.y);
+    ctx.strokeStyle = '#6a4510';
+    ctx.lineWidth   = 2;
+    ctx.stroke();
+    // Inner shadow strip (above bottom wall)
+    ctx.beginPath();
+    ctx.moveTo(wallEdgeBot[0].x, wallEdgeBot[0].y);
+    for (const pt of wallEdgeBot) ctx.lineTo(pt.x, pt.y - 8);
+    ctx.strokeStyle = 'rgba(80, 40, 5, 0.18)';
+    ctx.lineWidth   = 10;
+    ctx.stroke();
+
+    // Grain lines across bottom wall
+    ctx.save();
+    ctx.globalAlpha = 0.12;
+    ctx.strokeStyle = '#f5e8c8';
+    ctx.lineWidth   = 1;
+    for (let y = H - wh + 4; y < H; y += 7) {
+        ctx.beginPath();
+        ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+    ctx.restore();
+
+    // Gravity indicator: a small hand-drawn arrow on the left edge
+    drawGravArrow();
+}
+
+function drawGravArrow() {
+    if (!gs) return;
+    const wh  = wallH();
+    const cx  = 10;
+    const cy  = H / 2;
+    const dir = gs.gravDir;  // 1 = down, -1 = up
+    const len = 22;
+
+    ctx.save();
+    ctx.globalAlpha = 0.45;
+    ctx.strokeStyle = '#7a5020';
+    ctx.fillStyle   = '#7a5020';
+    ctx.lineWidth   = 1.5;
+
+    // Arrow shaft
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - dir * len * 0.4);
+    ctx.lineTo(cx, cy + dir * len * 0.4);
+    ctx.stroke();
+
+    // Arrowhead
+    ctx.beginPath();
+    ctx.moveTo(cx,          cy + dir * len * 0.4);
+    ctx.lineTo(cx - 4,      cy + dir * (len * 0.4 - 8));
+    ctx.lineTo(cx + 4,      cy + dir * (len * 0.4 - 8));
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+}
+
+function drawObstacles() {
+    if (!gs) return;
+    const wh = wallH();
+    for (const o of gs.obstacles) {
+        const gapTop = o.gapCenter - o.gapH / 2;
+        const gapBot = o.gapCenter + o.gapH / 2;
+        drawPillar(o.x, wh,     OBS_W, gapTop - wh,        o.flash || 0);
+        drawPillar(o.x, gapBot, OBS_W, (H - wh) - gapBot,  o.flash || 0);
+    }
+}
+
+function drawPillar(x, y, w, h, flash) {
+    if (h <= 0) return;
+    ctx.save();
+
+    // Drop shadow
+    ctx.shadowColor  = 'rgba(80, 50, 10, 0.25)';
+    ctx.shadowBlur   = 6;
+    ctx.shadowOffsetX = 3;
+    ctx.shadowOffsetY = 3;
+
+    // Paper-white body
+    const grad = ctx.createLinearGradient(x, 0, x + w, 0);
+    grad.addColorStop(0,   '#f0e4cc');
+    grad.addColorStop(0.15,'#f8f2e4');
+    grad.addColorStop(0.85,'#f0e4cc');
+    grad.addColorStop(1,   '#ddd0b0');
+    ctx.fillStyle = grad;
+    ctx.fillRect(x, y, w, h);
+    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+
+    // Horizontal page-edge lines (like stacked paper sheets)
+    ctx.globalAlpha = 0.55;
+    ctx.strokeStyle = '#c8a870';
+    ctx.lineWidth   = 0.7;
+    const lineStep  = 5;
+    for (let ly = y + lineStep; ly < y + h; ly += lineStep) {
+        ctx.beginPath();
+        ctx.moveTo(x, ly); ctx.lineTo(x + w, ly); ctx.stroke();
+    }
+
+    // Dark ink outline
+    ctx.globalAlpha  = 1;
+    ctx.strokeStyle  = '#5a3810';
+    ctx.lineWidth    = 1.5;
+    ctx.strokeRect(x + 0.75, y, w - 1.5, h);
+
+    // Edge highlight (left side fold)
+    ctx.globalAlpha  = 0.35;
+    ctx.strokeStyle  = '#f8f4ec';
+    ctx.lineWidth    = 1;
+    ctx.beginPath();
+    ctx.moveTo(x + 3, y + 1);
+    ctx.lineTo(x + 3, y + h - 1);
+    ctx.stroke();
+
+    // Near-miss flash overlay
+    if (flash > 0) {
+        ctx.globalAlpha = flash * 0.65;
+        ctx.fillStyle   = '#ffe090';
+        ctx.fillRect(x, y, w, h);
+    }
+
+    ctx.restore();
+}
+
+function drawPlayer() {
+    const p  = gs.player;
+
+    // Ghost airplane silhouettes fading along trail
+    for (let i = 3; i < p.trail.length; i += 4) {
+        const t    = p.trail[i];
+        const frac = 1 - i / p.trail.length;
+        ctx.save();
+        ctx.globalAlpha = frac * 0.28;
+        ctx.fillStyle   = '#9a7040';
+        ctx.translate(t.x, t.y);
+        ctx.rotate(t.angle);
+        planePath(PS * 0.8);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    // Dashed pencil flight-path line — thicker and darker
+    if (p.trail.length > 1) {
+        ctx.save();
+        ctx.globalAlpha = 0.55;
+        ctx.strokeStyle = '#6a4018';
+        ctx.lineWidth   = 1.6;
+        ctx.setLineDash([4, 5]);
+        ctx.beginPath();
+        ctx.moveTo(p.trail[0].x, p.trail[0].y);
+        for (let i = 1; i < p.trail.length; i++) {
+            ctx.lineTo(p.trail[i].x, p.trail[i].y);
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.restore();
+    }
+
+    // Paper airplane
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.angle);
+    ctx.scale(p.scaleX, p.scaleY);
+
+    // Drop shadow
+    ctx.save();
+    ctx.globalAlpha  = 0.18;
+    ctx.fillStyle    = '#5a3810';
+    ctx.translate(3, 4);
+    planePath(PS);
+    ctx.fill();
+    ctx.restore();
+
+    // Upper wing (lighter — facing up/lit)
+    ctx.fillStyle = '#f8f4ec';
+    ctx.beginPath();
+    ctx.moveTo(PS,           0);
+    ctx.lineTo(-PS * 0.58,  -PS * 0.72);
+    ctx.lineTo(-PS * 0.12,   0);
+    ctx.closePath();
+    ctx.fill();
+
+    // Lower wing (slightly shadowed)
+    ctx.fillStyle = '#e8dcc8';
+    ctx.beginPath();
+    ctx.moveTo(PS,           0);
+    ctx.lineTo(-PS * 0.58,   PS * 0.72);
+    ctx.lineTo(-PS * 0.12,   0);
+    ctx.closePath();
+    ctx.fill();
+
+    // Ink outline
+    ctx.strokeStyle  = '#5a3810';
+    ctx.lineWidth    = 1.2;
+    planePath(PS);
+    ctx.stroke();
+
+    // Center fold crease
+    ctx.strokeStyle  = '#9a7040';
+    ctx.lineWidth    = 0.8;
+    ctx.globalAlpha  = 0.6;
+    ctx.beginPath();
+    ctx.moveTo(PS, 0); ctx.lineTo(-PS * 0.12, 0);
+    ctx.stroke();
+
+    ctx.restore();
+}
+
+function planePath(size) {
+    ctx.beginPath();
+    ctx.moveTo(size,          0);
+    ctx.lineTo(-size * 0.58, -size * 0.72);
+    ctx.lineTo(-size * 0.12,  0);
+    ctx.lineTo(-size * 0.58,  size * 0.72);
+    ctx.closePath();
+}
+
+function drawParticles() {
+    for (const pt of particles) {
+        ctx.save();
+        ctx.globalAlpha = pt.life;
+        if (pt.type === 'ghost') {
+            ctx.translate(pt.x, pt.y);
+            ctx.rotate(pt.angle);
+            ctx.fillStyle   = '#f8f4ec';
+            ctx.strokeStyle = '#9a7040';
+            ctx.lineWidth   = 1;
+            planePath(PS * 1.1);
+            ctx.fill();
+            ctx.stroke();
+        } else if (pt.type === 'scrap') {
+            ctx.translate(pt.x, pt.y);
+            ctx.rotate(pt.angle);
+            ctx.fillStyle   = pt.color;
+            ctx.strokeStyle = 'rgba(80, 50, 10, 0.3)';
+            ctx.lineWidth   = 0.5;
+            ctx.fillRect(-pt.w / 2, -pt.h / 2, pt.w, pt.h);
+            ctx.strokeRect(-pt.w / 2, -pt.h / 2, pt.w, pt.h);
+        } else if (pt.type === 'ink') {
+            ctx.fillStyle = '#1a0e05';
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, pt.r * Math.sqrt(pt.life), 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            // dust
+            ctx.fillStyle = '#b89050';
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.restore();
+    }
+}
+
+function drawVignette() {
+    const g = ctx.createRadialGradient(W/2, H/2, H * 0.2, W/2, H/2, H * 0.9);
+    g.addColorStop(0, 'transparent');
+    g.addColorStop(1, 'rgba(100, 65, 15, 0.22)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+}
+
+function drawDangerTint() {
+    if (!gs || gs.dead) return;
+    const p      = gs.player;
+    const wh     = wallH();
+    const margin = laneH() * 0.28;
+    const topDist = p.y - wh;
+    const botDist = H - wh - p.y;
+    const closest = Math.min(topDist, botDist);
+    const danger  = Math.max(0, 1 - closest / margin);
+    if (danger < 0.01) return;
+    const fromTop = topDist < botDist;
+    const y0 = fromTop ? 0 : H;
+    const y1 = fromTop ? H * 0.42 : H * 0.58;
+    const grad = ctx.createLinearGradient(0, y0, 0, y1);
+    grad.addColorStop(0, `rgba(190, 55, 15, ${danger * 0.32})`);
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+}
+
+function drawSpeedLines() {
+    if (!gs || gs.dead) return;
+    const speedFrac = Math.max(0, (gs.speed - SPEED_START - 1) / (SPEED_MAX - SPEED_START));
+    if (speedFrac < 0.08) return;
+    const p = gs.player;
+    ctx.save();
+    ctx.strokeStyle = '#a08040';
+    ctx.lineWidth   = 0.7;
+    for (let i = 0; i < 7; i++) {
+        const phase  = (gs.scrollX * 0.4 + i * 53.7) % 100;
+        const yOff   = (i - 3) * PS * 1.3 + Math.sin(phase * 0.063) * 4;
+        const len    = (18 + i * 7) * speedFrac;
+        ctx.globalAlpha = speedFrac * (0.15 + i * 0.03);
+        ctx.beginPath();
+        ctx.moveTo(p.x - PS * 1.8,       p.y + yOff);
+        ctx.lineTo(p.x - PS * 1.8 - len, p.y + yOff);
+        ctx.stroke();
+    }
+    ctx.restore();
+}
+
+function spawnMilestoneParticles() {
+    const p = gs.player;
+    const colors = ['#f0e2bc', '#e8d5a8', '#f5e8cc', '#ffd890', '#fff0c0'];
+    for (let i = 0; i < 28; i++) {
+        const ang = (i / 28) * Math.PI * 2;
+        const spd = Math.random() * 5 + 3;
+        particles.push({
+            x: p.x, y: p.y,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd - 1,
+            life: 1,
+            decay: 0.018 + Math.random() * 0.012,
+            w: Math.random() * 11 + 5,
+            h: Math.random() * 6 + 3,
+            angle: Math.random() * Math.PI * 2,
+            spin:  (Math.random() - 0.5) * 0.22,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            type: 'scrap',
+        });
+    }
+}
+
+// ─── Game loop ───────────────────────────────────────────────────────────────
+
+let lastTs = 0;
+function loop(ts) {
+    const dt = Math.min((ts - lastTs) / 16.667, 3);
+    lastTs = ts;
+    update(dt);
+    draw();
+    requestAnimationFrame(loop);
+}
+
+// ─── Input ───────────────────────────────────────────────────────────────────
+
+document.addEventListener('keydown', e => {
+    if (!['Space', 'ArrowUp', 'ArrowDown'].includes(e.code)) return;
+    e.preventDefault();
+    const startScreen    = document.getElementById('startScreen');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    if (!startScreen.classList.contains('hidden'))    { startGame();   return; }
+    if (!gameOverScreen.classList.contains('hidden')) { restartGame(); return; }
+    flip();
+});
+document.addEventListener('mousedown', e => {
+    if (e.target.closest('button, a')) return;
+    flip();
+});
+document.addEventListener('touchstart', e => {
+    if (e.target.closest('button, a')) return;
+    e.preventDefault(); flip();
+}, { passive: false });
+
+// ─── Buttons ─────────────────────────────────────────────────────────────────
+
+const tutEl = document.getElementById('tut');
+
+function startGame() {
+    audio.wake();
+    audio.startDrones();
+    document.getElementById('startScreen').classList.add('hidden');
+    initGame();
+    gs.running = true;
+    document.getElementById('scoreEl').textContent = '0';
+    document.getElementById('bestEl').textContent  = `Best: ${best}`;
+    tutEl.style.opacity = '1';
+    setTimeout(() => { tutEl.style.opacity = '0'; }, 3000);
+}
+
+function restartGame() {
+    document.getElementById('gameOverScreen').classList.add('hidden');
+    audio.wake();
+    audio.startDrones();
+    initGame();
+    gs.running = true;
+    document.getElementById('scoreEl').textContent = '0';
+    tutEl.style.opacity = '0';
+}
+
+document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('restartBtn').addEventListener('click', restartGame);
+
+// ─── Boot ────────────────────────────────────────────────────────────────────
+
+initGame();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
