@@ -39,49 +39,80 @@
             opacity: 0.9;
         }
 
-        .games-grid {
+        .folders-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
             margin-bottom: 40px;
+        }
+
+        .folder {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .folder-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .games-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .game-card {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 10px 14px;
             text-decoration: none;
             color: white;
             transition: all 0.3s ease;
             border: 2px solid rgba(255, 255, 255, 0.2);
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 10px;
         }
 
         .game-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             background: rgba(255, 255, 255, 0.25);
             border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .game-icon {
-            font-size: 40px;
-            margin-bottom: 0px;
+            font-size: 28px;
+            flex-shrink: 0;
         }
 
         .game-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            text-align: center;
+        }
+
+        .empty-folder {
+            font-size: 14px;
+            opacity: 0.5;
+            font-style: italic;
+            padding: 8px 0;
         }
 
         @media (max-width: 768px) {
             h1 {
                 font-size: 36px;
+            }
+
+            .folders-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -91,38 +122,67 @@
         <h1>🎮 Games</h1>
         <p class="subtitle">Choose a game to play</p>
 
-        <div class="games-grid">
-            <!-- Birthday Bubble Pop Game -->
-            <a href="birthday-bubble-pop.html" class="game-card">
-                <div class="game-icon">🫧</div>
-                <div class="game-title">Birthday Bubble Pop</div>
-            </a>
+        <div class="folders-grid">
+            <div class="folder">
+                <div class="folder-title">Rory's Games</div>
+                <div class="games-list">
+                    <div class="empty-folder">No games yet</div>
+                </div>
+            </div>
 
-            <!-- Tower Topple Game -->
-            <a href="tower-topple.html" class="game-card">
-                <div class="game-icon">📦</div>
-                <div class="game-title">Tower Topple</div>
-            </a>
+            <div class="folder">
+                <div class="folder-title">Shea's Games</div>
+                <div class="games-list">
+                    <div class="empty-folder">No games yet</div>
+                </div>
+            </div>
 
-            <!-- Tic-Tac-Toe Game -->
-            <a href="tic-tac-toe.html" class="game-card">
-                <div class="game-icon">⭕</div>
-                <div class="game-title">Tic-Tac-Toe</div>
-            </a>
+            <div class="folder">
+                <div class="folder-title">Maggie's Games</div>
+                <div class="games-list">
+                    <a href="birthday-bubble-pop.html"
+                       class="game-card">
+                        <div class="game-icon">🫧</div>
+                        <div class="game-title">
+                            Birthday Bubble Pop
+                        </div>
+                    </a>
+                </div>
+            </div>
 
-            <!-- Neon Echo Game -->
-            <a href="neon-echo.html" class="game-card">
-                <div class="game-icon">🔮</div>
-                <div class="game-title">Neon Echo</div>
-            </a>
-
-            <!-- Gravity Flip Game -->
-            <a href="gravity-flip.html" class="game-card">
-                <div class="game-icon">💎</div>
-                <div class="game-title">Gravity Flip</div>
-            </a>
-
-            <!-- Add more games here in the future -->
+            <div class="folder">
+                <div class="folder-title">Uncle Mack's Games</div>
+                <div class="games-list">
+                    <a href="tower-topple.html"
+                       class="game-card">
+                        <div class="game-icon">📦</div>
+                        <div class="game-title">
+                            Tower Topple
+                        </div>
+                    </a>
+                    <a href="tic-tac-toe.html"
+                       class="game-card">
+                        <div class="game-icon">⭕</div>
+                        <div class="game-title">
+                            Tic-Tac-Toe
+                        </div>
+                    </a>
+                    <a href="neon-echo.html"
+                       class="game-card">
+                        <div class="game-icon">🔮</div>
+                        <div class="game-title">
+                            Neon Echo
+                        </div>
+                    </a>
+                    <a href="gravity-flip.html"
+                       class="game-card">
+                        <div class="game-icon">💎</div>
+                        <div class="game-title">
+                            Gravity Flip
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </body>
