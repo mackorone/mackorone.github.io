@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0,
+                   maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Flag Coloring - Maggie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont,
+                         'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg,
+                        #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            cursor: default;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            touch-action: none;
+            overscroll-behavior: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 100;
+            padding: 8px 16px;
+            font-size: 16px;
+            font-family: -apple-system, BlinkMacSystemFont,
+                'Segoe UI', sans-serif;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 0, 0, 0.7);
+            transform: scale(1.05);
+        }
+
+        .flag-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .flag-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px;
+            min-height: 0;
+            gap: 6px;
+        }
+
+        .flag-container {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .flag-container svg {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .flag-region {
+            fill: #f0f0f0;
+            stroke: #ccc;
+            stroke-width: 1;
+            cursor: pointer;
+            transition: fill 0.05s;
+        }
+
+        .flag-region:hover {
+            filter: brightness(1.05);
+        }
+
+        .flag-region.filled {
+            stroke: rgba(0, 0, 0, 0.15);
+        }
+
+        .controls {
+            flex-shrink: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .color-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .color-btn.selected {
+            border-color: white;
+            transform: scale(1.2);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 8px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .page-indicator {
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+
+        /* Ripple animation for coloring */
+        @keyframes colorRipple {
+            0% {
+                r: 0;
+                opacity: 0.8;
+            }
+            100% {
+                r: 600;
+                opacity: 0;
+            }
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1) rotate(180deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            pointer-events: none;
+        }
+
+        .sparkle::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: currentColor;
+            clip-path: polygon(
+                50% 0%, 61% 35%, 98% 35%,
+                68% 57%, 79% 91%, 50% 70%,
+                21% 91%, 32% 57%, 2% 35%,
+                39% 35%
+            );
+            animation: sparkle 0.6s ease-out forwards;
+        }
+
+        /* Celebration */
+        @keyframes celebrateBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .celebrate .flag-container svg {
+            animation: celebrateBounce 0.5s ease 2;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-10px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @media (min-width: 768px) {
+            .flag-name {
+                font-size: 30px;
+            }
+
+            .color-btn {
+                width: 44px;
+                height: 44px;
+            }
+
+            .nav-btn {
+                font-size: 17px;
+                padding: 10px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">&larr; Back</a>
+
+    <div class="flag-area" id="flagArea">
+        <div class="flag-name" id="flagName"></div>
+        <div class="flag-container" id="flagContainer"></div>
+    </div>
+
+    <div class="controls">
+        <div class="palette" id="palette"></div>
+        <button class="nav-btn"
+                onclick="clearFlag()">Clear</button>
+        <div class="nav-buttons">
+            <button class="nav-btn" id="prevBtn"
+                    onclick="prevFlag()">Prev</button>
+            <span class="page-indicator"
+                  id="pageIndicator"></span>
+            <button class="nav-btn" id="nextBtn"
+                    onclick="nextFlag()">Next</button>
+        </div>
+    </div>
+
+    <script>
+    const COLORS = [
+        '#e74c3c', '#e67e22', '#f1c40f', '#2ecc71',
+        '#1abc9c', '#3498db', '#9b59b6', '#e84393',
+        '#fd79a8', '#ffffff', '#2c3e50', '#7f8c8d',
+        '#d35400', '#c0392b', '#27ae60', '#2980b9',
+    ];
+
+    let selectedColor = COLORS[0];
+    let currentFlagIndex = 0;
+
+    // ---- Sound effects (Web Audio API) ----
+    let audioCtx = null;
+
+    function getAudioCtx() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext ||
+                            window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        return audioCtx;
+    }
+
+    function playPaintSound() {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+
+        // Bubbly pop: short sine chirp + noise burst
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(
+            1200, now + 0.06
+        );
+        osc.frequency.exponentialRampToValueAtTime(
+            400, now + 0.15
+        );
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(
+            0.01, now + 0.15
+        );
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.15);
+
+        // Soft noise burst for "splash" texture
+        const bufferSize = ctx.sampleRate * 0.08;
+        const buffer = ctx.createBuffer(
+            1, bufferSize, ctx.sampleRate
+        );
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) *
+                      (1 - i / bufferSize);
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const noiseGain = ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.08, now);
+        noiseGain.gain.exponentialRampToValueAtTime(
+            0.001, now + 0.08
+        );
+        const noiseFilter = ctx.createBiquadFilter();
+        noiseFilter.type = 'bandpass';
+        noiseFilter.frequency.value = 2000;
+        noiseFilter.Q.value = 1;
+        noise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(ctx.destination);
+        noise.start(now);
+    }
+
+    function playColorSelectSound() {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.exponentialRampToValueAtTime(
+            1100, now + 0.05
+        );
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(
+            0.001, now + 0.08
+        );
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.08);
+    }
+
+    function playNavSound() {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+
+        // Soft whoosh: filtered noise sweep
+        const bufferSize = ctx.sampleRate * 0.2;
+        const buffer = ctx.createBuffer(
+            1, bufferSize, ctx.sampleRate
+        );
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            const env = Math.sin(
+                (i / bufferSize) * Math.PI
+            );
+            data[i] = (Math.random() * 2 - 1) * env;
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.06, now);
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(800, now);
+        filter.frequency.exponentialRampToValueAtTime(
+            3000, now + 0.1
+        );
+        filter.frequency.exponentialRampToValueAtTime(
+            600, now + 0.2
+        );
+        filter.Q.value = 2;
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        noise.start(now);
+    }
+
+    function playClearSound() {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(500, now);
+        osc.frequency.exponentialRampToValueAtTime(
+            200, now + 0.25
+        );
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(
+            0.001, now + 0.25
+        );
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.25);
+    }
+
+    function playFanfare() {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+
+        // Ascending arpeggio with shimmer
+        const notes = [523, 659, 784, 1047];
+        notes.forEach((freq, i) => {
+            const t = now + i * 0.12;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(
+                0.2, t + 0.03
+            );
+            gain.gain.setValueAtTime(
+                0.2, t + 0.15
+            );
+            gain.gain.exponentialRampToValueAtTime(
+                0.001,
+                t + (i === notes.length - 1 ? 0.6 : 0.2)
+            );
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(t);
+            osc.stop(
+                t + (i === notes.length - 1 ? 0.6 : 0.2)
+            );
+        });
+
+        // Shimmer on final note
+        const shimmerTime = now + notes.length * 0.12;
+        for (let i = 0; i < 3; i++) {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(
+                1047 * (1 + i * 0.5), shimmerTime
+            );
+            gain.gain.setValueAtTime(0.05, shimmerTime);
+            gain.gain.exponentialRampToValueAtTime(
+                0.001, shimmerTime + 0.5
+            );
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(shimmerTime);
+            osc.stop(shimmerTime + 0.5);
+        }
+    }
+
+    // ---- Flag definitions ----
+    // Each flag: { name, width, height, regions[] }
+    // Each region: { id, d (SVG path) }
+    const W = 600;
+    const H = 400;
+
+    const FLAGS = [
+        {
+            name: 'Tricolor (Vertical)',
+            width: W, height: H,
+            regions: [
+                { id: 'left',
+                  d: `M0,0 H200 V${H} H0 Z` },
+                { id: 'center',
+                  d: `M200,0 H400 V${H} H200 Z` },
+                { id: 'right',
+                  d: `M400,0 H${W} V${H} H400 Z` },
+            ]
+        },
+        {
+            name: 'Tricolor (Horizontal)',
+            width: W, height: H,
+            regions: [
+                { id: 'top',
+                  d: `M0,0 H${W} V133 H0 Z` },
+                { id: 'middle',
+                  d: `M0,133 H${W} V267 H0 Z` },
+                { id: 'bottom',
+                  d: `M0,267 H${W} V${H} H0 Z` },
+            ]
+        },
+        {
+            name: 'Nordic Cross',
+            width: W, height: H,
+            regions: [
+                { id: 'topLeft',
+                  d: 'M0,0 H190 V160 H0 Z' },
+                { id: 'topRight',
+                  d: `M260,0 H${W} V160 H260 Z` },
+                { id: 'bottomLeft',
+                  d: `M0,240 H190 V${H} H0 Z` },
+                { id: 'bottomRight',
+                  d: `M260,240 H${W} V${H} H260 Z` },
+                { id: 'hBar',
+                  d: `M0,160 H${W} V240 H0 Z` },
+                { id: 'vBar',
+                  d: `M190,0 H260 V${H} H190 Z` },
+            ]
+        },
+        {
+            name: 'Rising Sun',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'circle',
+                  d: circlePath(300, 200, 80) },
+            ]
+        },
+        {
+            name: 'Diagonal Split',
+            width: W, height: H,
+            regions: [
+                { id: 'upper',
+                  d: `M0,0 H${W} L0,${H} Z` },
+                { id: 'lower',
+                  d: `M${W},0 V${H} H0 Z` },
+            ]
+        },
+        {
+            name: 'Quarters',
+            width: W, height: H,
+            regions: [
+                { id: 'tl',
+                  d: `M0,0 H300 V200 H0 Z` },
+                { id: 'tr',
+                  d: `M300,0 H${W} V200 H300 Z` },
+                { id: 'bl',
+                  d: `M0,200 H300 V${H} H0 Z` },
+                { id: 'br',
+                  d: `M300,200 H${W} V${H} H300 Z` },
+            ]
+        },
+        {
+            name: 'Chevron',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'chevron',
+                  d: `M0,0 L200,200 L0,${H} Z` },
+            ]
+        },
+        {
+            name: 'Arendelle (Frozen)',
+            width: W, height: H,
+            regions: arendelleRegions(),
+        },
+        {
+            name: 'Stripes (5)',
+            width: W, height: H,
+            regions: [
+                { id: 's1',
+                  d: `M0,0 H${W} V80 H0 Z` },
+                { id: 's2',
+                  d: `M0,80 H${W} V160 H0 Z` },
+                { id: 's3',
+                  d: `M0,160 H${W} V240 H0 Z` },
+                { id: 's4',
+                  d: `M0,240 H${W} V320 H0 Z` },
+                { id: 's5',
+                  d: `M0,320 H${W} V${H} H0 Z` },
+            ]
+        },
+        {
+            name: 'Canton with Stripes',
+            width: W, height: H,
+            regions: [
+                { id: 'canton',
+                  d: `M0,0 H240 V200 H0 Z` },
+                { id: 'stripe1',
+                  d: `M240,0 H${W} V67 H240 Z` },
+                { id: 'stripe2',
+                  d: `M240,67 H${W} V133 H240 Z` },
+                { id: 'stripe3',
+                  d: `M240,133 H${W} V200 H240 Z` },
+                { id: 'stripe4',
+                  d: `M0,200 H${W} V267 H0 Z` },
+                { id: 'stripe5',
+                  d: `M0,267 H${W} V333 H0 Z` },
+                { id: 'stripe6',
+                  d: `M0,333 H${W} V${H} H0 Z` },
+                { id: 'star1',
+                  d: starPath(120, 100, 40, 18, 5) },
+            ]
+        },
+        {
+            name: 'Circle on Bicolor',
+            width: W, height: H,
+            regions: [
+                { id: 'topHalf',
+                  d: `M0,0 H${W} V200 H0 Z` },
+                { id: 'bottomHalf',
+                  d: `M0,200 H${W} V${H} H0 Z` },
+                { id: 'circle',
+                  d: circlePath(300, 200, 70) },
+            ]
+        },
+        {
+            name: 'Horizontal Bands (4)',
+            width: W, height: H,
+            regions: [
+                { id: 'b1',
+                  d: `M0,0 H${W} V100 H0 Z` },
+                { id: 'b2',
+                  d: `M0,100 H${W} V200 H0 Z` },
+                { id: 'b3',
+                  d: `M0,200 H${W} V300 H0 Z` },
+                { id: 'b4',
+                  d: `M0,300 H${W} V${H} H0 Z` },
+            ]
+        },
+        {
+            name: 'Double Pennant',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'topTriangle',
+                  d: `M0,0 H${W} L300,130 L0,130 Z` },
+                { id: 'bottomTriangle',
+                  d: `M0,270 L300,270 L${W},${H}
+                       H0 Z` },
+            ]
+        },
+        {
+            name: 'Diamond',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'diamond',
+                  d: `M300,40 L560,200 L300,360
+                       L40,200 Z` },
+                { id: 'innerCircle',
+                  d: circlePath(300, 200, 70) },
+            ]
+        },
+        {
+            name: 'Sun Rays',
+            width: W, height: H,
+            regions: sunRaysRegions(),
+        },
+    ];
+
+    function circlePath(cx, cy, r) {
+        return `M${cx - r},${cy}
+                A${r},${r} 0 1,0 ${cx + r},${cy}
+                A${r},${r} 0 1,0 ${cx - r},${cy} Z`;
+    }
+
+    function starPath(cx, cy, outerR, innerR, points) {
+        let d = '';
+        for (let i = 0; i < points * 2; i++) {
+            const angle =
+                (Math.PI / 2 * -1) + (i * Math.PI / points);
+            const r = i % 2 === 0 ? outerR : innerR;
+            const x = cx + Math.cos(angle) * r;
+            const y = cy + Math.sin(angle) * r;
+            d += (i === 0 ? 'M' : 'L') +
+                 x.toFixed(1) + ',' + y.toFixed(1) + ' ';
+        }
+        return d + 'Z';
+    }
+
+    function sunRaysRegions() {
+        const cx = 300, cy = 200;
+        const regions = [
+            { id: 'bg',
+              d: `M0,0 H${W} V${H} H0 Z` },
+        ];
+        const numRays = 12;
+        const innerR = 50;
+        const outerR = 170;
+        const halfAngle = Math.PI / numRays * 0.45;
+        let sunD = '';
+        for (let i = 0; i < numRays; i++) {
+            const angle = (i / numRays) * Math.PI * 2 -
+                          Math.PI / 2;
+            const x1 = cx +
+                Math.cos(angle - halfAngle) * innerR;
+            const y1 = cy +
+                Math.sin(angle - halfAngle) * innerR;
+            const x2 = cx +
+                Math.cos(angle) * outerR;
+            const y2 = cy +
+                Math.sin(angle) * outerR;
+            const x3 = cx +
+                Math.cos(angle + halfAngle) * innerR;
+            const y3 = cy +
+                Math.sin(angle + halfAngle) * innerR;
+            sunD +=
+                `M${x1.toFixed(1)},${y1.toFixed(1)} ` +
+                `L${x2.toFixed(1)},${y2.toFixed(1)} ` +
+                `L${x3.toFixed(1)},${y3.toFixed(1)} Z `;
+        }
+        sunD += circlePath(cx, cy, innerR);
+        regions.push({ id: 'sun', d: sunD });
+        return regions;
+    }
+
+    function arendelleRegions() {
+        // Frozen-inspired: horizontal bands with a
+        // large snowflake in the center
+        const cx = 300, cy = 200;
+        const regions = [
+            // Three horizontal bands
+            { id: 'topBand',
+              d: `M0,0 H${W} V133 H0 Z` },
+            { id: 'midBand',
+              d: `M0,133 H${W} V267 H0 Z` },
+            { id: 'botBand',
+              d: `M0,267 H${W} V${H} H0 Z` },
+        ];
+
+        // Build a single snowflake path from all
+        // arms, tips, branches, and center hexagon
+        const numArms = 6;
+        const armLen = 110;
+        const armW = 8;
+        const branchOff = 55;
+        const branchLen = 40;
+        const branchW = 6;
+        let snowD = '';
+
+        for (let i = 0; i < numArms; i++) {
+            const angle = (i / numArms) * Math.PI * 2 -
+                          Math.PI / 2;
+            const cos = Math.cos(angle);
+            const sin = Math.sin(angle);
+            const px = -sin;
+            const py = cos;
+
+            // Main arm
+            const ax1 = cx + px * armW;
+            const ay1 = cy + py * armW;
+            const ax2 = cx + cos * armLen + px * armW;
+            const ay2 = cy + sin * armLen + py * armW;
+            const ax3 = cx + cos * armLen - px * armW;
+            const ay3 = cy + sin * armLen - py * armW;
+            const ax4 = cx - px * armW;
+            const ay4 = cy - py * armW;
+            snowD +=
+                `M${ax1.toFixed(1)},${ay1.toFixed(1)} ` +
+                `L${ax2.toFixed(1)},${ay2.toFixed(1)} ` +
+                `L${ax3.toFixed(1)},${ay3.toFixed(1)} ` +
+                `L${ax4.toFixed(1)},${ay4.toFixed(1)} Z `;
+
+            // Diamond tip
+            const tipCx = cx + cos * (armLen + 15);
+            const tipCy = cy + sin * (armLen + 15);
+            snowD +=
+                `M${(tipCx - px * 12).toFixed(1)},` +
+                `${(tipCy - py * 12).toFixed(1)} ` +
+                `L${(tipCx + cos * 18).toFixed(1)},` +
+                `${(tipCy + sin * 18).toFixed(1)} ` +
+                `L${(tipCx + px * 12).toFixed(1)},` +
+                `${(tipCy + py * 12).toFixed(1)} ` +
+                `L${(tipCx - cos * 18).toFixed(1)},` +
+                `${(tipCy - sin * 18).toFixed(1)} Z `;
+
+            // Two branches per arm
+            for (let side = -1; side <= 1; side += 2) {
+                const bx = cx + cos * branchOff;
+                const by = cy + sin * branchOff;
+                const bAngle = angle + side * Math.PI / 4;
+                const bCos = Math.cos(bAngle);
+                const bSin = Math.sin(bAngle);
+                const bPx = -bSin;
+                const bPy = bCos;
+                const b1x = bx + bPx * branchW;
+                const b1y = by + bPy * branchW;
+                const b2x = bx + bCos * branchLen +
+                             bPx * branchW;
+                const b2y = by + bSin * branchLen +
+                             bPy * branchW;
+                const b3x = bx + bCos * branchLen -
+                             bPx * branchW;
+                const b3y = by + bSin * branchLen -
+                             bPy * branchW;
+                const b4x = bx - bPx * branchW;
+                const b4y = by - bPy * branchW;
+                snowD +=
+                    `M${b1x.toFixed(1)},${b1y.toFixed(1)} ` +
+                    `L${b2x.toFixed(1)},${b2y.toFixed(1)} ` +
+                    `L${b3x.toFixed(1)},${b3y.toFixed(1)} ` +
+                    `L${b4x.toFixed(1)},${b4y.toFixed(1)} Z `;
+            }
+        }
+
+        // Center hexagon
+        for (let i = 0; i < 6; i++) {
+            const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+            const hx = cx + Math.cos(a) * 22;
+            const hy = cy + Math.sin(a) * 22;
+            snowD += (i === 0 ? 'M' : 'L') +
+                     hx.toFixed(1) + ',' +
+                     hy.toFixed(1) + ' ';
+        }
+        snowD += 'Z';
+
+        regions.push({ id: 'snowflake', d: snowD });
+
+        return regions;
+    }
+
+    // ---- Palette ----
+    function buildPalette() {
+        const palette = document.getElementById('palette');
+        palette.innerHTML = '';
+        COLORS.forEach(color => {
+            const btn = document.createElement('div');
+            btn.className = 'color-btn' +
+                (color === selectedColor ? ' selected' : '');
+            btn.style.background = color;
+            if (color === '#ffffff') {
+                btn.style.border = '3px solid #ccc';
+            }
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                selectedColor = color;
+                document
+                    .querySelectorAll('.color-btn')
+                    .forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                playColorSelectSound();
+            });
+            palette.appendChild(btn);
+        });
+    }
+
+    // ---- Render flag ----
+    function renderFlag() {
+        const flag = FLAGS[currentFlagIndex];
+        document.getElementById('flagName').textContent =
+            flag.name;
+        document.getElementById('pageIndicator')
+            .textContent =
+            `${currentFlagIndex + 1} / ${FLAGS.length}`;
+        document.getElementById('prevBtn').disabled =
+            currentFlagIndex === 0;
+        document.getElementById('nextBtn').disabled =
+            currentFlagIndex === FLAGS.length - 1;
+
+        const container =
+            document.getElementById('flagContainer');
+
+        // Size the SVG to fit available space
+        const area = document.getElementById('flagArea');
+        const areaW = area.clientWidth - 20;
+        const areaH = area.clientHeight - 20;
+        const aspect = flag.width / flag.height;
+        let svgW, svgH;
+        if (areaW / areaH > aspect) {
+            svgH = Math.min(areaH, flag.height);
+            svgW = svgH * aspect;
+        } else {
+            svgW = Math.min(areaW, flag.width);
+            svgH = svgW / aspect;
+        }
+
+        container.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 ${flag.width} ${flag.height}"
+                 width="${svgW}" height="${svgH}">
+                <defs>
+                    <clipPath id="flagClip">
+                        <rect x="0" y="0"
+                              width="${flag.width}"
+                              height="${flag.height}"
+                              rx="8" ry="8"/>
+                    </clipPath>
+                </defs>
+                <g clip-path="url(#flagClip)">
+                    ${flag.regions.map(r => `
+                        <path class="flag-region"
+                              id="${r.id}"
+                              d="${r.d}"
+                              fill-rule="evenodd"/>
+                    `).join('')}
+                </g>
+                <rect x="0" y="0"
+                      width="${flag.width}"
+                      height="${flag.height}"
+                      fill="none"
+                      stroke="rgba(0,0,0,0.2)"
+                      stroke-width="3"
+                      rx="8" ry="8"/>
+            </svg>
+        `;
+
+        // Attach click handlers
+        container.querySelectorAll('.flag-region')
+            .forEach(el => {
+            el.addEventListener('click', (e) => {
+                colorRegion(el, e);
+            });
+            el.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                const touch = e.changedTouches[0];
+                colorRegion(el, touch);
+            });
+        });
+    }
+
+    function colorRegion(el, event) {
+        el.style.fill = selectedColor;
+        el.classList.add('filled');
+        playPaintSound();
+        spawnSparkles(event);
+        animateRegionFill(el);
+        checkCompletion();
+    }
+
+    function animateRegionFill(el) {
+        el.style.transition = 'none';
+        el.style.opacity = '0.7';
+        requestAnimationFrame(() => {
+            el.style.transition =
+                'opacity 0.3s ease-out';
+            el.style.opacity = '1';
+        });
+    }
+
+    function spawnSparkles(event) {
+        const numSparkles = 6;
+        const sparkleColors = [
+            '#FFD700', '#FF6B6B', '#4ECDC4',
+            '#45B7D1', '#FFEAA7', '#DDA0DD',
+        ];
+
+        for (let i = 0; i < numSparkles; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            const angle = (i / numSparkles) * Math.PI * 2;
+            const dist = 20 + Math.random() * 30;
+            const x = (event.clientX || event.pageX) +
+                      Math.cos(angle) * dist;
+            const y = (event.clientY || event.pageY) +
+                      Math.sin(angle) * dist;
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.color =
+                sparkleColors[
+                    Math.floor(
+                        Math.random() *
+                        sparkleColors.length
+                    )
+                ];
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 600);
+        }
+    }
+
+    function checkCompletion() {
+        const regions =
+            document.querySelectorAll('.flag-region');
+        const allFilled = Array.from(regions)
+            .every(r => r.classList.contains('filled'));
+        if (allFilled) {
+            document.getElementById('flagArea')
+                .classList.add('celebrate');
+            playFanfare();
+            launchConfetti();
+            setTimeout(() => {
+                document.getElementById('flagArea')
+                    .classList.remove('celebrate');
+            }, 1500);
+        }
+    }
+
+    function launchConfetti() {
+        const colors = [
+            '#e74c3c', '#f1c40f', '#2ecc71',
+            '#3498db', '#9b59b6', '#e84393',
+            '#FF6B6B', '#4ECDC4',
+        ];
+        for (let i = 0; i < 30; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left =
+                Math.random() * 100 + 'vw';
+            confetti.style.top = '-10px';
+            confetti.style.background =
+                colors[
+                    Math.floor(
+                        Math.random() * colors.length
+                    )
+                ];
+            confetti.style.borderRadius =
+                Math.random() > 0.5 ? '50%' : '2px';
+            confetti.style.width =
+                (6 + Math.random() * 6) + 'px';
+            confetti.style.height =
+                (6 + Math.random() * 6) + 'px';
+            confetti.style.animation =
+                `confettiFall ${1.5 + Math.random() * 2}s
+                 linear ${Math.random() * 0.5}s forwards`;
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 4000);
+        }
+    }
+
+    function clearFlag() {
+        playClearSound();
+        document.querySelectorAll('.flag-region')
+            .forEach(el => {
+            el.style.fill = '';
+            el.classList.remove('filled');
+        });
+    }
+
+    function prevFlag() {
+        if (currentFlagIndex > 0) {
+            playNavSound();
+            currentFlagIndex--;
+            renderFlag();
+        }
+    }
+
+    function nextFlag() {
+        if (currentFlagIndex < FLAGS.length - 1) {
+            playNavSound();
+            currentFlagIndex++;
+            renderFlag();
+        }
+    }
+
+    // ---- Init ----
+    buildPalette();
+    renderFlag();
+
+    // Handle resize
+    window.addEventListener('resize', renderFlag);
+    </script>
+</body>
+</html>
