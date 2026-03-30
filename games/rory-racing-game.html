@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+        maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Rory's Racing Game</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%; height: 100%; overflow: hidden;
+            background: #000;
+        }
+        body {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            touch-action: none; overscroll-behavior: none;
+        }
+        canvas { display: block; }
+
+        .back-btn {
+            position: fixed; top: 10px; left: 10px; z-index: 100;
+            padding: 8px 16px; font-size: 16px;
+            font-family: -apple-system, BlinkMacSystemFont,
+                'Segoe UI', sans-serif;
+            font-weight: 600;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px);
+            color: #fff; border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 20px; cursor: pointer;
+            text-decoration: none;
+            display: flex; align-items: center; gap: 5px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: rgba(0,0,0,0.7);
+            transform: scale(1.05);
+        }
+
+        .pov-select {
+            position: fixed; top: 10px; right: 10px; z-index: 100;
+            padding: 8px 12px; font-size: 15px;
+            font-family: inherit; font-weight: 600;
+            background: rgba(0,0,0,0.5);
+            color: #fff; border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 12px; cursor: pointer;
+            backdrop-filter: blur(6px);
+        }
+        .pov-select option { background: #222; color: #fff; }
+
+        .touch-left, .touch-right {
+            position: fixed; bottom: 20px; z-index: 100;
+            display: flex; gap: 10px;
+        }
+        .touch-left { left: 20px; }
+        .touch-right { right: 20px; }
+
+        .touch-btn {
+            width: 80px; height: 64px; border-radius: 16px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.4);
+            color: #fff; font-size: 26px; font-weight: bold;
+            display: flex; align-items: center;
+            justify-content: center;
+            cursor: pointer; user-select: none;
+            -webkit-user-select: none;
+            backdrop-filter: blur(4px);
+            transition: background 0.1s;
+        }
+        .touch-btn:active, .touch-btn.pressed {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.75); z-index: 200;
+            display: flex; align-items: center;
+            justify-content: center;
+        }
+        .modal-card {
+            background: #1a1a2e; border: 2px solid #9333ea;
+            border-radius: 16px; padding: 30px 40px;
+            text-align: center; color: #fff; max-width: 90vw;
+        }
+        .modal-card h2 {
+            font-size: 22px; margin-bottom: 10px; color: #c084fc;
+        }
+        .modal-card p {
+            font-size: 16px; margin-bottom: 20px; opacity: 0.9;
+        }
+        .modal-card button {
+            padding: 10px 30px; font-size: 16px;
+            font-family: inherit; font-weight: 600;
+            border: none; border-radius: 25px; cursor: pointer;
+            margin: 0 8px; transition: transform 0.2s;
+        }
+        .modal-card button:hover { transform: scale(1.08); }
+        .btn-buy {
+            background: linear-gradient(135deg, #9333ea, #7c3aed);
+            color: #fff;
+        }
+        .btn-skip {
+            background: rgba(255,255,255,0.15); color: #fff;
+            border: 1px solid rgba(255,255,255,0.3) !important;
+        }
+
+        .notes-btn {
+            position: fixed; bottom: 10px; left: 10px;
+            z-index: 100;
+            padding: 6px 12px; font-size: 13px;
+            font-family: -apple-system, BlinkMacSystemFont,
+                'Segoe UI', sans-serif;
+            font-weight: 600;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px);
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px; cursor: pointer;
+            text-decoration: none; transition: all 0.3s;
+        }
+        .notes-btn:hover {
+            color: #fff;
+            background: rgba(0,0,0,0.7);
+        }
+
+        .start-notes {
+            color: rgba(255,255,255,0.6);
+            font-size: 14px; margin-top: 12px;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        .start-notes:hover { color: #fff; }
+
+        .start-screen {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #0f0c29,
+                #302b63, #24243e);
+            z-index: 300; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            color: #fff; text-align: center; padding: 20px;
+        }
+        .start-screen h1 {
+            font-size: 42px; margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(147,51,234,0.6);
+        }
+        .start-screen p {
+            font-size: 18px; opacity: 0.8; margin-bottom: 8px;
+        }
+        .start-screen .hint {
+            font-size: 14px; opacity: 0.5; margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .start-screen h1 { font-size: 28px; }
+            .start-screen p { font-size: 15px; }
+            .touch-btn { width: 56px; height: 56px; font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="game"></canvas>
+    <a href="index.html" class="back-btn">&larr; Back</a>
+
+    <select id="pov" class="pov-select">
+        <option value="1.8">Close</option>
+        <option value="1.1" selected>Normal</option>
+        <option value="0.55">Far</option>
+    </select>
+
+    <div class="touch-left">
+        <div class="touch-btn" id="tLeft">&larr;</div>
+        <div class="touch-btn" id="tRight">&rarr;</div>
+    </div>
+    <div class="touch-right">
+        <div class="touch-btn" id="tGas">&uarr;</div>
+        <div class="touch-btn" id="tBrake">&darr;</div>
+    </div>
+
+    <div id="scModal" class="modal-overlay" style="display:none">
+        <div class="modal-card">
+            <h2>Secret Passage!</h2>
+            <p id="scText"></p>
+            <button class="btn-buy" id="scBuy">Buy</button>
+            <button class="btn-skip" id="scSkip">Skip</button>
+        </div>
+    </div>
+
+    <div id="startScreen" class="start-screen">
+        <h1>Rory's Racing Game</h1>
+        <p>Arrow keys / WASD or on-screen controls</p>
+        <p>Race through Kingdom, Highway, Jungle,
+            River, and Sky!</p>
+        <a href="rory_racing_game.pdf" target="_blank"
+            class="start-notes">View Rory's original
+            design notes (PDF)</a>
+        <p class="hint">Tap or press any key to start</p>
+    </div>
+
+    <script>
+    // ============ CANVAS SETUP ============
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // ============ CONSTANTS ============
+    const W = 4000, H = 3000, ROAD_W = 100;
+    const ACCEL = 220, BRAKE = 400, FRICTION = 0.97;
+    const MAX_SPD = 320, OFF_SPD = 150;
+    const TURN_SPD = 2.8;
+
+    // ============ TRACK (closed loop, ~clockwise) ============
+    // Faithful to Rory's drawing: Kingdom(top) -> Highway(right)
+    // -> Jungle(down-right) -> River(left) -> Sky(up-left)
+    // -> back to Kingdom
+    const TRK = [
+        // KINGDOM - start/finish
+        [2000,350],[2120,375],[2240,440],
+        // Exit kingdom, S-curve into highway
+        [2180,580],[2080,700],[2120,820],
+        // HIGHWAY - long stretch going right
+        [2320,840],[2560,810],[2800,790],
+        [3050,800],[3280,825],[3480,790],
+        // Curve into JUNGLE
+        [3620,880],[3680,1040],[3640,1200],
+        // JUNGLE - winding down
+        [3540,1350],[3590,1500],[3490,1650],[3380,1810],
+        // Curve into RIVER
+        [3220,1960],[3030,2060],
+        // RIVER - going left
+        [2780,2130],[2500,2175],[2200,2200],
+        [1900,2180],[1600,2130],[1300,2070],[1040,2000],
+        // Curve into SKY
+        [840,1880],[710,1730],
+        // SKY - going up on left
+        [620,1530],[575,1330],[565,1130],
+        [595,930],[660,770],
+        // Return to KINGDOM
+        [790,630],[960,520],[1200,440],
+        [1500,370],[1760,345],
+        // -> wraps to TRK[0]
+    ];
+
+    // Zone for each waypoint index
+    const ZONES = [
+        'kingdom','kingdom','kingdom',
+        'kingdom','kingdom','highway',
+        'highway','highway','highway',
+        'highway','highway','highway',
+        'jungle','jungle','jungle',
+        'jungle','jungle','jungle','jungle',
+        'river','river',
+        'river','river','river',
+        'river','river','river','river',
+        'sky','sky',
+        'sky','sky','sky',
+        'sky','sky',
+        'kingdom','kingdom','kingdom',
+        'kingdom','kingdom',
+    ];
+
+    const ZONE_VEHICLES = {
+        kingdom: 'Cool Convertible',
+        highway: 'Motorcycle',
+        jungle: 'CR-V (Honda)',
+        river: 'Boat',
+        sky: 'Plane'
+    };
+
+    const ZONE_COLORS = {
+        kingdom: '#a09080',
+        highway: '#555',
+        jungle: '#1e4d10',
+        river: '#1a6fb5',
+        sky: '#6bb8e0'
+    };
+
+    // ============ SHORTCUTS ============
+    const SHORTCUTS = [
+        {
+            name: 'Kingdom Warp',
+            entrance: {x: 2250, y: 480},
+            exit: {x: 3600, y: 1100},
+            exitAngle: Math.PI * 0.6,
+            cost: 50, radius: 70, used: false, skipped: false
+        },
+        {
+            name: 'River Warp',
+            entrance: {x: 1700, y: 2140},
+            exit: {x: 640, y: 1400},
+            exitAngle: -Math.PI * 0.45,
+            cost: 30, radius: 70, used: false, skipped: false
+        }
+    ];
+
+    // ============ STATE ============
+    const player = {
+        x: 2000, y: 350,
+        angle: Math.atan2(
+            TRK[1][1] - TRK[0][1],
+            TRK[1][0] - TRK[0][0]
+        ),
+        speed: 0, zone: 'kingdom'
+    };
+    const camera = { x: 2000, y: 350, zoom: 1.1, tz: 1.1 };
+    const input = {
+        up: false, down: false, left: false, right: false
+    };
+    let points = 0, lap = 0, canCountLap = false;
+    let lapStart = null, bestLap = null, curLapTime = 0;
+    let lapPauseStart = null, lapPauseTotal = 0;
+    let lapMsg = '', lapMsgT = 0;
+    let blinkerDir = null;
+    let scPaused = false, activeSC = null;
+    let gameStarted = false;
+    let prevZone = 'kingdom';
+    let lastTime = 0;
+    let wasOnCourse = true;
+    let prevBlinker = null;
+
+    // ============ AUDIO ============
+    let audioCtx = null;
+    let engineOsc = null, engineGain = null, engineFilter = null;
+    let engineOsc2 = null, engineGain2 = null;
+    let musicInterval = null, musicGain = null;
+
+    // Engine profiles: all sine-based, gentle hum per vehicle
+    const ENGINE = {
+        kingdom: {
+            base: 85, range: 45, base2: 170, range2: 30,
+            vol: 0.06, vol2: 0.025, cutoff: 300
+        },
+        highway: {
+            base: 100, range: 70, base2: 200, range2: 45,
+            vol: 0.05, vol2: 0.02, cutoff: 400
+        },
+        jungle: {
+            base: 75, range: 40, base2: 150, range2: 25,
+            vol: 0.05, vol2: 0.02, cutoff: 250
+        },
+        river: {
+            base: 55, range: 25, base2: 110, range2: 15,
+            vol: 0.05, vol2: 0.025, cutoff: 200
+        },
+        sky: {
+            base: 160, range: 80, base2: 320, range2: 50,
+            vol: 0.04, vol2: 0.015, cutoff: 500
+        }
+    };
+
+    function initAudio() {
+        if (audioCtx) return;
+        audioCtx = new (window.AudioContext
+            || window.webkitAudioContext)();
+
+        // Low-pass filter to smooth engine sound
+        engineFilter = audioCtx.createBiquadFilter();
+        engineFilter.type = 'lowpass';
+        engineFilter.frequency.value = 300;
+        engineFilter.Q.value = 0.7;
+        engineFilter.connect(audioCtx.destination);
+
+        // Primary engine oscillator (sine only)
+        engineOsc = audioCtx.createOscillator();
+        engineGain = audioCtx.createGain();
+        engineOsc.type = 'sine';
+        engineOsc.connect(engineGain);
+        engineGain.connect(engineFilter);
+        engineGain.gain.value = 0;
+        engineOsc.start();
+
+        // Secondary engine harmonic (sine only)
+        engineOsc2 = audioCtx.createOscillator();
+        engineGain2 = audioCtx.createGain();
+        engineOsc2.type = 'sine';
+        engineOsc2.connect(engineGain2);
+        engineGain2.connect(engineFilter);
+        engineGain2.gain.value = 0;
+        engineOsc2.start();
+
+        startMusic();
+    }
+
+    function resumeAudio() {
+        if (audioCtx && audioCtx.state === 'suspended')
+            audioCtx.resume();
+    }
+
+    function updateEngine() {
+        if (!audioCtx || scPaused) return;
+        const e = ENGINE[player.zone];
+        const spdPct = Math.abs(player.speed) / MAX_SPD;
+        const t = audioCtx.currentTime;
+
+        engineOsc.frequency.setTargetAtTime(
+            e.base + e.range * spdPct, t, 0.08);
+        engineGain.gain.setTargetAtTime(
+            e.vol * Math.max(0.1, spdPct), t, 0.08);
+
+        engineOsc2.frequency.setTargetAtTime(
+            e.base2 + e.range2 * spdPct, t, 0.08);
+        engineGain2.gain.setTargetAtTime(
+            e.vol2 * Math.max(0.08, spdPct), t, 0.08);
+
+        engineFilter.frequency.setTargetAtTime(
+            e.cutoff + 200 * spdPct, t, 0.08);
+    }
+
+    // Background music
+    function startMusic() {
+        if (!audioCtx || musicInterval) return;
+        musicGain = audioCtx.createGain();
+        musicGain.gain.value = 0.07;
+        musicGain.connect(audioCtx.destination);
+
+        const melody = [
+            330,330,392,440, 392,330,294,262,
+            294,330,392,330, 294,262,294,330,
+            440,440,494,523, 494,440,392,330,
+            392,440,523,494, 440,392,330,294
+        ];
+        let noteIdx = 0;
+
+        function playNote() {
+            if (!audioCtx || !musicGain) return;
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.connect(g); g.connect(musicGain);
+            osc.type = 'triangle';
+            osc.frequency.value = melody[noteIdx];
+            const t = audioCtx.currentTime;
+            g.gain.setValueAtTime(0.25, t);
+            g.gain.exponentialRampToValueAtTime(0.01, t+0.17);
+            osc.start(t); osc.stop(t+0.17);
+            noteIdx = (noteIdx+1) % melody.length;
+        }
+
+        playNote();
+        musicInterval = setInterval(playNote, 220);
+    }
+
+    function stopMusic() {
+        if (musicInterval) {
+            clearInterval(musicInterval);
+            musicInterval = null;
+        }
+        if (musicGain) {
+            musicGain.disconnect();
+            musicGain = null;
+        }
+    }
+
+    function muteEngine() {
+        if (!audioCtx) return;
+        const t = audioCtx.currentTime;
+        engineGain.gain.setTargetAtTime(0, t, 0.02);
+        engineGain2.gain.setTargetAtTime(0, t, 0.02);
+    }
+
+    // One-shot sound effects
+    function playFX(freq, dur, type, vol) {
+        if (!audioCtx) return;
+        resumeAudio();
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.connect(g); g.connect(audioCtx.destination);
+        osc.type = type || 'sine';
+        osc.frequency.value = freq;
+        const t = audioCtx.currentTime;
+        g.gain.setValueAtTime(vol||0.3, t);
+        g.gain.exponentialRampToValueAtTime(0.01, t+dur);
+        osc.start(t); osc.stop(t+dur);
+    }
+
+    function playOffCourse() {
+        playFX(280, 0.2, 'sine', 0.2);
+        setTimeout(()=>playFX(220, 0.18, 'sine', 0.15), 100);
+    }
+
+    function playOnCourse() {
+        playFX(600, 0.15, 'sine', 0.2);
+        setTimeout(()=>playFX(800, 0.12, 'sine', 0.15), 80);
+    }
+
+    function playBlinkerTick() {
+        // Two quick clicks to be audible
+        playFX(880, 0.08, 'sine', 0.3);
+        setTimeout(()=>playFX(1100, 0.06, 'sine', 0.2), 60);
+    }
+
+    function playWarp() {
+        for (let i=0;i<6;i++) {
+            setTimeout(()=>{
+                playFX(300+i*150, 0.15, 'sine', 0.2);
+            }, i*50);
+        }
+    }
+
+    function playLapComplete() {
+        [523,659,784,1047].forEach((f,i)=>{
+            setTimeout(()=>playFX(f,0.3,'triangle',0.25),i*120);
+        });
+    }
+
+    function playShortcutChime() {
+        playFX(660, 0.25, 'sine', 0.2);
+        setTimeout(()=>playFX(880, 0.25, 'sine', 0.18), 150);
+    }
+
+    // ============ OFFSCREEN MAP ============
+    const mapC = document.createElement('canvas');
+    mapC.width = W; mapC.height = H;
+    const mCtx = mapC.getContext('2d');
+
+    // ============ UTILITIES ============
+    function ptSeg(px,py,ax,ay,bx,by) {
+        const dx=bx-ax, dy=by-ay, l2=dx*dx+dy*dy;
+        if (l2===0) return Math.hypot(px-ax,py-ay);
+        let t=((px-ax)*dx+(py-ay)*dy)/l2;
+        t=Math.max(0,Math.min(1,t));
+        return Math.hypot(px-(ax+t*dx),py-(ay+t*dy));
+    }
+
+    function nearestWP(x,y) {
+        let md=Infinity, mi=0;
+        for (let i=0;i<TRK.length;i++) {
+            const d=(x-TRK[i][0])**2+(y-TRK[i][1])**2;
+            if (d<md) { md=d; mi=i; }
+        }
+        return mi;
+    }
+
+    function onRoad(x,y) {
+        const ni = nearestWP(x,y);
+        for (let o=-3;o<=3;o++) {
+            const i=(ni+o+TRK.length)%TRK.length;
+            const j=(i+1)%TRK.length;
+            if (ptSeg(x,y,TRK[i][0],TRK[i][1],
+                TRK[j][0],TRK[j][1]) < ROAD_W/2) return true;
+        }
+        return false;
+    }
+
+    function isNearRoad(x,y,margin) {
+        for (let i=0;i<TRK.length;i++) {
+            const j=(i+1)%TRK.length;
+            if (ptSeg(x,y,TRK[i][0],TRK[i][1],
+                TRK[j][0],TRK[j][1]) < ROAD_W/2+margin)
+                return true;
+        }
+        return false;
+    }
+
+    function rr(c,x,y,w,h,r) {
+        c.beginPath();
+        c.moveTo(x+r,y);
+        c.lineTo(x+w-r,y);
+        c.quadraticCurveTo(x+w,y,x+w,y+r);
+        c.lineTo(x+w,y+h-r);
+        c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+        c.lineTo(x+r,y+h);
+        c.quadraticCurveTo(x,y+h,x,y+h-r);
+        c.lineTo(x,y+r);
+        c.quadraticCurveTo(x,y,x+r,y);
+        c.closePath();
+    }
+
+    // ============ MAP BUILDING ============
+    function buildMap() {
+        const c = mCtx;
+
+        // Base: grass
+        c.fillStyle = '#4a7c2e';
+        c.fillRect(0,0,W,H);
+
+        // Zone backgrounds
+        const bgPolys = {
+            sky: [[0,0],[1200,0],[1200,550],[850,850],
+                [650,1250],[520,1650],[450,2100],
+                [300,2500],[0,2500]],
+            kingdom: [[1100,0],[2900,0],[2900,750],
+                [2450,850],[1550,850],[1100,750]],
+            highway: [[1850,580],[3750,580],[3750,1050],
+                [3650,1100],[1850,1050]],
+            jungle: [[3050,850],[3900,850],[3900,2150],
+                [3050,2150],[2950,2000],[3150,1000]],
+            river: [[550,1850],[3500,1850],[3500,2400],
+                [550,2400]]
+        };
+        const order = ['sky','kingdom','highway','jungle','river'];
+        order.forEach(z => {
+            const p = bgPolys[z];
+            c.fillStyle = ZONE_COLORS[z];
+            c.beginPath();
+            c.moveTo(p[0][0],p[0][1]);
+            for (let i=1;i<p.length;i++) c.lineTo(p[i][0],p[i][1]);
+            c.closePath(); c.fill();
+        });
+
+        // Decorations (before road)
+        drawDecorations(c);
+
+        // Road
+        drawRoad(c);
+
+        // Start/finish
+        drawStartFinish(c);
+
+        // Castle
+        drawCastle(c);
+
+        // Shortcut portals
+        SHORTCUTS.forEach(sc => {
+            c.save(); c.translate(sc.entrance.x, sc.entrance.y);
+            const g = c.createRadialGradient(0,0,8,0,0,35);
+            g.addColorStop(0,'rgba(147,51,234,0.9)');
+            g.addColorStop(1,'rgba(147,51,234,0)');
+            c.fillStyle = g;
+            c.beginPath(); c.arc(0,0,35,0,Math.PI*2); c.fill();
+            c.fillStyle = '#c084fc';
+            c.beginPath(); c.arc(0,0,12,0,Math.PI*2); c.fill();
+            c.fillStyle = '#ffd700'; c.font = 'bold 18px sans-serif';
+            c.textAlign = 'center'; c.textBaseline = 'middle';
+            c.fillText('\u2605',0,1);
+            c.restore();
+        });
+
+        // Zone labels
+        c.font = 'bold 55px sans-serif';
+        c.textAlign = 'center';
+        c.fillStyle = 'rgba(255,255,255,0.25)';
+        c.fillText('Kingdom',2000,250);
+        c.fillText('Highway',2900,730);
+        c.fillText('Jungle',3400,1400);
+        c.fillText('River',2100,2080);
+        c.fillText('Sky',600,1350);
+    }
+
+    function drawRoad(c) {
+        function trkPath() {
+            c.beginPath();
+            c.moveTo(TRK[0][0],TRK[0][1]);
+            for (let i=1;i<TRK.length;i++)
+                c.lineTo(TRK[i][0],TRK[i][1]);
+            c.closePath();
+        }
+        c.lineJoin = 'round'; c.lineCap = 'round';
+
+        // Edge
+        trkPath();
+        c.lineWidth = ROAD_W + 12;
+        c.strokeStyle = '#2a2a2a'; c.stroke();
+
+        // Surface
+        trkPath();
+        c.lineWidth = ROAD_W;
+        c.strokeStyle = '#777'; c.stroke();
+
+        // Highway dashed center
+        c.beginPath(); c.setLineDash([18,14]);
+        for (let i=5;i<=11;i++) {
+            if (i===5) c.moveTo(TRK[i][0],TRK[i][1]);
+            else c.lineTo(TRK[i][0],TRK[i][1]);
+        }
+        c.lineWidth = 3; c.strokeStyle = '#ffd700';
+        c.lineCap = 'round'; c.stroke();
+        c.setLineDash([]);
+
+        // River blue tint
+        c.beginPath();
+        for (let i=19;i<=27;i++) {
+            if (i===19) c.moveTo(TRK[i][0],TRK[i][1]);
+            else c.lineTo(TRK[i][0],TRK[i][1]);
+        }
+        c.lineWidth = ROAD_W - 12;
+        c.strokeStyle = 'rgba(30,120,220,0.35)';
+        c.lineCap = 'round'; c.lineJoin = 'round';
+        c.stroke();
+
+        // Sky section subtle tint
+        c.beginPath();
+        for (let i=28;i<=34;i++) {
+            if (i===28) c.moveTo(TRK[i][0],TRK[i][1]);
+            else c.lineTo(TRK[i][0],TRK[i][1]);
+        }
+        c.lineWidth = ROAD_W - 12;
+        c.strokeStyle = 'rgba(135,206,235,0.25)';
+        c.stroke();
+    }
+
+    function drawStartFinish(c) {
+        const a = Math.atan2(TRK[1][1]-TRK[0][1],
+            TRK[1][0]-TRK[0][0]);
+        c.save();
+        c.translate(TRK[0][0],TRK[0][1]);
+        c.rotate(a + Math.PI/2);
+        const sq=12, cols=Math.ceil(ROAD_W/sq);
+        for (let r=0;r<2;r++)
+            for (let cl=0;cl<cols;cl++) {
+                c.fillStyle=(r+cl)%2?'#000':'#fff';
+                c.fillRect(cl*sq-ROAD_W/2, r*sq-sq, sq, sq);
+            }
+        c.restore();
+    }
+
+    function drawCastle(c) {
+        const cx=2000, cy=200;
+        // Wall arc
+        c.strokeStyle = '#696969'; c.lineWidth = 10;
+        c.beginPath();
+        c.arc(cx,cy+200,420,Math.PI*1.12,Math.PI*1.88,true);
+        c.stroke();
+        // Battlements on wall
+        for (let a=Math.PI*1.15; a<Math.PI*1.85; a+=0.12) {
+            const bx=cx+Math.cos(a)*425, by=cy+200+Math.sin(a)*425;
+            c.fillStyle='#696969';
+            c.fillRect(bx-5,by-8,10,8);
+        }
+        // Towers
+        [[cx-400,cy+190],[cx+400,cy+190]].forEach(([tx,ty])=>{
+            c.fillStyle='#808080';
+            c.fillRect(tx-18,ty-45,36,55);
+            c.fillRect(tx-22,ty-50,12,10);
+            c.fillRect(tx+10,ty-50,12,10);
+            c.fillStyle='#8b0000';
+            c.beginPath();
+            c.moveTo(tx,ty-72);
+            c.lineTo(tx-26,ty-50);
+            c.lineTo(tx+26,ty-50);
+            c.fill();
+            c.fillStyle='#ffd700';
+            c.beginPath();
+            c.moveTo(tx,ty-72);
+            c.lineTo(tx+18,ty-66);
+            c.lineTo(tx,ty-58);
+            c.fill();
+        });
+        // Gate tower (bigger, center top)
+        const gx=cx, gy=cy-170;
+        c.fillStyle='#808080';
+        c.fillRect(gx-25,gy-55,50,65);
+        c.fillRect(gx-30,gy-60,15,12);
+        c.fillRect(gx+15,gy-60,15,12);
+        c.fillStyle='#8b0000';
+        c.beginPath();
+        c.moveTo(gx,gy-85);
+        c.lineTo(gx-35,gy-60);
+        c.lineTo(gx+35,gy-60);
+        c.fill();
+        c.fillStyle='#ffd700';
+        c.beginPath();
+        c.moveTo(gx,gy-85);
+        c.lineTo(gx+22,gy-78);
+        c.lineTo(gx,gy-68);
+        c.fill();
+        // Label
+        c.fillStyle='rgba(255,255,255,0.4)';
+        c.font='bold 28px sans-serif'; c.textAlign='center';
+        c.fillText('START / FINISH',cx,cy+100);
+    }
+
+    function drawDecorations(c) {
+        // Jungle trees
+        for (let i=0;i<55;i++) {
+            const x=2950+Math.random()*950;
+            const y=850+Math.random()*1250;
+            if (!isNearRoad(x,y,35)) drawTree(c,x,y,14+Math.random()*22);
+        }
+        // Extra trees near jungle/left side
+        for (let i=0;i<25;i++) {
+            const x=350+Math.random()*750;
+            const y=900+Math.random()*1000;
+            if (!isNearRoad(x,y,35)) drawTree(c,x,y,10+Math.random()*18);
+        }
+        // Highway barriers
+        for (let i=5;i<11;i++) {
+            const j=i+1;
+            const mx=(TRK[i][0]+TRK[j][0])/2;
+            const my=(TRK[i][1]+TRK[j][1])/2;
+            const a=Math.atan2(TRK[j][1]-TRK[i][1],
+                TRK[j][0]-TRK[i][0])+Math.PI/2;
+            for (const side of [-1,1]) {
+                const bx=mx+Math.cos(a)*ROAD_W*0.6*side;
+                const by=my+Math.sin(a)*ROAD_W*0.6*side;
+                c.fillStyle='#aaa';
+                c.fillRect(bx-12,by-3,24,6);
+                c.fillStyle='#e74c3c';
+                c.fillRect(bx-12,by-3,8,6);
+            }
+        }
+        // Clouds in sky
+        for (let i=0;i<14;i++) {
+            const x=50+Math.random()*1100;
+            const y=50+Math.random()*2300;
+            drawCloud(c,x,y,22+Math.random()*50);
+        }
+        // River details
+        for (let i=0;i<18;i++) {
+            const x=650+Math.random()*2800;
+            const y=1880+Math.random()*480;
+            if (!isNearRoad(x,y,20)) {
+                // Lily pad
+                c.fillStyle='rgba(50,200,50,0.5)';
+                c.beginPath();
+                c.arc(x,y,6+Math.random()*8,0,Math.PI*2);
+                c.fill();
+            }
+        }
+        // River wave lines
+        for (let i=0;i<12;i++) {
+            const x=700+Math.random()*2700;
+            const y=1900+Math.random()*400;
+            c.strokeStyle='rgba(255,255,255,0.15)';
+            c.lineWidth=2;
+            c.beginPath();
+            c.moveTo(x,y);
+            c.quadraticCurveTo(x+15,y-8,x+30,y);
+            c.quadraticCurveTo(x+45,y+8,x+60,y);
+            c.stroke();
+        }
+        // Birds in sky
+        for (let i=0;i<8;i++) {
+            const x=100+Math.random()*900;
+            const y=200+Math.random()*1800;
+            c.strokeStyle='rgba(50,50,50,0.3)';
+            c.lineWidth=2;
+            c.beginPath();
+            c.moveTo(x-8,y+4);
+            c.quadraticCurveTo(x-4,y-4,x,y);
+            c.quadraticCurveTo(x+4,y-4,x+8,y+4);
+            c.stroke();
+        }
+    }
+
+    function drawTree(c,x,y,sz) {
+        c.fillStyle='rgba(0,0,0,0.2)';
+        c.beginPath();
+        c.ellipse(x+3,y+3,sz,sz*0.7,0,0,Math.PI*2);
+        c.fill();
+        c.fillStyle='#1a6a1a';
+        c.beginPath(); c.arc(x,y,sz,0,Math.PI*2); c.fill();
+        c.fillStyle='#2d9a2d';
+        c.beginPath();
+        c.arc(x-sz*0.3,y-sz*0.3,sz*0.35,0,Math.PI*2);
+        c.fill();
+    }
+
+    function drawCloud(c,x,y,sz) {
+        c.fillStyle='rgba(255,255,255,0.45)';
+        c.beginPath();
+        c.arc(x,y,sz,0,Math.PI*2);
+        c.arc(x+sz*0.7,y-sz*0.2,sz*0.65,0,Math.PI*2);
+        c.arc(x-sz*0.5,y+sz*0.1,sz*0.5,0,Math.PI*2);
+        c.arc(x+sz*0.3,y+sz*0.3,sz*0.4,0,Math.PI*2);
+        c.fill();
+    }
+
+    // ============ INPUT ============
+    document.addEventListener('keydown', e => {
+        if (!gameStarted) { startGame(); return; }
+        if (e.key==='ArrowUp'||e.key==='w') input.up=true;
+        if (e.key==='ArrowDown'||e.key==='s') input.down=true;
+        if (e.key==='ArrowLeft'||e.key==='a') input.left=true;
+        if (e.key==='ArrowRight'||e.key==='d') input.right=true;
+    });
+    document.addEventListener('keyup', e => {
+        if (e.key==='ArrowUp'||e.key==='w') input.up=false;
+        if (e.key==='ArrowDown'||e.key==='s') input.down=false;
+        if (e.key==='ArrowLeft'||e.key==='a') input.left=false;
+        if (e.key==='ArrowRight'||e.key==='d') input.right=false;
+    });
+
+    function setupBtn(id,key) {
+        const el=document.getElementById(id);
+        const on=()=>{input[key]=true;el.classList.add('pressed');};
+        const off=()=>{input[key]=false;el.classList.remove('pressed');};
+        el.addEventListener('touchstart',e=>{e.preventDefault();on();});
+        el.addEventListener('touchend',e=>{e.preventDefault();off();});
+        el.addEventListener('touchcancel',off);
+        el.addEventListener('mousedown',on);
+        el.addEventListener('mouseup',off);
+        el.addEventListener('mouseleave',off);
+    }
+    setupBtn('tLeft','left');
+    setupBtn('tRight','right');
+    setupBtn('tGas','up');
+    setupBtn('tBrake','down');
+
+    document.getElementById('pov').addEventListener('change',e=>{
+        camera.tz=parseFloat(e.target.value);
+    });
+
+    // ============ SHORTCUT HANDLERS ============
+    document.getElementById('scBuy').addEventListener('click',()=>{
+        if (activeSC && points>=activeSC.cost) {
+            points -= activeSC.cost;
+            player.x = activeSC.exit.x;
+            player.y = activeSC.exit.y;
+            player.angle = activeSC.exitAngle;
+            player.speed = MAX_SPD * 0.4;
+            activeSC.used = true;
+            playWarp();
+        }
+        document.getElementById('scModal').style.display='none';
+        if (lapPauseStart) lapPauseTotal+=Date.now()-lapPauseStart;
+        lapPauseStart=null;
+        scPaused=false; activeSC=null;
+        startMusic();
+    });
+    document.getElementById('scSkip').addEventListener('click',()=>{
+        if (activeSC) activeSC.skipped=true;
+        document.getElementById('scModal').style.display='none';
+        if (lapPauseStart) lapPauseTotal+=Date.now()-lapPauseStart;
+        lapPauseStart=null;
+        scPaused=false; activeSC=null;
+        startMusic();
+    });
+
+    // ============ GAME START ============
+    function startGame() {
+        if (gameStarted) return;
+        gameStarted = true;
+        lapStart = Date.now();
+        lapPauseTotal = 0;
+        initAudio();
+        document.getElementById('startScreen').style.display='none';
+    }
+    document.addEventListener('touchstart',(e)=>{
+        if (!gameStarted
+            && !e.target.closest('.start-notes'))
+            startGame();
+    },{once:false});
+    document.addEventListener('click',(e)=>{
+        if (!gameStarted
+            && !e.target.closest('.start-notes'))
+            startGame();
+    },{once:false});
+
+    // ============ PHYSICS ============
+    function updatePlayer(dt) {
+        // Speed-dependent turning
+        const spdFactor = 1 - Math.abs(player.speed)/(MAX_SPD*2.5);
+        const turn = TURN_SPD * Math.max(0.3, spdFactor);
+        if (input.left) player.angle -= turn * dt;
+        if (input.right) player.angle += turn * dt;
+
+        const road = onRoad(player.x, player.y);
+        const maxSpd = road ? MAX_SPD : OFF_SPD;
+
+        if (input.up) {
+            player.speed = Math.min(
+                player.speed + ACCEL * dt, maxSpd
+            );
+        } else if (input.down) {
+            player.speed -= BRAKE * dt;
+            if (player.speed < -maxSpd/3)
+                player.speed = -maxSpd/3;
+        } else {
+            player.speed *= Math.pow(FRICTION, dt*60);
+            if (Math.abs(player.speed)<1) player.speed=0;
+        }
+
+        // Clamp if over terrain max
+        if (player.speed > maxSpd)
+            player.speed -= (player.speed-maxSpd) * 3 * dt;
+
+        player.x += Math.cos(player.angle) * player.speed * dt;
+        player.y += Math.sin(player.angle) * player.speed * dt;
+
+        // World bounds
+        player.x = Math.max(30, Math.min(W-30, player.x));
+        player.y = Math.max(30, Math.min(H-30, player.y));
+    }
+
+    // ============ ZONE DETECTION ============
+    function updateZone() {
+        const ni = nearestWP(player.x, player.y);
+        player.zone = ZONES[ni] || 'kingdom';
+
+        if (player.zone !== prevZone) {
+            points += 10;
+            prevZone = player.zone;
+        }
+    }
+
+    // ============ CAMERA ============
+    function updateCamera() {
+        camera.x += (player.x - camera.x) * 0.08;
+        camera.y += (player.y - camera.y) * 0.08;
+        camera.zoom += (camera.tz - camera.zoom) * 0.08;
+    }
+
+    // ============ BLINKER ============
+    function updateBlinker() {
+        const ni = nearestWP(player.x, player.y);
+        for (let ah=3; ah<=7; ah++) {
+            const i=(ni+ah)%TRK.length;
+            const p=(i-1+TRK.length)%TRK.length;
+            const n=(i+1)%TRK.length;
+            const a1=Math.atan2(TRK[i][1]-TRK[p][1],
+                TRK[i][0]-TRK[p][0]);
+            const a2=Math.atan2(TRK[n][1]-TRK[i][1],
+                TRK[n][0]-TRK[i][0]);
+            let d=a2-a1;
+            while(d>Math.PI)d-=Math.PI*2;
+            while(d<-Math.PI)d+=Math.PI*2;
+            if (Math.abs(d)>0.8) {
+                blinkerDir = d>0 ? 'right' : 'left';
+                return;
+            }
+        }
+        blinkerDir = null;
+    }
+
+    // ============ LAP DETECTION ============
+    function checkLap() {
+        const d=Math.hypot(player.x-TRK[0][0],player.y-TRK[0][1]);
+        if (d>350) canCountLap=true;
+        if (d<ROAD_W && canCountLap && player.speed>10) {
+            // Direction check
+            const ta=Math.atan2(TRK[1][1]-TRK[0][1],
+                TRK[1][0]-TRK[0][0]);
+            let ad=player.angle-ta;
+            while(ad>Math.PI)ad-=Math.PI*2;
+            while(ad<-Math.PI)ad+=Math.PI*2;
+            if (Math.abs(ad)<Math.PI/2) {
+                if (lapStart!==null) {
+                    const lt=Date.now()-lapStart-lapPauseTotal;
+                    if (bestLap===null||lt<bestLap) bestLap=lt;
+                    lapMsg='Lap '+(lap+1)+' Complete!';
+                    lapMsgT=150;
+                    playLapComplete();
+                }
+                lap++;
+                lapStart=Date.now();
+                lapPauseTotal=0;
+                points+=100;
+                canCountLap=false;
+                // Reset shortcuts
+                SHORTCUTS.forEach(s=>{s.used=false;s.skipped=false;});
+            }
+        }
+    }
+
+    // ============ SHORTCUT CHECK ============
+    function checkShortcuts() {
+        if (scPaused) return;
+        for (const sc of SHORTCUTS) {
+            if (sc.used) continue;
+            const d=Math.hypot(player.x-sc.entrance.x,
+                player.y-sc.entrance.y);
+            // Clear cooldown once player leaves the area
+            if (d>sc.radius*2) sc.skipped=false;
+            if (d<sc.radius && points>=sc.cost && !sc.skipped) {
+                scPaused=true; activeSC=sc;
+                lapPauseStart=Date.now();
+                stopMusic();
+                muteEngine();
+                playShortcutChime();
+                document.getElementById('scText').textContent=
+                    sc.name+' \u2014 Cost: '+sc.cost+' points'+
+                    ' (You have '+points+')';
+                document.getElementById('scModal')
+                    .style.display='flex';
+                break;
+            }
+        }
+    }
+
+    // ============ VEHICLE DRAWING ============
+    function drawVehicle() {
+        ctx.save();
+        ctx.translate(player.x, player.y);
+        ctx.rotate(player.angle);
+
+        switch(player.zone) {
+        case 'kingdom': // Convertible
+            ctx.fillStyle='#e74c3c';
+            rr(ctx,-18,-11,36,22,5); ctx.fill();
+            ctx.fillStyle='#c0392b';
+            ctx.fillRect(-8,-7,16,14);
+            ctx.fillStyle='#aed6f1';
+            ctx.fillRect(12,-8,4,16);
+            ctx.fillStyle='#222';
+            [[-14,-13],[14,-13],[-14,10],[14,10]].forEach(
+                ([x,y])=>ctx.fillRect(x,y,7,3));
+            break;
+        case 'highway': // Motorcycle
+            ctx.fillStyle='#333';
+            rr(ctx,-16,-5,32,10,4); ctx.fill();
+            ctx.fillStyle='#8b4513';
+            ctx.fillRect(-6,-6,14,12);
+            ctx.fillStyle='#555';
+            ctx.beginPath();
+            ctx.arc(-12,0,5,0,Math.PI*2);
+            ctx.arc(12,0,5,0,Math.PI*2);
+            ctx.fill();
+            ctx.strokeStyle='#ccc'; ctx.lineWidth=2;
+            ctx.beginPath();
+            ctx.moveTo(14,-7); ctx.lineTo(16,-7);
+            ctx.moveTo(14,7); ctx.lineTo(16,7);
+            ctx.stroke();
+            break;
+        case 'jungle': // CR-V
+            ctx.fillStyle='#2c3e50';
+            rr(ctx,-20,-13,40,26,4); ctx.fill();
+            ctx.fillStyle='#34495e';
+            ctx.fillRect(-13,-11,26,22);
+            ctx.fillStyle='#aed6f1';
+            ctx.fillRect(13,-9,5,18);
+            ctx.fillRect(-18,-7,4,14);
+            ctx.fillStyle='#222';
+            [[-16,-15],[12,-15],[-16,12],[12,12]].forEach(
+                ([x,y])=>ctx.fillRect(x,y,8,3));
+            ctx.strokeStyle='#7f8c8d'; ctx.lineWidth=1.5;
+            ctx.strokeRect(-11,-11,22,22);
+            break;
+        case 'river': // Boat
+            ctx.fillStyle='#e67e22';
+            ctx.beginPath();
+            ctx.moveTo(22,0);
+            ctx.lineTo(10,-13);
+            ctx.lineTo(-18,-13);
+            ctx.lineTo(-18,13);
+            ctx.lineTo(10,13);
+            ctx.closePath(); ctx.fill();
+            ctx.fillStyle='#d35400';
+            ctx.fillRect(-14,-9,24,18);
+            ctx.strokeStyle='rgba(255,255,255,0.4)';
+            ctx.lineWidth=2;
+            ctx.beginPath();
+            ctx.moveTo(-18,-10); ctx.lineTo(-26,-16);
+            ctx.moveTo(-18,10); ctx.lineTo(-26,16);
+            ctx.stroke();
+            break;
+        case 'sky': // Plane
+            ctx.fillStyle='#ecf0f1';
+            ctx.beginPath();
+            ctx.ellipse(0,0,20,7,0,0,Math.PI*2); ctx.fill();
+            ctx.fillStyle='#bdc3c7';
+            ctx.beginPath();
+            ctx.moveTo(-3,-7); ctx.lineTo(1,-23);
+            ctx.lineTo(8,-23); ctx.lineTo(5,-7);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(-3,7); ctx.lineTo(1,23);
+            ctx.lineTo(8,23); ctx.lineTo(5,7);
+            ctx.fill();
+            ctx.fillStyle='#95a5a6';
+            ctx.beginPath();
+            ctx.moveTo(-16,-2); ctx.lineTo(-23,-10);
+            ctx.lineTo(-18,-10); ctx.lineTo(-14,-2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(-16,2); ctx.lineTo(-23,10);
+            ctx.lineTo(-18,10); ctx.lineTo(-14,2);
+            ctx.fill();
+            ctx.fillStyle='#e74c3c';
+            ctx.beginPath();
+            ctx.arc(18,0,4,-Math.PI/2,Math.PI/2); ctx.fill();
+            break;
+        }
+        ctx.restore();
+    }
+
+    // ============ HUD ============
+    function drawHUD() {
+        const w=canvas.width, h=canvas.height;
+        ctx.save();
+        ctx.setTransform(1,0,0,1,0,0); // Reset transform
+
+        // Touch button height to avoid (64px btn + 20px margin)
+        const touchH = 90;
+
+        // Points + Lap (top center, narrower)
+        ctx.fillStyle='rgba(0,0,0,0.5)';
+        rr(ctx,w/2-85,8,170,30,12); ctx.fill();
+        ctx.fillStyle='#ffd700';
+        ctx.font='bold 13px sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(
+            '\u2b50 '+points+'  |  Lap '+
+            Math.max(1,lap), w/2, 23
+        );
+
+        // Zone + Vehicle (below, narrower)
+        ctx.fillStyle='rgba(0,0,0,0.4)';
+        rr(ctx,w/2-90,42,180,22,8); ctx.fill();
+        ctx.fillStyle='#fff'; ctx.font='12px sans-serif';
+        const zn = player.zone.charAt(0).toUpperCase()
+            + player.zone.slice(1);
+        ctx.fillText(
+            zn+' \u2014 '+ZONE_VEHICLES[player.zone],
+            w/2, 53
+        );
+
+        // On/off course indicator
+        const onR = onRoad(player.x,player.y);
+        ctx.fillStyle = onR
+            ? 'rgba(0,180,0,0.6)'
+            : 'rgba(180,0,0,0.6)';
+        rr(ctx,w/2-42,67,84,18,6); ctx.fill();
+        ctx.fillStyle='#fff'; ctx.font='10px sans-serif';
+        ctx.textAlign='center';
+        ctx.fillText(onR?'ON COURSE':'OFF COURSE',w/2,78);
+
+        // Bottom panels: sit just above touch buttons
+        const botY = h - touchH - 8;
+
+        // Speedometer (right side)
+        ctx.fillStyle='rgba(0,0,0,0.5)';
+        rr(ctx,w-120,botY-38,110,38,10); ctx.fill();
+        const mph=Math.round(Math.abs(player.speed)*0.47);
+        ctx.fillStyle = mph>120?'#f44':mph>80?'#fa0':'#0f0';
+        ctx.font='bold 20px sans-serif';
+        ctx.textAlign='right';
+        ctx.fillText(mph+' mph',w-18,botY-14);
+
+        // Zoom level (left side)
+        ctx.fillStyle='rgba(0,0,0,0.5)';
+        rr(ctx,10,botY-38,110,38,10); ctx.fill();
+        ctx.fillStyle='#fff'; ctx.textAlign='left';
+        ctx.font='14px sans-serif';
+        ctx.fillText('Zoom: '+camera.zoom.toFixed(1)+'x',
+            20,botY-14);
+
+        // Lap time (center)
+        if (lapStart && !scPaused) {
+            curLapTime = Date.now()-lapStart-lapPauseTotal;
+        }
+        ctx.fillStyle='rgba(0,0,0,0.4)';
+        rr(ctx,w/2-80,botY-34,160,22,8); ctx.fill();
+        ctx.fillStyle='#fff'; ctx.font='12px sans-serif';
+        ctx.textAlign='center';
+        const ct=(curLapTime/1000).toFixed(1);
+        const bt=bestLap?(bestLap/1000).toFixed(1)+'s':'--';
+        ctx.fillText('Time: '+ct+'s  |  Best: '+bt,
+            w/2, botY-21);
+
+        // Turn warning (below back button)
+        if (blinkerDir) {
+            const flash = Math.floor(Date.now()/350)%2===0;
+            ctx.fillStyle = flash
+                ? 'rgba(255,140,0,0.85)'
+                : 'rgba(255,140,0,0.4)';
+            rr(ctx,10,52,110,24,8); ctx.fill();
+            ctx.fillStyle='#fff';
+            ctx.font='bold 11px sans-serif';
+            ctx.textAlign='center';
+            ctx.fillText('\u26a0 TURN AHEAD',65,67);
+        }
+
+        // Lap complete message
+        if (lapMsgT>0) {
+            lapMsgT--;
+            const alpha=Math.min(1,lapMsgT/30);
+            ctx.fillStyle='rgba(255,215,0,'+alpha+')';
+            ctx.font='bold 36px sans-serif';
+            ctx.textAlign='center';
+            ctx.fillText(lapMsg,w/2,h/2-50);
+        }
+
+        // Minimap (top-right, below POV selector)
+        drawMinimap(w-160,100,150,110);
+
+        ctx.restore();
+    }
+
+    function drawMinimap(mx,my,mw,mh) {
+        ctx.fillStyle='rgba(0,0,0,0.55)';
+        rr(ctx,mx,my,mw,mh,6); ctx.fill();
+
+        const sx=mw/W, sy=mh/H;
+        const pad=4;
+
+        // Zone colors on minimap
+        const zoneRects = [
+            ['sky',0,0,1200,2500],
+            ['kingdom',1100,0,1800,850],
+            ['highway',1850,580,1900,470],
+            ['jungle',3050,850,850,1300],
+            ['river',550,1850,2950,550]
+        ];
+        zoneRects.forEach(([z,zx,zy,zw,zh])=>{
+            ctx.fillStyle = ZONE_COLORS[z]+'66';
+            ctx.fillRect(
+                mx+pad+zx*sx, my+pad+zy*sy,
+                zw*sx, zh*sy
+            );
+        });
+
+        // Track line
+        ctx.beginPath();
+        ctx.moveTo(mx+pad+TRK[0][0]*sx, my+pad+TRK[0][1]*sy);
+        for (let i=1;i<TRK.length;i++)
+            ctx.lineTo(mx+pad+TRK[i][0]*sx, my+pad+TRK[i][1]*sy);
+        ctx.closePath();
+        ctx.strokeStyle='#aaa'; ctx.lineWidth=2; ctx.stroke();
+
+        // Player dot
+        ctx.fillStyle='#f00';
+        ctx.beginPath();
+        ctx.arc(mx+pad+player.x*sx, my+pad+player.y*sy,
+            3,0,Math.PI*2);
+        ctx.fill();
+
+        // Border
+        ctx.strokeStyle='rgba(255,255,255,0.4)';
+        ctx.lineWidth=1;
+        rr(ctx,mx,my,mw,mh,6); ctx.stroke();
+    }
+
+    // ============ RENDER ============
+    function render() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // Camera transform
+        ctx.save();
+        ctx.translate(canvas.width/2, canvas.height/2);
+        ctx.scale(camera.zoom, camera.zoom);
+        ctx.translate(-camera.x, -camera.y);
+
+        // Map
+        ctx.drawImage(mapC, 0, 0);
+
+        // Shortcut portal pulse (animated, on top of map)
+        const pulse = 0.8 + Math.sin(Date.now()/300)*0.2;
+        SHORTCUTS.forEach(sc => {
+            if (sc.used) return;
+            ctx.save();
+            ctx.translate(sc.entrance.x, sc.entrance.y);
+            ctx.scale(pulse, pulse);
+            ctx.strokeStyle='rgba(192,132,252,0.6)';
+            ctx.lineWidth=3;
+            ctx.beginPath();
+            ctx.arc(0,0,20,0,Math.PI*2);
+            ctx.stroke();
+            ctx.restore();
+        });
+
+        // Player
+        drawVehicle();
+
+        ctx.restore();
+
+        // HUD (screen space)
+        drawHUD();
+
+        // Start screen fade hint
+        if (!gameStarted) {
+            ctx.fillStyle='rgba(0,0,0,0.7)';
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+        }
+    }
+
+    // ============ UPDATE ============
+    function update(dt) {
+        updatePlayer(dt);
+        updateZone();
+        updateCamera();
+        updateBlinker();
+        checkLap();
+        checkShortcuts();
+        updateEngine();
+
+        // On/off course sound
+        const nowOnCourse = onRoad(player.x, player.y);
+        if (nowOnCourse && !wasOnCourse) playOnCourse();
+        if (!nowOnCourse && wasOnCourse
+            && Math.abs(player.speed) > 20) playOffCourse();
+        wasOnCourse = nowOnCourse;
+
+        // Blinker tick sound
+        if (blinkerDir && blinkerDir !== prevBlinker) {
+            playBlinkerTick();
+        }
+        prevBlinker = blinkerDir;
+    }
+
+    // ============ GAME LOOP ============
+    function loop(ts) {
+        const dt=Math.min((ts-lastTime)/1000, 0.05);
+        lastTime=ts;
+        if (gameStarted && !scPaused) update(dt);
+        render();
+        requestAnimationFrame(loop);
+    }
+
+    // ============ INIT ============
+    buildMap();
+    requestAnimationFrame(loop);
+    </script>
+</body>
+</html>
