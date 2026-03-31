@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0,
+                   maximum-scale=1.0, user-scalable=no">
+    <title>Bedtime Remote</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont,
+                'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(
+                180deg, #4a90d9 0%, #74b9ff 35%,
+                #a8d8ea 60%, #fdcb6e 100%
+            );
+            min-height: 100vh;
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            padding: 8px 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 1.5s ease 1.5s;
+        }
+
+        .stars.visible {
+            opacity: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--dur) ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: var(--bright); }
+        }
+
+        .title {
+            position: fixed;
+            top: 16px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .canvas-area {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .button-area {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .sleep-btn {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 100, 100, 0.6);
+            background: radial-gradient(
+                circle at 40% 35%,
+                #ff6b6b 0%, #c0392b 60%, #8b1a1a 100%
+            );
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            box-shadow:
+                0 0 30px rgba(255, 80, 80, 0.4),
+                0 0 60px rgba(255, 80, 80, 0.2),
+                inset 0 -4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 4px 8px rgba(255, 255, 255, 0.2);
+            transition: all 0.15s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .sleep-btn:active {
+            transform: scale(0.93);
+            box-shadow:
+                0 0 15px rgba(255, 80, 80, 0.3),
+                inset 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        .sleep-btn.asleep {
+            background: radial-gradient(
+                circle at 40% 35%,
+                #7ec8e3 0%, #3a7bd5 60%, #1a3a6b 100%
+            );
+            border-color: rgba(100, 180, 255, 0.6);
+            box-shadow:
+                0 0 30px rgba(100, 180, 255, 0.4),
+                0 0 60px rgba(100, 180, 255, 0.2),
+                inset 0 -4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 4px 8px rgba(255, 255, 255, 0.2);
+        }
+
+        .status-msg {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            text-align: center;
+            min-height: 24px;
+        }
+
+        .status-msg.visible {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .sleep-btn {
+                width: 120px;
+                height: 120px;
+                font-size: 16px;
+            }
+
+            .button-area {
+                bottom: 40px;
+            }
+
+            .title {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .button-area {
+                bottom: 20px;
+            }
+
+            .sleep-btn {
+                width: 100px;
+                height: 100px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">Back</a>
+
+    <div class="title">Bedtime Remote</div>
+
+    <div class="stars" id="stars"></div>
+
+    <div class="canvas-area">
+        <canvas id="game"></canvas>
+    </div>
+
+    <div class="button-area">
+        <button class="sleep-btn" id="sleepBtn">SLEEP</button>
+        <div class="status-msg" id="statusMsg"></div>
+    </div>
+
+    <script>
+    (function () {
+        // --- Stars ---
+        const starsEl = document.getElementById('stars');
+        for (let i = 0; i < 80; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            s.style.left = Math.random() * 100 + '%';
+            s.style.top = Math.random() * 70 + '%';
+            s.style.setProperty(
+                '--dur', (2 + Math.random() * 4) + 's'
+            );
+            s.style.setProperty(
+                '--bright',
+                (0.4 + Math.random() * 0.6).toFixed(2)
+            );
+            s.style.animationDelay = (Math.random() * 4) + 's';
+            starsEl.appendChild(s);
+        }
+
+        // --- Canvas setup ---
+        const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
+        let W, H;
+
+        function resize() {
+            W = canvas.width =
+                window.innerWidth * devicePixelRatio;
+            H = canvas.height =
+                window.innerHeight * devicePixelRatio;
+            ctx.scale(devicePixelRatio, devicePixelRatio);
+            W /= devicePixelRatio;
+            H /= devicePixelRatio;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        // --- Audio ---
+        let audioCtx = null;
+        function ensureAudio() {
+            if (!audioCtx) {
+                audioCtx = new (
+                    window.AudioContext
+                    || window.webkitAudioContext
+                )();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playPowerDown() {
+            ensureAudio();
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, now);
+            osc.frequency.exponentialRampToValueAtTime(
+                80, now + 0.8
+            );
+            gain.gain.setValueAtTime(0.3, now);
+            gain.gain.exponentialRampToValueAtTime(
+                0.01, now + 1.0
+            );
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 1.0);
+
+            setTimeout(() => {
+                const now2 = audioCtx.currentTime;
+                [440, 330, 262].forEach((freq, i) => {
+                    const o = audioCtx.createOscillator();
+                    const g = audioCtx.createGain();
+                    o.type = 'triangle';
+                    o.frequency.value = freq;
+                    g.gain.setValueAtTime(
+                        0.15, now2 + i * 0.3
+                    );
+                    g.gain.exponentialRampToValueAtTime(
+                        0.01, now2 + i * 0.3 + 0.8
+                    );
+                    o.connect(g);
+                    g.connect(audioCtx.destination);
+                    o.start(now2 + i * 0.3);
+                    o.stop(now2 + i * 0.3 + 0.8);
+                });
+            }, 400);
+        }
+
+        function playWakeUp() {
+            ensureAudio();
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.exponentialRampToValueAtTime(
+                600, now + 0.5
+            );
+            gain.gain.setValueAtTime(0.2, now);
+            gain.gain.exponentialRampToValueAtTime(
+                0.01, now + 0.6
+            );
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.6);
+        }
+
+        function playSnore() {
+            ensureAudio();
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 200;
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(80, now);
+            osc.frequency.linearRampToValueAtTime(
+                60, now + 0.4
+            );
+            osc.frequency.linearRampToValueAtTime(
+                90, now + 0.8
+            );
+            osc.frequency.linearRampToValueAtTime(
+                55, now + 1.2
+            );
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(
+                0.06, now + 0.15
+            );
+            gain.gain.linearRampToValueAtTime(
+                0.02, now + 0.4
+            );
+            gain.gain.linearRampToValueAtTime(
+                0.07, now + 0.55
+            );
+            gain.gain.linearRampToValueAtTime(
+                0.01, now + 1.0
+            );
+            gain.gain.linearRampToValueAtTime(0, now + 1.2);
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 1.2);
+        }
+
+        // --- Tap sounds (one per kid, diff pitch) ---
+        function playBoing(pitchIdx) {
+            ensureAudio();
+            const now = audioCtx.currentTime;
+            const base = [280, 380, 500][pitchIdx];
+            const dur = 0.6;
+            // Main spring oscillator
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            // Schedule rapid frequency bounces that
+            // decay, like a wobbling spring
+            const bounces = 8;
+            for (let i = 0; i < bounces; i++) {
+                const t = now + (i / bounces) * dur;
+                const decay = 1 - i / bounces;
+                const hi = base + 400 * decay;
+                const lo = base - 100 * decay;
+                osc.frequency.setValueAtTime(hi, t);
+                osc.frequency.linearRampToValueAtTime(
+                    lo, t + (dur / bounces) * 0.5
+                );
+                osc.frequency.linearRampToValueAtTime(
+                    hi, t + dur / bounces
+                );
+            }
+            gain.gain.setValueAtTime(0.3, now);
+            gain.gain.exponentialRampToValueAtTime(
+                0.01, now + dur
+            );
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + dur);
+        }
+
+        // --- Kids ---
+        const KIDS = [
+            {
+                name: 'Rory', color: '#ff6b6b',
+                colorDark: '#c0392b'
+            },
+            {
+                name: 'Shea', color: '#55efc4',
+                colorDark: '#00b894'
+            },
+            {
+                name: 'Maggie', color: '#a29bfe',
+                colorDark: '#6c5ce7'
+            },
+        ];
+
+        const KID_RADIUS = 38;
+        let asleep = false;
+        let sleepTransition = 0;
+        let snoreTimer = 0;
+
+        const kids = KIDS.map((k, i) => ({
+            ...k,
+            x: W * (0.25 + i * 0.25),
+            y: H * 0.35,
+            vx: (Math.random() - 0.5) * 4,
+            vy: (Math.random() - 0.5) * 4,
+            baseSpeed: 2 + Math.random(),
+            angle: 0,
+            spinSpeed: (Math.random() - 0.5) * 0.1,
+            bouncePhase: Math.random() * Math.PI * 2,
+            eyeBlink: 0,
+            blinkTimer: Math.random() * 200,
+            zzzParticles: [],
+            trail: [],
+            squash: 0,
+            burstParticles: [],
+        }));
+
+        // --- Tap / click on kids ---
+        function getTapPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const t = e.touches ? e.touches[0] : e;
+            return {
+                x: t.clientX - rect.left,
+                y: t.clientY - rect.top,
+            };
+        }
+
+        function handleTap(e) {
+            if (sleepTransition > 0.3) return;
+            const pos = getTapPos(e);
+            kids.forEach((kid, idx) => {
+                const dx = pos.x - kid.x;
+                const bounce = Math.sin(
+                    kid.bouncePhase
+                    + frameCount * 0.05
+                ) * 6 * (1 - sleepTransition);
+                const dy = pos.y - (kid.y + bounce);
+                const dist = Math.sqrt(
+                    dx * dx + dy * dy
+                );
+                if (dist < KID_RADIUS + 10) {
+                    // Squash animation
+                    kid.squash = 1.0;
+                    // Bounce away from tap
+                    kid.vx += (Math.random() - 0.5) * 4;
+                    kid.vy -= 1.5 + Math.random() * 2;
+                    kid.spinSpeed =
+                        (Math.random() - 0.5) * 0.3;
+                    // Burst particles
+                    for (let i = 0; i < 8; i++) {
+                        const angle =
+                            (i / 8) * Math.PI * 2;
+                        kid.burstParticles.push({
+                            x: kid.x,
+                            y: kid.y,
+                            vx: Math.cos(angle)
+                                * (2 + Math.random() * 2),
+                            vy: Math.sin(angle)
+                                * (2 + Math.random() * 2),
+                            life: 1.0,
+                            size: 4 + Math.random() * 4,
+                        });
+                    }
+                    playBoing(idx);
+                }
+            });
+        }
+
+        document.addEventListener(
+            'touchstart', handleTap, { passive: true }
+        );
+        document.addEventListener('mousedown', handleTap);
+
+        // --- ZZZ particles ---
+        function spawnZzz(kid) {
+            kid.zzzParticles.push({
+                x: kid.x + (Math.random() - 0.5) * 20,
+                y: kid.y - KID_RADIUS,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: -0.8 - Math.random() * 0.5,
+                life: 1.0,
+                size: 14 + Math.random() * 8,
+                rotation: (Math.random() - 0.5) * 0.3,
+            });
+        }
+
+        // --- Button ---
+        const btn = document.getElementById('sleepBtn');
+        const msg = document.getElementById('statusMsg');
+
+        btn.addEventListener('click', () => {
+            if (!asleep) {
+                asleep = true;
+                btn.textContent = 'WAKE';
+                btn.classList.add('asleep');
+                msg.textContent = '';
+                msg.classList.remove('visible');
+                starsEl.classList.add('visible');
+                playPowerDown();
+                setTimeout(() => {
+                    msg.textContent = 'Peace and quiet!';
+                    msg.classList.add('visible');
+                }, 2500);
+            } else {
+                asleep = false;
+                btn.textContent = 'SLEEP';
+                btn.classList.remove('asleep');
+                msg.textContent = '';
+                msg.classList.remove('visible');
+                starsEl.classList.remove('visible');
+                playWakeUp();
+                kids.forEach(k => {
+                    k.vx = (Math.random() - 0.5) * 6;
+                    k.vy = (Math.random() - 0.5) * 6;
+                    k.zzzParticles = [];
+                });
+            }
+        });
+
+        // --- Draw helpers ---
+        function drawKid(kid, t) {
+            const r = KID_RADIUS;
+            const x = kid.x;
+            const bounce = Math.sin(
+                kid.bouncePhase + t * 0.05
+            ) * 6 * (1 - sleepTransition);
+            const y = kid.y + bounce;
+
+            // Trail (awake only)
+            if (sleepTransition < 0.5) {
+                ctx.globalAlpha =
+                    0.15 * (1 - sleepTransition * 2);
+                kid.trail.forEach((pt, i) => {
+                    const a = i / kid.trail.length;
+                    ctx.beginPath();
+                    ctx.arc(
+                        pt.x, pt.y, r * a * 0.6,
+                        0, Math.PI * 2
+                    );
+                    ctx.fillStyle = kid.color;
+                    ctx.fill();
+                });
+                ctx.globalAlpha = 1;
+            }
+
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(
+                kid.angle * (1 - sleepTransition)
+            );
+            // Squash & stretch on tap
+            if (kid.squash > 0.01) {
+                const sq = kid.squash;
+                ctx.scale(1 + sq * 0.4, 1 - sq * 0.3);
+            }
+
+            // Body circle
+            const grad = ctx.createRadialGradient(
+                -r * 0.2, -r * 0.2, r * 0.1,
+                0, 0, r
+            );
+            grad.addColorStop(0, kid.color);
+            grad.addColorStop(1, kid.colorDark);
+            ctx.beginPath();
+            ctx.arc(0, 0, r, 0, Math.PI * 2);
+            ctx.fillStyle = grad;
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Face
+            const eyeY = -6;
+            const eyeSpacing = 11;
+            const eyeR = 5;
+
+            if (sleepTransition > 0.5) {
+                // Sleeping face
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+                [-eyeSpacing, eyeSpacing].forEach(ex => {
+                    ctx.beginPath();
+                    ctx.arc(
+                        ex, eyeY, eyeR,
+                        0.2, Math.PI - 0.2
+                    );
+                    ctx.stroke();
+                });
+                ctx.beginPath();
+                ctx.arc(0, 6, 7, 0.3, Math.PI - 0.3);
+                ctx.stroke();
+            } else {
+                // Awake face
+                const blinkAmt = kid.eyeBlink;
+                ctx.fillStyle = 'white';
+                [-eyeSpacing, eyeSpacing].forEach(ex => {
+                    ctx.beginPath();
+                    ctx.ellipse(
+                        ex, eyeY, eyeR,
+                        eyeR * (1 - blinkAmt * 0.9),
+                        0, 0, Math.PI * 2
+                    );
+                    ctx.fill();
+                });
+                ctx.fillStyle = '#2d3436';
+                [-eyeSpacing, eyeSpacing].forEach(ex => {
+                    ctx.beginPath();
+                    ctx.arc(
+                        ex + 1, eyeY + 1,
+                        2.5 * (1 - blinkAmt),
+                        0, Math.PI * 2
+                    );
+                    ctx.fill();
+                });
+                ctx.fillStyle = '#2d3436';
+                ctx.beginPath();
+                ctx.ellipse(
+                    0, 10, 6, 5, 0, 0, Math.PI * 2
+                );
+                ctx.fill();
+            }
+
+            ctx.restore();
+
+            // Name label
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 13px -apple-system, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.globalAlpha = 0.9;
+            ctx.fillText(kid.name, x, y + r + 18);
+            ctx.globalAlpha = 1;
+
+            // ZZZ particles
+            kid.zzzParticles.forEach(z => {
+                ctx.save();
+                ctx.translate(z.x, z.y);
+                ctx.rotate(z.rotation);
+                ctx.globalAlpha = z.life * 0.8;
+                ctx.fillStyle = '#ffeaa7';
+                ctx.font =
+                    `bold ${z.size}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.fillText('z', 0, 0);
+                ctx.restore();
+            });
+
+            // Burst particles from tap
+            kid.burstParticles.forEach(p => {
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = kid.color;
+                ctx.beginPath();
+                ctx.arc(
+                    p.x, p.y, p.size * p.life,
+                    0, Math.PI * 2
+                );
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1;
+        }
+
+        // --- Update ---
+        let frameCount = 0;
+
+        function update() {
+            frameCount++;
+
+            const targetSleep = asleep ? 1 : 0;
+            sleepTransition += (
+                targetSleep - sleepTransition
+            ) * 0.03;
+            if (
+                Math.abs(sleepTransition - targetSleep)
+                < 0.001
+            ) {
+                sleepTransition = targetSleep;
+            }
+
+            const awake = 1 - sleepTransition;
+            const playArea = {
+                top: 70,
+                bottom: H - 180,
+                left: 20 + KID_RADIUS,
+                right: W - 20 - KID_RADIUS,
+            };
+
+            kids.forEach((kid, idx) => {
+                // Blink
+                kid.blinkTimer--;
+                if (kid.blinkTimer <= 0) {
+                    kid.eyeBlink = 1;
+                    kid.blinkTimer =
+                        100 + Math.random() * 200;
+                }
+                if (kid.eyeBlink > 0) {
+                    kid.eyeBlink -= 0.15;
+                    if (kid.eyeBlink < 0) {
+                        kid.eyeBlink = 0;
+                    }
+                }
+
+                // Movement
+                const speed = awake * kid.baseSpeed;
+                kid.x += kid.vx * speed;
+                kid.y += kid.vy * speed;
+
+                // Drift to rest when asleep
+                if (sleepTransition > 0.3) {
+                    const restX = W * (0.2 + idx * 0.3);
+                    const restY = H * 0.4;
+                    kid.x += (restX - kid.x)
+                        * 0.02 * sleepTransition;
+                    kid.y += (restY - kid.y)
+                        * 0.02 * sleepTransition;
+                }
+
+                // Bounce off walls
+                if (kid.x < playArea.left) {
+                    kid.x = playArea.left;
+                    kid.vx *= -1;
+                }
+                if (kid.x > playArea.right) {
+                    kid.x = playArea.right;
+                    kid.vx *= -1;
+                }
+                if (kid.y < playArea.top) {
+                    kid.y = playArea.top;
+                    kid.vy *= -1;
+                }
+                if (kid.y > playArea.bottom) {
+                    kid.y = playArea.bottom;
+                    kid.vy *= -1;
+                }
+
+                // Random direction changes
+                if (awake > 0.5 && Math.random() < 0.02) {
+                    kid.vx += (Math.random() - 0.5) * 2;
+                    kid.vy += (Math.random() - 0.5) * 2;
+                    const mag = Math.sqrt(
+                        kid.vx * kid.vx
+                        + kid.vy * kid.vy
+                    );
+                    if (mag > 3) {
+                        kid.vx = (kid.vx / mag) * 3;
+                        kid.vy = (kid.vy / mag) * 3;
+                    }
+                }
+
+                // Squash decay
+                if (kid.squash > 0) {
+                    kid.squash *= 0.85;
+                    if (kid.squash < 0.01) {
+                        kid.squash = 0;
+                    }
+                }
+
+                // Burst particles
+                kid.burstParticles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.1;
+                    p.life -= 0.03;
+                });
+                kid.burstParticles =
+                    kid.burstParticles.filter(
+                        p => p.life > 0
+                    );
+
+                // Spin (decay back to gentle)
+                kid.spinSpeed *= 0.995;
+                kid.angle += kid.spinSpeed * awake;
+
+                // Trail
+                if (awake > 0.3) {
+                    kid.trail.push({
+                        x: kid.x, y: kid.y
+                    });
+                    if (kid.trail.length > 12) {
+                        kid.trail.shift();
+                    }
+                } else if (kid.trail.length > 0) {
+                    kid.trail.shift();
+                }
+
+                // ZZZ
+                if (
+                    sleepTransition > 0.6
+                    && Math.random() < 0.03
+                ) {
+                    spawnZzz(kid);
+                }
+                kid.zzzParticles.forEach(z => {
+                    z.x += z.vx;
+                    z.y += z.vy;
+                    z.life -= 0.008;
+                    z.rotation += 0.01;
+                });
+                kid.zzzParticles =
+                    kid.zzzParticles.filter(
+                        z => z.life > 0
+                    );
+            });
+
+            // Snore sound
+            if (sleepTransition > 0.8) {
+                snoreTimer++;
+                if (snoreTimer > 180) {
+                    snoreTimer = 0;
+                    playSnore();
+                }
+            } else {
+                snoreTimer = 0;
+            }
+        }
+
+        // --- Draw ---
+        function draw() {
+            // Paint daytime sky background
+            const sky = ctx.createLinearGradient(
+                0, 0, 0, H
+            );
+            sky.addColorStop(0, '#4a90d9');
+            sky.addColorStop(0.35, '#74b9ff');
+            sky.addColorStop(0.6, '#a8d8ea');
+            sky.addColorStop(1, '#fdcb6e');
+            ctx.fillStyle = sky;
+            ctx.fillRect(0, 0, W, H);
+
+            // Night shade slides down from top
+            if (sleepTransition > 0.01) {
+                const shadeH = sleepTransition * H;
+                const night = ctx.createLinearGradient(
+                    0, 0, 0, shadeH
+                );
+                night.addColorStop(0, '#0f0c29');
+                night.addColorStop(0.5, '#1a1a4e');
+                night.addColorStop(1, '#24243e');
+                ctx.fillStyle = night;
+                ctx.fillRect(0, 0, W, shadeH);
+
+                // Handle bar at bottom of shade
+                const handleW = 60;
+                const handleH = 6;
+                ctx.fillStyle =
+                    'rgba(255, 255, 255, 0.25)';
+                ctx.beginPath();
+                ctx.roundRect(
+                    (W - handleW) / 2,
+                    shadeH - 2,
+                    handleW, handleH, 3
+                );
+                ctx.fill();
+            }
+
+            // Sun / Moon — shade edge reveals one
+            // as it covers the other
+            const orbX = W - 70;
+            const orbY = 80;
+            const orbR = 28;
+            const shadeBottom = sleepTransition * H;
+
+            // Sun: clipped to area below shade
+            if (shadeBottom < orbY + orbR) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(0, shadeBottom, W, H);
+                ctx.clip();
+                const sg = ctx.createRadialGradient(
+                    orbX - 6, orbY - 6, 2,
+                    orbX, orbY, orbR
+                );
+                sg.addColorStop(0, '#fff9c4');
+                sg.addColorStop(1, '#f9ca24');
+                ctx.fillStyle = sg;
+                ctx.beginPath();
+                ctx.arc(
+                    orbX, orbY, orbR,
+                    0, Math.PI * 2
+                );
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // Moon crescent: clipped to shade area
+            if (shadeBottom > orbY - orbR) {
+                ctx.save();
+                // Clip to shade region AND moon circle
+                ctx.beginPath();
+                ctx.rect(0, 0, W, shadeBottom);
+                ctx.clip();
+                ctx.beginPath();
+                ctx.arc(
+                    orbX, orbY, orbR,
+                    0, Math.PI * 2
+                );
+                ctx.clip();
+                // Fill the whole clipped area gold
+                ctx.fillStyle = '#ffeaa7';
+                ctx.fill();
+                // Paint shadow circle with night color
+                // to carve out the crescent
+                const nightFill =
+                    ctx.createLinearGradient(
+                        0, 0, 0, shadeBottom
+                    );
+                nightFill.addColorStop(0, '#0f0c29');
+                nightFill.addColorStop(0.5, '#1a1a4e');
+                nightFill.addColorStop(1, '#24243e');
+                ctx.fillStyle = nightFill;
+                ctx.beginPath();
+                ctx.arc(
+                    orbX + 11, orbY - 6,
+                    orbR * 0.78,
+                    0, Math.PI * 2
+                );
+                ctx.fill();
+                ctx.restore();
+            }
+
+            kids.forEach(k => drawKid(k, frameCount));
+        }
+
+        // --- Loop ---
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+        loop();
+    })();
+    </script>
+</body>
+</html>
