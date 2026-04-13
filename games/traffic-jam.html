@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0,
+                   maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Traffic Jam - Rory</title>
+    <style>
+        * { margin: 0; padding: 0;
+            box-sizing: border-box; }
+        html, body { height: 100%; width: 100%;
+            overflow: hidden; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont,
+                         'Segoe UI', Arial, sans-serif;
+            cursor: default; position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            touch-action: none;
+            overscroll-behavior: none;
+            display: flex; flex-direction: column;
+            background: #263238;
+        }
+        .back-btn {
+            position: fixed; top: 10px; left: 10px;
+            z-index: 100; padding: 8px 16px;
+            font-size: 16px; font-family: inherit;
+            font-weight: 600;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px); color: #fff;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 20px; cursor: pointer;
+            text-decoration: none;
+            display: flex; align-items: center;
+            gap: 5px;
+        }
+        .top-btn {
+            position: fixed; top: 10px;
+            z-index: 100; padding: 8px 12px;
+            font-size: 13px; font-family: inherit;
+            font-weight: 600;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px); color: #fff;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 20px; cursor: pointer;
+        }
+        .reset-btn { right: 10px; }
+        .levels-btn { right: 78px; }
+        .header {
+            flex-shrink: 0; text-align: center;
+            padding: 44px 20px 6px;
+        }
+        .title {
+            font-size: 20px; font-weight: bold;
+            color: #FFD54F;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .subtitle {
+            font-size: 13px; color: rgba(255,255,255,0.6);
+            margin-top: 2px;
+        }
+        .board-area {
+            flex: 1; display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px; min-height: 0;
+        }
+        .board-area svg {
+            max-width: 100%; max-height: 100%;
+            filter: drop-shadow(0 4px 12px
+                    rgba(0,0,0,0.4));
+        }
+        .nav-bar {
+            flex-shrink: 0; display: flex;
+            justify-content: center; gap: 12px;
+            padding: 12px;
+        }
+        .nav-btn {
+            padding: 10px 28px;
+            font-size: 16px; font-weight: 700;
+            font-family: inherit;
+            background: #37474F;
+            color: #FFD54F; border: none;
+            border-radius: 25px; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .nav-btn:disabled {
+            opacity: 0.3; cursor: default;
+        }
+        .nav-btn:active:not(:disabled) {
+            background: #455A64;
+        }
+        .moves-bar {
+            text-align: center;
+            padding: 0 0 8px;
+            font-size: 14px; font-weight: 600;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Level select overlay */
+        .level-select {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 300; display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px 20px;
+            overflow-y: auto;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .level-select.active {
+            opacity: 1; pointer-events: auto;
+        }
+        .ls-title {
+            font-size: 24px; font-weight: bold;
+            color: #FFD54F; margin-bottom: 20px;
+        }
+        .ls-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px; max-width: 320px; width: 100%;
+        }
+        .ls-btn {
+            aspect-ratio: 1; display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px; font-weight: bold;
+            font-family: inherit;
+            border-radius: 12px; cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.15);
+            background: #37474F; color: white;
+            transition: all 0.2s;
+        }
+        .ls-btn.completed {
+            background: #2E7D32;
+            border-color: #66BB6A;
+        }
+        .ls-btn.current {
+            background: #E65100;
+            border-color: #FF9800;
+        }
+        .ls-btn:active { transform: scale(0.95); }
+        .ls-close {
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 16px; font-weight: 600;
+            font-family: inherit;
+            background: #455A64; color: white;
+            border: none; border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Win overlay */
+        .win-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 200; display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.4s;
+        }
+        .win-overlay.active {
+            opacity: 1; pointer-events: auto;
+        }
+        .win-text {
+            font-size: 36px; font-weight: bold;
+            color: #FFD54F;
+            text-shadow: 0 0 15px rgba(255,213,79,0.5);
+            margin-bottom: 10px;
+            animation: pop 0.5s ease both;
+        }
+        .win-sub {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 28px;
+            animation: pop 0.5s ease 0.1s both;
+        }
+        .win-btn {
+            padding: 14px 40px;
+            font-size: 18px; font-weight: 700;
+            font-family: inherit;
+            background: linear-gradient(135deg,
+                        #FF6F00, #FFD54F);
+            color: #263238; border: none;
+            border-radius: 30px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: pop 0.5s ease 0.25s both;
+        }
+        @keyframes pop {
+            0% { transform: scale(0); }
+            60% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .confetti {
+            position: fixed; pointer-events: none;
+            z-index: 250; font-size: 24px;
+            animation: confDrop linear forwards;
+        }
+        @keyframes confDrop {
+            0% { transform: translateY(-30px)
+                 rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh)
+                    rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">
+        &#9664; Back</a>
+    <button class="top-btn levels-btn"
+            id="levelsBtn">Levels</button>
+    <button class="top-btn reset-btn"
+            id="resetBtn">Reset</button>
+
+    <div class="header">
+        <div class="title" id="title">
+            Traffic Jam</div>
+        <div class="subtitle" id="subtitle">
+            Slide cars to free the red one!</div>
+    </div>
+
+    <div class="board-area" id="boardArea"></div>
+
+    <div class="moves-bar" id="movesBar">
+        Moves: 0</div>
+
+    <div class="nav-bar">
+        <button class="nav-btn" id="prevBtn">
+            &#9664; Prev</button>
+        <button class="nav-btn" id="nextBtn">
+            Next &#9654;</button>
+    </div>
+
+    <div class="level-select" id="levelSelect">
+        <div class="ls-title">Select Level</div>
+        <div class="ls-grid" id="lsGrid"></div>
+        <button class="ls-close"
+                id="lsClose">Close</button>
+    </div>
+
+    <div class="win-overlay" id="winOverlay">
+        <div class="win-text">Level Clear!</div>
+        <div class="win-sub" id="winSub"></div>
+        <button class="win-btn"
+                id="winBtn">Next Level</button>
+    </div>
+
+<script>
+/* ================================================= */
+/*  Audio                                            */
+/* ================================================= */
+var audioCtx = null;
+function initAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext
+        || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended")
+        audioCtx.resume();
+}
+function tone(freq, dur, type, vol, del) {
+    if (!audioCtx) return;
+    var t = audioCtx.currentTime + (del || 0);
+    var o = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    o.type = type || "sine";
+    o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(vol || 0.1, t);
+    g.gain.exponentialRampToValueAtTime(
+        0.001, t + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(t); o.stop(t + dur);
+}
+function sndSlide() {
+    tone(400, 0.06, "sine", 0.07, 0);
+    tone(500, 0.06, "sine", 0.07, 0.03);
+}
+function sndSnap() {
+    tone(300, 0.04, "triangle", 0.05, 0);
+}
+function sndWin() {
+    var n = [392,494,587,784];
+    n.forEach(function(f,i) {
+        tone(f, 0.25, "triangle", 0.1, i*0.1);
+    });
+    tone(784, 0.5, "sine", 0.08, 0.45);
+    for (var j = 0; j < 5; j++)
+        tone(900+j*150, 0.12, "sine",
+             0.03, 0.7+j*0.06);
+}
+document.addEventListener("click", function() {
+    initAudio();
+}, { once: true });
+
+/* ================================================= */
+/*  Levels                                           */
+/* ================================================= */
+/* Vehicle: [x, y, len, dir, color]
+   dir: 0=horizontal, 1=vertical
+   First vehicle is always the red car (row 2, h) */
+var C = {
+    r: "#E53935", /* red - player */
+    b: "#1E88E5", g: "#43A047", o: "#FB8C00",
+    p: "#8E24AA", t: "#00ACC1", y: "#FDD835",
+    pk: "#EC407A", br: "#6D4C41", gr: "#78909C",
+    lg: "#66BB6A", lb: "#29B6F6"
+};
+
+var LEVELS = [
+/* 1  (2 moves) */ { v: [[0,2,2,0,C.r],[3,2,3,1,C.b]] },
+/* 2  (3 moves) */ { v: [[1,2,2,0,C.r],[2,5,2,0,C.b],[3,0,3,1,C.g]] },
+/* 3  (4 moves) */ { v: [[1,2,2,0,C.r],[5,0,3,1,C.b],[1,5,3,0,C.g],[4,5,2,0,C.o]] },
+/* 4  (5 moves) */ { v: [[1,2,2,0,C.r],[4,4,2,0,C.b],[5,1,2,1,C.g],[4,0,3,1,C.o],[3,0,3,1,C.p]] },
+/* 5  (6 moves) */ { v: [[2,2,2,0,C.r],[3,3,3,1,C.b],[4,1,3,1,C.g],[4,4,2,0,C.o]] },
+/* 6  (7 moves) */ { v: [[0,2,2,0,C.r],[1,0,3,0,C.b],[3,4,3,0,C.g],[2,1,2,1,C.o],[0,3,2,1,C.p],[3,1,3,1,C.t]] },
+/* 7  (8 moves) */ { v: [[1,2,2,0,C.r],[3,5,3,0,C.b],[2,4,2,1,C.g],[5,2,3,1,C.o],[2,3,3,0,C.p]] },
+/* 8  (8 moves) */ { v: [[0,2,2,0,C.r],[1,0,2,1,C.b],[2,0,3,1,C.g],[5,3,3,1,C.o],[4,0,2,1,C.p],[2,3,3,0,C.t]] },
+/* 9  (9 moves) */ { v: [[0,2,2,0,C.r],[5,0,3,1,C.b],[4,1,2,1,C.g],[3,5,3,0,C.o],[3,4,3,0,C.p],[2,1,3,1,C.t],[4,3,2,0,C.y]] },
+/* 10 (12 moves) */ { v: [[0,2,2,0,C.r],[3,0,2,0,C.b],[0,5,3,0,C.g],[3,2,2,1,C.o],[2,1,3,1,C.p],[4,3,2,0,C.t],[4,4,2,1,C.y],[5,0,3,1,C.pk]] },
+/* 11 (12 moves) */ { v: [[0,2,2,0,C.r],[2,0,3,1,C.b],[3,4,3,0,C.g],[4,1,2,1,C.o],[1,5,2,0,C.p],[1,3,2,1,C.t],[3,2,2,1,C.y],[3,5,3,0,C.pk],[5,0,3,1,C.br],[4,3,2,0,C.gr],[3,0,2,0,C.lg]] },
+/* 12 (13 moves) */ { v: [[2,2,2,0,C.r],[0,3,2,0,C.b],[0,0,2,1,C.g],[4,0,3,1,C.o],[2,3,3,1,C.p],[3,4,2,0,C.t],[1,4,2,1,C.y]] },
+/* 13 (13 moves) */ { v: [[2,2,2,0,C.r],[1,0,3,0,C.b],[4,4,2,0,C.g],[0,5,3,0,C.o],[2,3,2,1,C.p],[4,0,3,1,C.t],[5,1,3,1,C.y],[3,3,2,1,C.pk],[1,1,2,1,C.br],[0,0,3,1,C.gr]] },
+/* 14 (13 moves) */ { v: [[0,2,2,0,C.r],[1,3,2,0,C.b],[2,1,2,1,C.g],[4,2,2,1,C.o],[5,2,3,1,C.p],[0,5,2,0,C.t],[0,0,2,0,C.y],[3,4,2,0,C.pk],[4,5,2,0,C.br],[0,3,2,1,C.gr],[2,4,2,1,C.lg],[3,1,2,0,C.lb]] },
+/* 15 (14 moves) */ { v: [[0,2,2,0,C.r],[1,3,2,1,C.b],[4,0,3,1,C.g],[0,0,3,0,C.o],[3,1,3,1,C.p],[5,0,3,1,C.t],[2,5,2,0,C.y],[2,4,2,0,C.pk],[0,3,2,1,C.br]] },
+/* 16 (14 moves) */ { v: [[0,2,2,0,C.r],[3,4,2,1,C.b],[4,0,3,1,C.g],[3,1,2,1,C.o],[2,1,3,1,C.p],[5,2,2,1,C.t],[4,4,2,0,C.y],[0,4,2,1,C.pk],[2,0,2,0,C.br]] },
+/* 17 (14 moves) */ { v: [[0,2,2,0,C.r],[1,0,3,0,C.b],[4,2,3,1,C.g],[0,3,2,0,C.o],[3,2,2,1,C.p],[5,1,3,1,C.t],[1,4,2,1,C.y],[1,1,2,0,C.pk],[3,5,3,0,C.br],[2,3,2,1,C.gr]] },
+/* 18 (14 moves) */ { v: [[0,2,2,0,C.r],[2,3,2,1,C.b],[0,3,2,0,C.g],[3,4,2,1,C.o],[2,0,2,1,C.p],[4,1,3,1,C.t],[5,2,2,1,C.y],[1,4,2,1,C.pk],[0,4,2,1,C.br],[4,4,2,0,C.gr]] },
+/* 19 (14 moves) */ { v: [[0,2,2,0,C.r],[3,0,2,0,C.b],[4,4,2,1,C.g],[2,1,3,1,C.o],[3,4,2,1,C.p],[3,3,2,0,C.t],[0,0,2,1,C.y],[0,5,3,0,C.pk],[1,4,2,0,C.br],[5,0,3,1,C.gr],[4,1,2,1,C.lg]] },
+/* 20 (15 moves) */ { v: [[0,2,2,0,C.r],[0,5,3,0,C.b],[3,1,2,0,C.g],[0,4,3,0,C.o],[2,0,2,0,C.p],[3,5,2,0,C.t],[2,2,2,1,C.y],[4,3,2,0,C.pk],[3,2,3,1,C.br],[0,0,2,1,C.gr],[4,0,2,0,C.lg]] },
+/* 21 (15 moves) */ { v: [[0,2,2,0,C.r],[3,1,3,0,C.b],[0,4,2,1,C.g],[2,0,2,1,C.o],[4,2,2,1,C.p],[3,5,3,0,C.t],[3,4,3,0,C.y],[0,3,2,0,C.pk],[0,0,2,0,C.br],[5,2,2,1,C.gr],[1,5,2,0,C.lg],[1,4,2,0,C.lb]] },
+/* 22 (16 moves) */ { v: [[0,2,2,0,C.r],[1,4,2,1,C.b],[3,1,3,1,C.g],[5,2,3,1,C.o],[3,4,2,0,C.p],[2,2,3,1,C.t],[0,0,3,0,C.y],[0,3,2,1,C.pk]] },
+/* 23 (16 moves) */ { v: [[1,2,2,0,C.r],[5,1,3,1,C.b],[3,0,3,1,C.g],[3,4,2,0,C.o],[1,3,2,1,C.p],[3,5,2,0,C.t],[0,0,2,1,C.y],[4,1,3,1,C.pk],[2,3,2,0,C.br]] },
+/* 24 (24 moves) */ { v: [[0,2,2,0,C.r],[0,0,2,1,C.b],[4,1,3,1,C.g],[0,3,3,1,C.o],[2,2,2,1,C.p],[5,3,2,1,C.t],[1,3,2,1,C.y],[3,4,2,0,C.pk],[3,1,3,1,C.br],[2,5,2,0,C.gr],[3,0,3,0,C.lg],[5,1,2,1,C.lb]] },
+/* 25 (24 moves) */ { v: [[0,2,2,0,C.r],[1,4,2,0,C.b],[3,4,3,0,C.g],[0,0,3,0,C.o],[3,0,2,1,C.p],[1,1,2,0,C.t],[1,5,3,0,C.y],[5,0,3,1,C.pk],[4,5,2,0,C.br],[2,2,2,1,C.gr],[4,0,2,1,C.lg],[0,4,2,1,C.lb]] }
+];
+
+/* ================================================= */
+/*  Game state                                       */
+/* ================================================= */
+var GS = 6; /* grid size */
+var curLevel = 0;
+var vehicles = [];
+var moves = 0;
+var won = false;
+var completed = {};
+
+var boardArea = document.getElementById("boardArea");
+var movesBar = document.getElementById("movesBar");
+var titleEl = document.getElementById("title");
+var subtitleEl = document.getElementById("subtitle");
+var winOverlay = document.getElementById("winOverlay");
+var winSub = document.getElementById("winSub");
+var winBtn = document.getElementById("winBtn");
+var prevBtn = document.getElementById("prevBtn");
+var nextBtn = document.getElementById("nextBtn");
+var resetBtn = document.getElementById("resetBtn");
+var levelsBtn = document.getElementById("levelsBtn");
+var levelSelect = document.getElementById("levelSelect");
+var lsGrid = document.getElementById("lsGrid");
+var lsClose = document.getElementById("lsClose");
+
+/* ================================================= */
+/*  Rendering                                        */
+/* ================================================= */
+var CELL = 60;
+var PAD = 4;
+var RAD = 8;
+
+function buildSVG() {
+    var bw = GS * CELL, bh = GS * CELL;
+    var exitY = 2 * CELL;
+    var exitW = CELL * 1.3;
+    var s = "<svg viewBox='-2 -2 " +
+        (bw+exitW+8) + " " + (bh+4) + "' " +
+        "xmlns='http://www.w3.org/2000/svg' " +
+        "style='touch-action:none'>";
+
+    /* Board background */
+    s += "<rect x='0' y='0' width='" + bw +
+         "' height='" + bh +
+         "' rx='12' fill='#455A64'/>";
+    /* Grid lines */
+    for (var i = 1; i < GS; i++) {
+        s += "<line x1='" + (i*CELL) + "' y1='4' " +
+             "x2='" + (i*CELL) + "' y2='" + (bh-4) +
+             "' stroke='#37474F' stroke-width='1'/>";
+        s += "<line x1='4' y1='" + (i*CELL) +
+             "' x2='" + (bw-4) + "' y2='" + (i*CELL) +
+             "' stroke='#37474F' stroke-width='1'/>";
+    }
+
+    /* Exit road */
+    s += "<rect x='" + bw + "' y='" + exitY +
+         "' width='" + exitW + "' height='" + CELL +
+         "' rx='6' fill='#263238'/>";
+    /* Road dashes */
+    s += "<line x1='" + (bw+10) + "' y1='" +
+         (exitY+CELL/2) + "' x2='" + (bw+exitW-5) +
+         "' y2='" + (exitY+CELL/2) +
+         "' stroke='#FFD54F' stroke-width='2' " +
+         "stroke-dasharray='8,6' opacity='0.4'/>";
+    /* Exit arrow */
+    var ax = bw + exitW - 20;
+    s += "<polygon points='" +
+         (ax) + "," + (exitY+CELL*0.25) + " " +
+         (ax+14) + "," + (exitY+CELL*0.5) + " " +
+         (ax) + "," + (exitY+CELL*0.75) +
+         "' fill='#FFD54F' opacity='0.5'/>";
+
+    /* Vehicles - each wrapped in a <g> so
+       transform moves everything together */
+    vehicles.forEach(function(v, idx) {
+        var x = v.x * CELL + PAD;
+        var y = v.y * CELL + PAD;
+        var w, h;
+        if (v.dir === 0) {
+            w = v.len * CELL - PAD*2;
+            h = CELL - PAD*2;
+        } else {
+            w = CELL - PAD*2;
+            h = v.len * CELL - PAD*2;
+        }
+        s += "<g data-v='" + idx +
+             "' style='cursor:grab'>";
+        s += "<rect " +
+             "x='" + x + "' y='" + y +
+             "' width='" + w + "' height='" + h +
+             "' rx='" + RAD + "' fill='" + v.color +
+             "' stroke='rgba(255,255,255,0.15)' " +
+             "stroke-width='1'/>";
+        if (v.dir === 0) {
+            var lx = x + w - 6;
+            s += "<circle cx='"+lx+"' cy='" +
+                 (y+h*0.3)+"' r='3' " +
+                 "fill='rgba(255,255,200,0.5)'/>";
+            s += "<circle cx='"+lx+"' cy='" +
+                 (y+h*0.7)+"' r='3' " +
+                 "fill='rgba(255,255,200,0.5)'/>";
+            s += "<circle cx='"+(x+6)+"' cy='" +
+                 (y+h*0.3)+"' r='2.5' " +
+                 "fill='rgba(255,50,50,0.4)'/>";
+            s += "<circle cx='"+(x+6)+"' cy='" +
+                 (y+h*0.7)+"' r='2.5' " +
+                 "fill='rgba(255,50,50,0.4)'/>";
+        } else {
+            var ly = y + h - 6;
+            s += "<circle cx='"+(x+w*0.3)+
+                 "' cy='"+ly+"' r='3' " +
+                 "fill='rgba(255,255,200,0.5)'/>";
+            s += "<circle cx='"+(x+w*0.7)+
+                 "' cy='"+ly+"' r='3' " +
+                 "fill='rgba(255,255,200,0.5)'/>";
+            s += "<circle cx='"+(x+w*0.3)+
+                 "' cy='"+(y+6)+"' r='2.5' " +
+                 "fill='rgba(255,50,50,0.4)'/>";
+            s += "<circle cx='"+(x+w*0.7)+
+                 "' cy='"+(y+6)+"' r='2.5' " +
+                 "fill='rgba(255,50,50,0.4)'/>";
+        }
+        if (idx === 0 && v.dir === 0) {
+            s += "<rect x='"+(x+w*0.35)+
+                 "' y='"+(y+4)+
+                 "' width='"+(w*0.25)+
+                 "' height='"+(h-8)+
+                 "' rx='3' fill='rgba(0,0,0,0.2)'/>";
+        }
+        s += "</g>";
+    });
+
+    s += "</svg>";
+    return s;
+}
+
+/* ================================================= */
+/*  Drag logic                                       */
+/* ================================================= */
+var dragIdx = -1;
+var dragStart = null;
+var dragOrig = null;
+
+function getGrid() {
+    var g = [];
+    for (var r = 0; r < GS; r++) {
+        g[r] = [];
+        for (var c = 0; c < GS; c++) g[r][c] = -1;
+    }
+    vehicles.forEach(function(v, i) {
+        for (var s = 0; s < v.len; s++) {
+            var cx = v.dir === 0 ? v.x+s : v.x;
+            var cy = v.dir === 1 ? v.y+s : v.y;
+            if (cx >= 0 && cx < GS &&
+                cy >= 0 && cy < GS)
+                g[cy][cx] = i;
+        }
+    });
+    return g;
+}
+
+function getRange(idx) {
+    var v = vehicles[idx];
+    var grid = getGrid();
+    var minP, maxP;
+    if (v.dir === 0) {
+        minP = v.x; maxP = v.x;
+        while (minP > 0 &&
+               grid[v.y][minP-1] === -1) minP--;
+        while (maxP + v.len < GS &&
+               grid[v.y][maxP+v.len] === -1) maxP++;
+        /* Red car: allow sliding to board edge
+           (exit animation takes over from there) */
+        if (idx === 0 && maxP + v.len >= GS)
+            maxP = GS - v.len;
+        return { min: minP, max: maxP, dir: 0 };
+    } else {
+        minP = v.y; maxP = v.y;
+        while (minP > 0 &&
+               grid[minP-1][v.x] === -1) minP--;
+        while (maxP + v.len < GS &&
+               grid[maxP+v.len][v.x] === -1) maxP++;
+        return { min: minP, max: maxP, dir: 1 };
+    }
+}
+
+function svgPoint(svg, clientX, clientY) {
+    var pt = svg.createSVGPoint();
+    pt.x = clientX; pt.y = clientY;
+    return pt.matrixTransform(
+        svg.getScreenCTM().inverse());
+}
+
+function attachDrag() {
+    var svg = boardArea.querySelector("svg");
+    if (!svg) return;
+
+    svg.addEventListener("pointerdown", function(e) {
+        if (won) return;
+        if (dragIdx >= 0) return;
+        /* Walk up from click target to find the
+           <g data-v> group */
+        var el = e.target;
+        while (el && el !== svg) {
+            if (el.dataset && el.dataset.v !== undefined)
+                break;
+            el = el.parentNode;
+        }
+        if (!el || !el.dataset ||
+            el.dataset.v === undefined) return;
+        var idx = parseInt(el.dataset.v);
+        dragIdx = idx;
+        dragStart = svgPoint(svg, e.clientX, e.clientY);
+        dragOrig = { x: vehicles[idx].x,
+                     y: vehicles[idx].y };
+        dragRange = getRange(idx);
+        svg.setPointerCapture(e.pointerId);
+        sndSnap();
+    });
+
+    svg.addEventListener("pointermove", function(e) {
+        if (dragIdx < 0) return;
+        var cur = svgPoint(svg, e.clientX, e.clientY);
+        var v = vehicles[dragIdx];
+        var prevX = v.x, prevY = v.y;
+
+        if (v.dir === 0) {
+            var dx = (cur.x - dragStart.x) / CELL;
+            var nx = Math.round(dragOrig.x + dx);
+            v.x = Math.max(dragRange.min,
+                  Math.min(dragRange.max, nx));
+        } else {
+            var dy = (cur.y - dragStart.y) / CELL;
+            var ny = Math.round(dragOrig.y + dy);
+            v.y = Math.max(dragRange.min,
+                  Math.min(dragRange.max, ny));
+        }
+
+        /* Move the vehicle elements via transform
+           instead of rebuilding the whole SVG */
+        if (v.x !== prevX || v.y !== prevY) {
+            var els = svg.querySelectorAll(
+                "[data-v='" + dragIdx + "']");
+            var offX = (v.x - dragOrig.x) * CELL;
+            var offY = (v.y - dragOrig.y) * CELL;
+            els.forEach(function(el) {
+                el.setAttribute("transform",
+                    "translate(" + offX + "," +
+                    offY + ")");
+            });
+        }
+    });
+
+    svg.addEventListener("pointerup", function(e) {
+        if (dragIdx < 0) return;
+        var v = vehicles[dragIdx];
+        var moved = dragOrig.x !== v.x ||
+                    dragOrig.y !== v.y;
+        if (moved) {
+            moves++;
+            movesBar.textContent = "Moves: " + moves;
+            sndSlide();
+        }
+        dragIdx = -1;
+        dragStart = null;
+        dragOrig = null;
+        dragRange = null;
+
+        /* Rebuild SVG to finalize positions */
+        boardArea.innerHTML = buildSVG();
+        attachDrag();
+
+        /* Check win: is red car's path to exit
+           completely clear? */
+        if (!won) checkWin();
+    });
+
+    svg.addEventListener("pointercancel", function() {
+        if (dragIdx < 0) return;
+        /* Revert position */
+        if (dragOrig) {
+            vehicles[dragIdx].x = dragOrig.x;
+            vehicles[dragIdx].y = dragOrig.y;
+        }
+        dragIdx = -1;
+        dragStart = null;
+        dragOrig = null;
+        dragRange = null;
+        boardArea.innerHTML = buildSVG();
+        attachDrag();
+    });
+}
+
+var dragRange = null;
+
+function checkWin() {
+    var rc = vehicles[0];
+    /* Only trigger when the red car's right edge
+       has reached the board edge */
+    if (rc.x + rc.len < GS) return;
+    animateExit();
+}
+
+/* ================================================= */
+/*  Game flow                                        */
+/* ================================================= */
+function loadLevel(n) {
+    curLevel = n;
+    var lv = LEVELS[n];
+    vehicles = lv.v.map(function(v) {
+        return { x:v[0], y:v[1], len:v[2],
+                 dir:v[3], color:v[4] };
+    });
+    moves = 0;
+    won = false;
+    movesBar.textContent = "Moves: 0";
+    titleEl.textContent =
+        "Level " + (n+1) + " / " + LEVELS.length;
+    winOverlay.classList.remove("active");
+    boardArea.innerHTML = buildSVG();
+    attachDrag();
+    updateNav();
+}
+
+function animateExit() {
+    if (won) return;
+    won = true;
+    sndWin();
+
+    /* Slide the red car smoothly off the right edge */
+    var svg = boardArea.querySelector("svg");
+    var redEls = svg.querySelectorAll(
+        "[data-v='0']");
+
+    /* Force a reflow so the transition animates
+       from current position */
+    redEls.forEach(function(el) {
+        el.getBoundingClientRect();
+        el.style.transition =
+            "transform 0.5s ease-in";
+    });
+
+    requestAnimationFrame(function() {
+        redEls.forEach(function(el) {
+            el.style.transform =
+                "translateX(" + (CELL * 2) + "px)";
+        });
+    });
+
+    setTimeout(function() {
+        completed[curLevel] = true;
+        winSub.textContent =
+            "Completed in " + moves + " moves!";
+        winOverlay.classList.add("active");
+        spawnConfetti();
+    }, 650);
+}
+
+function updateNav() {
+    prevBtn.disabled = curLevel <= 0;
+    nextBtn.disabled = curLevel >= LEVELS.length - 1;
+}
+
+function spawnConfetti() {
+    var ems = ["\ud83d\ude97","\ud83d\ude99",
+               "\ud83d\ude95","\u2b50",
+               "\ud83c\udf1f","\ud83c\udf89"];
+    for (var i = 0; i < 15; i++) {
+        (function(idx) {
+            setTimeout(function() {
+                var c = document.createElement("div");
+                c.className = "confetti";
+                c.textContent = ems[
+                    Math.floor(
+                        Math.random()*ems.length)];
+                c.style.left =
+                    (Math.random()*100) + "vw";
+                c.style.animationDuration =
+                    (1.5+Math.random()*2) + "s";
+                document.body.appendChild(c);
+                setTimeout(function() {
+                    c.remove(); }, 4000);
+            }, idx * 80);
+        })(i);
+    }
+}
+
+function showLevelSelect() {
+    lsGrid.innerHTML = "";
+    for (var i = 0; i < LEVELS.length; i++) {
+        var btn = document.createElement("button");
+        btn.className = "ls-btn";
+        if (completed[i]) btn.classList.add("completed");
+        if (i === curLevel) btn.classList.add("current");
+        btn.textContent = i + 1;
+        (function(idx) {
+            btn.addEventListener("click", function() {
+                loadLevel(idx);
+                levelSelect.classList.remove("active");
+            });
+        })(i);
+        lsGrid.appendChild(btn);
+    }
+    levelSelect.classList.add("active");
+}
+
+/* Event handlers */
+prevBtn.addEventListener("click", function() {
+    if (curLevel > 0) loadLevel(curLevel - 1);
+});
+nextBtn.addEventListener("click", function() {
+    if (curLevel < LEVELS.length - 1)
+        loadLevel(curLevel + 1);
+});
+resetBtn.addEventListener("click", function() {
+    loadLevel(curLevel);
+});
+winBtn.addEventListener("click", function() {
+    if (curLevel < LEVELS.length - 1)
+        loadLevel(curLevel + 1);
+    else {
+        winOverlay.classList.remove("active");
+        showLevelSelect();
+    }
+});
+levelsBtn.addEventListener("click", showLevelSelect);
+lsClose.addEventListener("click", function() {
+    levelSelect.classList.remove("active");
+});
+
+loadLevel(0);
+</script>
+</body>
+</html>
