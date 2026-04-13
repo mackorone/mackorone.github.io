@@ -664,20 +664,6 @@
             ]
         },
         {
-            name: 'Horizontal Bands (4)',
-            width: W, height: H,
-            regions: [
-                { id: 'b1',
-                  d: `M0,0 H${W} V100 H0 Z` },
-                { id: 'b2',
-                  d: `M0,100 H${W} V200 H0 Z` },
-                { id: 'b3',
-                  d: `M0,200 H${W} V300 H0 Z` },
-                { id: 'b4',
-                  d: `M0,300 H${W} V${H} H0 Z` },
-            ]
-        },
-        {
             name: 'Double Pennant',
             width: W, height: H,
             regions: [
@@ -708,7 +694,349 @@
             width: W, height: H,
             regions: sunRaysRegions(),
         },
+        {
+            name: 'Bicolor (Horizontal)',
+            width: W, height: H,
+            regions: [
+                { id: 'top',
+                  d: `M0,0 H${W} V200 H0 Z` },
+                { id: 'bottom',
+                  d: `M0,200 H${W} V${H} H0 Z` },
+            ]
+        },
+        {
+            name: 'Bicolor (Vertical)',
+            width: W, height: H,
+            regions: [
+                { id: 'left',
+                  d: `M0,0 H300 V${H} H0 Z` },
+                { id: 'right',
+                  d: `M300,0 H${W} V${H} H300 Z` },
+            ]
+        },
+        {
+            name: 'Saltire',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'diag1',
+                  d: `M0,0 L40,0 L${W},${H - 40}
+                       L${W},${H} L${W - 40},${H}
+                       L0,40 Z` },
+                { id: 'diag2',
+                  d: `M${W},0 L${W - 40},0 L0,${H - 40}
+                       L0,${H} L40,${H} L${W},40 Z` },
+            ]
+        },
+        {
+            name: 'Triangle Hoist',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'triangle',
+                  d: `M0,0 L240,200 L0,${H} Z` },
+            ]
+        },
+        {
+            name: 'Single Star',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'star',
+                  d: starPath(300, 200, 120, 55, 5) },
+            ]
+        },
+        {
+            name: 'Half Sun',
+            width: W, height: H,
+            regions: [
+                { id: 'sky',
+                  d: `M0,0 H${W} V260 H0 Z` },
+                { id: 'ground',
+                  d: `M0,260 H${W} V${H} H0 Z` },
+                { id: 'sun',
+                  d: `M180,260 A120,120 0 0,1 420,260 Z` },
+            ]
+        },
+        {
+            name: 'Mountain Peaks',
+            width: W, height: H,
+            regions: [
+                { id: 'sky',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'mountains',
+                  d: `M0,${H} L120,180 L240,260
+                       L360,140 L480,240 L${W},180
+                       L${W},${H} Z` },
+            ]
+        },
+        {
+            name: 'Checkered 3x2',
+            width: W, height: H,
+            regions: [
+                { id: 'c1',
+                  d: `M0,0 H200 V200 H0 Z` },
+                { id: 'c2',
+                  d: `M200,0 H400 V200 H200 Z` },
+                { id: 'c3',
+                  d: `M400,0 H${W} V200 H400 Z` },
+                { id: 'c4',
+                  d: `M0,200 H200 V${H} H0 Z` },
+                { id: 'c5',
+                  d: `M200,200 H400 V${H} H200 Z` },
+                { id: 'c6',
+                  d: `M400,200 H${W} V${H} H400 Z` },
+            ]
+        },
+        {
+            name: 'Stripes (7)',
+            width: W, height: H,
+            regions: Array.from({ length: 7 },
+                (_, i) => ({
+                    id: `s${i + 1}`,
+                    d: `M0,${(i * H / 7).toFixed(2)}
+                        H${W}
+                        V${((i + 1) * H / 7).toFixed(2)}
+                        H0 Z`,
+                })
+            ),
+        },
+        {
+            name: 'Vertical Stripes (5)',
+            width: W, height: H,
+            regions: Array.from({ length: 5 },
+                (_, i) => ({
+                    id: `v${i + 1}`,
+                    d: `M${(i * W / 5).toFixed(2)},0
+                        H${((i + 1) * W / 5).toFixed(2)}
+                        V${H}
+                        H${(i * W / 5).toFixed(2)} Z`,
+                })
+            ),
+        },
+        {
+            name: 'Canton with Stars',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'canton',
+                  d: `M0,0 H250 V180 H0 Z` },
+                { id: 'star1',
+                  d: starPath(75, 60, 25, 11, 5) },
+                { id: 'star2',
+                  d: starPath(175, 60, 25, 11, 5) },
+                { id: 'star3',
+                  d: starPath(75, 130, 25, 11, 5) },
+                { id: 'star4',
+                  d: starPath(175, 130, 25, 11, 5) },
+            ]
+        },
+        {
+            name: 'Bordered',
+            width: W, height: H,
+            regions: [
+                { id: 'border',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'inner',
+                  d: `M40,40 H${W - 40} V${H - 40}
+                       H40 Z` },
+            ]
+        },
+        {
+            name: 'Concentric Rings',
+            width: W, height: H,
+            regions: [
+                { id: 'ring1',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'ring2',
+                  d: circlePath(300, 200, 160) },
+                { id: 'ring3',
+                  d: circlePath(300, 200, 110) },
+                { id: 'ring4',
+                  d: circlePath(300, 200, 60) },
+            ]
+        },
+        {
+            name: 'Diagonal Stripes (3)',
+            width: W, height: H,
+            regions: [
+                { id: 'd1',
+                  d: `M0,0 L200,0 L0,${H} Z` },
+                { id: 'd2',
+                  d: `M200,0 L${W},0 L${W},130
+                       L0,${H} L0,270 Z` },
+                { id: 'd3',
+                  d: `M${W},130 V${H} H0 L${W},130 Z` },
+            ]
+        },
+        {
+            name: 'Pale with Emblem',
+            width: W, height: H,
+            regions: [
+                { id: 'left',
+                  d: `M0,0 H200 V${H} H0 Z` },
+                { id: 'pale',
+                  d: `M200,0 H400 V${H} H200 Z` },
+                { id: 'right',
+                  d: `M400,0 H${W} V${H} H400 Z` },
+                { id: 'emblem',
+                  d: starPath(300, 200, 70, 32, 5) },
+            ]
+        },
+        {
+            name: 'Fess with Star',
+            width: W, height: H,
+            regions: [
+                { id: 'top',
+                  d: `M0,0 H${W} V140 H0 Z` },
+                { id: 'fess',
+                  d: `M0,140 H${W} V260 H0 Z` },
+                { id: 'bottom',
+                  d: `M0,260 H${W} V${H} H0 Z` },
+                { id: 'star',
+                  d: starPath(300, 200, 45, 20, 5) },
+            ]
+        },
+        {
+            name: 'Y-Shape (Pall)',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'pall',
+                  d: `M0,0 L0,60 L260,200 L0,340
+                       L0,${H} L40,${H} L300,240
+                       L${W},${H} V${H - 40}
+                       L340,200 L${W},60 V0
+                       L${W - 40},0 L300,160 L40,0 Z` },
+            ]
+        },
+        {
+            name: 'Hourglass',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'topTri',
+                  d: `M0,0 H${W} L300,200 Z` },
+                { id: 'botTri',
+                  d: `M0,${H} H${W} L300,200 Z` },
+            ]
+        },
+        {
+            name: 'Double Chevron',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'chev1',
+                  d: `M0,0 L140,200 L0,${H}
+                       L40,${H} L180,200 L40,0 Z` },
+                { id: 'chev2',
+                  d: `M80,0 L220,200 L80,${H}
+                       L120,${H} L260,200 L120,0 Z` },
+            ]
+        },
+        {
+            name: 'Corner Rays',
+            width: W, height: H,
+            regions: cornerRaysRegions(),
+        },
+        {
+            name: 'Cross with Disc',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'hBar',
+                  d: `M0,170 H${W} V230 H0 Z` },
+                { id: 'vBar',
+                  d: `M270,0 H330 V${H} H270 Z` },
+                { id: 'disc',
+                  d: circlePath(300, 200, 55) },
+            ]
+        },
+        {
+            name: 'Pentagon',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'pent',
+                  d: `M300,70 L520,220 L435,360
+                       L165,360 L80,220 Z` },
+            ]
+        },
+        {
+            name: 'Bowtie',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'leftTri',
+                  d: `M0,0 L300,200 L0,${H} Z` },
+                { id: 'rightTri',
+                  d: `M${W},0 L300,200 L${W},${H} Z` },
+            ]
+        },
+        {
+            name: 'Triple Disc',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 'disc1',
+                  d: circlePath(180, 200, 70) },
+                { id: 'disc2',
+                  d: circlePath(300, 200, 70) },
+                { id: 'disc3',
+                  d: circlePath(420, 200, 70) },
+            ]
+        },
+        {
+            name: 'Four Stars',
+            width: W, height: H,
+            regions: [
+                { id: 'bg',
+                  d: `M0,0 H${W} V${H} H0 Z` },
+                { id: 's1',
+                  d: starPath(150, 120, 40, 18, 5) },
+                { id: 's2',
+                  d: starPath(450, 120, 40, 18, 5) },
+                { id: 's3',
+                  d: starPath(150, 280, 40, 18, 5) },
+                { id: 's4',
+                  d: starPath(450, 280, 40, 18, 5) },
+            ]
+        },
     ];
+
+    function cornerRaysRegions() {
+        const regions = [
+            { id: 'bg',
+              d: `M0,0 H${W} V${H} H0 Z` },
+        ];
+        const numRays = 8;
+        let rayD = '';
+        for (let i = 0; i < numRays; i++) {
+            const a1 = (i / numRays) * (Math.PI / 2);
+            const a2 = ((i + 0.5) / numRays) *
+                       (Math.PI / 2);
+            const R = 700;
+            rayD +=
+                `M0,0 L${(Math.cos(a1) * R).toFixed(1)},` +
+                `${(Math.sin(a1) * R).toFixed(1)} ` +
+                `L${(Math.cos(a2) * R).toFixed(1)},` +
+                `${(Math.sin(a2) * R).toFixed(1)} Z `;
+        }
+        regions.push({ id: 'rays', d: rayD });
+        return regions;
+    }
+
 
     function circlePath(cx, cy, r) {
         return `M${cx - r},${cy}
