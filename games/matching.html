@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0,
+                   maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Matching Game - Shea</title>
+    <style>
+        * { margin: 0; padding: 0;
+            box-sizing: border-box; }
+        html, body { height: 100%; width: 100%;
+            overflow: hidden; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont,
+                         'Segoe UI', Arial, sans-serif;
+            cursor: default; position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            touch-action: manipulation;
+            overscroll-behavior: none;
+            display: flex; flex-direction: column;
+            background: linear-gradient(135deg,
+                        #1a1a2e 0%, #16213e 50%,
+                        #0f3460 100%);
+        }
+
+        .back-btn {
+            position: fixed; top: 10px; left: 10px;
+            z-index: 100; padding: 8px 16px;
+            font-size: 16px; font-family: inherit;
+            font-weight: 600;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px); color: #00e5ff;
+            border: 2px solid rgba(0,229,255,0.3);
+            border-radius: 20px; cursor: pointer;
+            text-decoration: none;
+            display: flex; align-items: center;
+            gap: 5px; transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: rgba(0,0,0,0.7);
+            border-color: #00e5ff;
+        }
+
+        .header {
+            flex-shrink: 0; text-align: center;
+            padding: 10px 60px 4px; z-index: 10;
+        }
+        .title {
+            font-size: 22px; font-weight: 800;
+            color: #00e5ff;
+            text-shadow: 0 0 12px rgba(0,229,255,0.5),
+                         0 2px 4px rgba(0,0,0,0.4);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .stats {
+            font-size: 14px; color: #76ff03;
+            font-weight: 600;
+            margin-top: 4px;
+            text-shadow: 0 0 6px rgba(118,255,3,0.3);
+        }
+
+        .top-btn {
+            position: fixed; top: 10px;
+            z-index: 100; padding: 8px 10px;
+            font-size: 13px; font-family: inherit;
+            font-weight: 600;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px); color: #00e5ff;
+            border: 2px solid rgba(0,229,255,0.3);
+            border-radius: 20px; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .top-btn:hover {
+            background: rgba(0,0,0,0.7);
+            border-color: #00e5ff;
+        }
+        .new-btn { right: 10px; }
+
+        /* Board */
+        .board-wrap {
+            flex: 1; display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            min-height: 0;
+        }
+        .board {
+            display: grid;
+            gap: 8px;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Card */
+        .card {
+            perspective: 600px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%; height: 100%;
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+        }
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card.matched .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-back {
+            background: linear-gradient(145deg,
+                        #1a1a3e, #2a2a5e);
+            border: 2px solid #00e5ff;
+            box-shadow: 0 0 8px rgba(0,229,255,0.3),
+                        inset 0 0 15px rgba(0,229,255,0.05);
+        }
+        .card-back::after {
+            content: "\26a1";
+            font-size: 30px;
+            filter: drop-shadow(0 0 4px
+                    rgba(0,229,255,0.6));
+        }
+        .card-front {
+            background: #1a1a2e;
+            border: 2px solid #ff9800;
+            transform: rotateY(180deg);
+            box-shadow: 0 0 10px rgba(255,152,0,0.25);
+        }
+        .card-emoji {
+            font-size: 42px;
+            user-select: none;
+        }
+
+        .card.matched {
+            pointer-events: none;
+        }
+        .card.matched .card-inner {
+            animation: matchPop 0.5s ease;
+        }
+        @keyframes matchPop {
+            0% { transform: rotateY(180deg)
+                 scale(1); }
+            40% { transform: rotateY(180deg)
+                   scale(1.15); }
+            100% { transform: rotateY(180deg)
+                    scale(1); }
+        }
+        .card.matched .card-front {
+            background: #0a2e0a;
+            border-color: #76ff03;
+            box-shadow: 0 0 15px rgba(118,255,3,0.4);
+        }
+
+        .card.wrong .card-inner {
+            animation: wrongShake 0.4s ease;
+        }
+        @keyframes wrongShake {
+            0%,100% { transform: rotateY(180deg)
+                      translateX(0); }
+            25% { transform: rotateY(180deg)
+                  translateX(-5px); }
+            75% { transform: rotateY(180deg)
+                  translateX(5px); }
+        }
+
+        .card.removing .card-inner {
+            animation: removeCard 0.6s ease forwards;
+        }
+        @keyframes removeCard {
+            0% { transform: rotateY(180deg)
+                 scale(1); opacity: 1; }
+            50% { transform: rotateY(180deg)
+                  scale(1.1); opacity: 1; }
+            100% { transform: rotateY(180deg)
+                    scale(0); opacity: 0; }
+        }
+
+        /* Celebration */
+        .celebration {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.55);
+            display: flex; flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 200; opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+        }
+        .celebration.active {
+            opacity: 1; pointer-events: auto;
+        }
+        .celeb-text {
+            font-size: 34px; font-weight: 800;
+            color: #00e5ff;
+            text-shadow: 0 0 20px rgba(0,229,255,0.5),
+                         0 3px 6px rgba(0,0,0,0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            animation: celebPop 0.6s ease both;
+        }
+        .celeb-sub {
+            font-size: 18px; color: #76ff03;
+            font-weight: 600;
+            margin-bottom: 24px;
+            animation: celebPop 0.6s ease 0.1s both;
+        }
+        .celeb-stars {
+            font-size: 48px; margin-bottom: 24px;
+            animation: celebPop 0.6s ease 0.2s both;
+        }
+        .celeb-btn {
+            background: linear-gradient(135deg,
+                        #00e5ff, #76ff03);
+            color: #1a1a2e; font-size: 20px;
+            font-weight: 800; font-family: inherit;
+            padding: 16px 40px; border: none;
+            border-radius: 30px; cursor: pointer;
+            box-shadow: 0 0 20px rgba(0,229,255,0.4),
+                        0 6px 20px rgba(0,0,0,0.35);
+            transition: transform 0.2s;
+            animation: celebPop 0.6s ease 0.35s both;
+        }
+        .celeb-btn:active { transform: scale(0.95); }
+        @keyframes celebPop {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .confetti {
+            position: fixed; pointer-events: none;
+            z-index: 250; font-size: 26px;
+            animation: confDrop linear forwards;
+        }
+        @keyframes confDrop {
+            0% { transform: translateY(-30px)
+                 rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh)
+                    rotate(720deg); opacity: 0; }
+        }
+
+        /* Theme picker */
+        .theme-row {
+            display: flex; gap: 5px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0 8px 6px;
+        }
+        .theme-chip {
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-size: 12px; font-weight: 600;
+            color: white; cursor: pointer;
+            background: rgba(0,229,255,0.1);
+            border: 2px solid rgba(0,229,255,0.25);
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .theme-chip.active {
+            background: rgba(0,229,255,0.25);
+            border-color: #00e5ff;
+            color: #00e5ff;
+            box-shadow: 0 0 8px rgba(0,229,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">
+        &#9664; Back</a>
+    <button class="top-btn new-btn" id="newBtn">
+        New Game</button>
+
+    <div class="header">
+        <div class="title">Matching Game</div>
+        <div class="stats" id="stats">
+            Moves: 0 &bull; Pairs: 0/0
+        </div>
+    </div>
+
+    <div class="theme-row" id="themeRow"></div>
+
+    <div class="board-wrap">
+        <div class="board" id="board"></div>
+    </div>
+
+    <div class="celebration" id="celebration">
+        <div class="celeb-text">You did it!</div>
+        <div class="celeb-sub" id="celebSub"></div>
+        <div class="celeb-stars">
+            &#11088;&#11088;&#11088;</div>
+        <button class="celeb-btn"
+                id="celebBtn">Play Again</button>
+    </div>
+
+<script>
+/* ================================================= */
+/*  Audio                                            */
+/* ================================================= */
+var audioCtx = null;
+
+function initAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext
+        || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended")
+        audioCtx.resume();
+}
+function tone(freq, dur, type, vol, del) {
+    if (!audioCtx) return;
+    var t = audioCtx.currentTime + (del || 0);
+    var o = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    o.type = type || "sine";
+    o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(vol || 0.1, t);
+    g.gain.exponentialRampToValueAtTime(
+        0.001, t + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(t); o.stop(t + dur);
+}
+function sndFlip() {
+    tone(600, 0.08, "sine", 0.08, 0);
+}
+function sndMatch() {
+    tone(523, 0.12, "sine", 0.12, 0);
+    tone(659, 0.12, "sine", 0.12, 0.08);
+    tone(784, 0.18, "sine", 0.14, 0.16);
+}
+function sndWrong() {
+    tone(300, 0.12, "triangle", 0.06, 0);
+    tone(250, 0.15, "triangle", 0.06, 0.08);
+}
+function sndCeleb() {
+    /* Rapid ascending power-up */
+    var rush = [330,440,554,659,880,1047,1318,1568];
+    rush.forEach(function(f,i) {
+        tone(f, 0.12, "square", 0.06, i * 0.05);
+    });
+    /* Big chord hit */
+    [523,659,784].forEach(function(f) {
+        tone(f, 0.6, "triangle", 0.09, 0.45);
+    });
+    /* Victory trill */
+    for (var j = 0; j < 6; j++) {
+        tone(1047, 0.08, "sine", 0.05, 0.9+j*0.07);
+        tone(1318, 0.08, "sine", 0.05, 0.93+j*0.07);
+    }
+    /* Final boom */
+    tone(130, 0.5, "triangle", 0.08, 1.35);
+    tone(523, 0.4, "sine", 0.06, 1.35);
+}
+
+/* ================================================= */
+/*  Themes                                           */
+/* ================================================= */
+var THEMES = [
+    {
+        name: "Animals",
+        emoji: [
+            "\ud83d\udc36","\ud83d\udc31",
+            "\ud83d\udc2d","\ud83d\udc39",
+            "\ud83d\udc30","\ud83e\udd8a",
+            "\ud83d\udc3b","\ud83d\udc3c",
+            "\ud83d\udc28","\ud83e\udd81",
+            "\ud83d\udc2f","\ud83d\udc37",
+            "\ud83d\udc38","\ud83d\udc35",
+            "\ud83d\udc14","\ud83e\udd86"
+        ]
+    },
+    {
+        name: "Food",
+        emoji: [
+            "\ud83c\udf4e","\ud83c\udf4a",
+            "\ud83c\udf4b","\ud83c\udf49",
+            "\ud83c\udf53","\ud83c\udf51",
+            "\ud83c\udf52","\ud83e\udd5d",
+            "\ud83c\udf55","\ud83c\udf54",
+            "\ud83c\udf69","\ud83c\udf70",
+            "\ud83c\udf66","\ud83c\udf6a",
+            "\ud83e\uddc1","\ud83c\udf6d"
+        ]
+    },
+    {
+        name: "Sports",
+        emoji: [
+            "\u26bd","\ud83c\udfc0",
+            "\ud83c\udfc8","\u26be",
+            "\ud83c\udfbe","\ud83c\udfd0",
+            "\ud83c\udfc9","\ud83e\udd4f",
+            "\ud83c\udfb3","\ud83c\udff8",
+            "\u26f3","\ud83e\udd4a",
+            "\ud83d\udef9","\ud83c\udfc4",
+            "\ud83e\udd3f","\u26f7\ufe0f"
+        ]
+    },
+    {
+        name: "Ocean",
+        emoji: [
+            "\ud83d\udc20","\ud83d\udc19",
+            "\ud83e\udd80","\ud83d\udc1a",
+            "\ud83e\udeb7","\ud83d\udc22",
+            "\ud83d\udc33","\ud83d\udc2c",
+            "\ud83e\udd88","\ud83e\udd91",
+            "\ud83e\uddac","\ud83e\udd90",
+            "\ud83e\uddaa","\u2b50",
+            "\ud83d\udc21","\ud83e\udd80"
+        ]
+    },
+    {
+        name: "Vehicles",
+        emoji: [
+            "\ud83d\ude97","\ud83d\ude95",
+            "\ud83d\ude8c","\ud83d\ude92",
+            "\ud83d\ude91","\ud83d\ude93",
+            "\ud83d\ude80","\u2708\ufe0f",
+            "\ud83d\udea2","\ud83d\ude82",
+            "\ud83d\udeb2","\ud83d\udef5",
+            "\ud83d\ude81","\ud83d\ude9c",
+            "\ud83d\ude8e","\ud83d\udef3\ufe0f"
+        ]
+    }
+];
+
+/* ================================================= */
+/*  Game state                                       */
+/* ================================================= */
+var PAIRS = 8; /* 4x4 grid = 8 pairs */
+var board = document.getElementById("board");
+var statsEl = document.getElementById("stats");
+var celebrationEl =
+    document.getElementById("celebration");
+var celebBtn = document.getElementById("celebBtn");
+var celebSub = document.getElementById("celebSub");
+var newBtn = document.getElementById("newBtn");
+var themeRow = document.getElementById("themeRow");
+
+var cards = [];
+var flipped = [];
+var matched = 0;
+var moves = 0;
+var locked = false;
+var currentTheme = 0;
+
+function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length-1; i > 0; i--) {
+        var j = Math.floor(Math.random()*(i+1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+}
+
+function pick(arr, n) {
+    return shuffle(arr).slice(0, n);
+}
+
+function buildThemeChips() {
+    themeRow.innerHTML = "";
+    THEMES.forEach(function(theme, i) {
+        var chip = document.createElement("div");
+        chip.className = "theme-chip" +
+            (i === currentTheme ? " active" : "");
+        chip.textContent = theme.name;
+        chip.addEventListener("click", function() {
+            currentTheme = i;
+            startGame();
+        });
+        themeRow.appendChild(chip);
+    });
+}
+
+function startGame() {
+    var theme = THEMES[currentTheme];
+    matched = 0;
+    moves = 0;
+    flipped = [];
+    locked = false;
+    cards = [];
+    celebrationEl.classList.remove("active");
+    buildThemeChips();
+
+    /* Pick PAIRS unique emoji, duplicate each */
+    var chosen = pick(theme.emoji, PAIRS);
+    var deck = shuffle(chosen.concat(chosen));
+
+    /* Determine grid: 4 columns */
+    var cols = 4;
+    var rows = Math.ceil(deck.length / cols);
+
+    board.innerHTML = "";
+
+    /* Size cards after layout settles */
+    requestAnimationFrame(function() {
+        var wrap = document.querySelector(".board-wrap");
+        var availW = wrap.clientWidth - 16;
+        var availH = wrap.clientHeight - 16;
+        var cardW = Math.floor(
+            (availW - (cols-1) * 8) / cols);
+        var cardH = Math.floor(
+            (availH - (rows-1) * 8) / rows);
+        var cardSize = Math.min(cardW, cardH);
+
+        board.style.gridTemplateColumns =
+            "repeat("+cols+", "+cardSize+"px)";
+        board.style.gridTemplateRows =
+            "repeat("+rows+", "+cardSize+"px)";
+    });
+
+    deck.forEach(function(emoji, i) {
+        var card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML =
+            "<div class='card-inner'>" +
+            "<div class='card-face card-back'></div>" +
+            "<div class='card-face card-front'>" +
+            "<span class='card-emoji'>" +
+            emoji + "</span></div></div>";
+        card.dataset.emoji = emoji;
+        card.dataset.idx = i;
+        card.addEventListener("click", function() {
+            onCardTap(card);
+        });
+        board.appendChild(card);
+        cards.push(card);
+    });
+
+    updateStats();
+}
+
+function onCardTap(card) {
+    if (locked) return;
+    if (card.classList.contains("flipped")) return;
+    if (card.classList.contains("matched")) return;
+    if (flipped.length >= 2) return;
+
+    card.classList.add("flipped");
+    flipped.push(card);
+    sndFlip();
+
+    if (flipped.length === 2) {
+        moves++;
+        updateStats();
+        locked = true;
+
+        var a = flipped[0], b = flipped[1];
+        if (a.dataset.emoji === b.dataset.emoji) {
+            /* Match! */
+            setTimeout(function() {
+                a.classList.add("matched");
+                b.classList.add("matched");
+                sndMatch();
+                matched++;
+                updateStats();
+                flipped = [];
+                locked = false;
+
+                /* Remove after animation */
+                setTimeout(function() {
+                    a.classList.add("removing");
+                    b.classList.add("removing");
+                }, 400);
+
+                if (matched >= PAIRS) {
+                    setTimeout(showCelebration, 800);
+                }
+            }, 400);
+        } else {
+            /* No match */
+            setTimeout(function() {
+                a.classList.add("wrong");
+                b.classList.add("wrong");
+                sndWrong();
+                setTimeout(function() {
+                    a.classList.remove(
+                        "flipped", "wrong");
+                    b.classList.remove(
+                        "flipped", "wrong");
+                    flipped = [];
+                    locked = false;
+                }, 600);
+            }, 700);
+        }
+    }
+}
+
+function updateStats() {
+    statsEl.textContent =
+        "Moves: " + moves +
+        " \u2022 Pairs: " + matched + "/" + PAIRS;
+}
+
+function showCelebration() {
+    sndCeleb();
+    /* Star rating based on moves */
+    var stars = moves <= PAIRS + 4 ? 3
+             : moves <= PAIRS + 8 ? 2 : 1;
+    celebSub.textContent =
+        "Finished in " + moves + " moves!";
+    celebrationEl.classList.add("active");
+    spawnConfetti();
+}
+
+function spawnConfetti() {
+    var ems = ["\ud83c\udf89","\ud83c\udf8a","\u2b50",
+               "\ud83c\udf1f","\u2728","\ud83d\udc9b",
+               "\ud83d\udc9c","\ud83d\udc99"];
+    for (var i = 0; i < 20; i++) {
+        (function(idx) {
+            setTimeout(function() {
+                var c = document.createElement("div");
+                c.className = "confetti";
+                c.textContent = ems[
+                    Math.floor(
+                        Math.random()*ems.length)];
+                c.style.left =
+                    (Math.random()*100) + "vw";
+                c.style.animationDuration =
+                    (1.5+Math.random()*2) + "s";
+                document.body.appendChild(c);
+                setTimeout(function() {
+                    c.remove(); }, 4000);
+            }, idx * 100);
+        })(i);
+    }
+}
+
+/* Event handlers */
+celebBtn.addEventListener("click", startGame);
+newBtn.addEventListener("click", startGame);
+
+/* Init audio on first user interaction */
+document.addEventListener("click", function() {
+    initAudio();
+}, { once: true });
+
+startGame();
+</script>
+</body>
+</html>
