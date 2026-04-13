@@ -1457,11 +1457,17 @@ function loadScene() {
 
 function onSceneTap(e) {
     var svg = sceneEl.querySelector("svg");
-    var pt = svg.createSVGPoint();
-    pt.x = e.clientX;
-    pt.y = e.clientY;
-    var svgPt = pt.matrixTransform(
-        svg.getScreenCTM().inverse());
+    var r = svg.getBoundingClientRect();
+    var vv = window.visualViewport;
+    var rLeft = r.left + (vv ? vv.offsetLeft : 0);
+    var rTop = r.top + (vv ? vv.offsetTop : 0);
+    var scale = Math.min(r.width / VW, r.height / VH);
+    var offX = (r.width - VW * scale) / 2;
+    var offY = (r.height - VH * scale) / 2;
+    var svgPt = {
+        x: (e.clientX - rLeft - offX) / scale,
+        y: (e.clientY - rTop - offY) / scale
+    };
 
     var hit = -1;
     var bestDist = 999;
