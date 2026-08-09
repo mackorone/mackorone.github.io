@@ -70,6 +70,7 @@ Useful for packing and pre-race jitters.
 1. Sunscreen
 1. Sunglasses
 1. Head lamp
+1. Hydration vest and flasks
 
 #### Triathlon
 
